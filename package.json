@@ -5,14 +5,13 @@
   "main": "index.js",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "validator": "^13.9.0",
     "express-validator": "^7.0.1",
-    "lodash": "^4.17.21",
-    "validator": "^13.9.0"
+    "lodash": "^4.17.21"
   },
   "devDependencies": {},
   "scripts": {
     "install": "npm --prefix backend install backend",
-    "dev:backend": "npm install --prefix backend start",
     "sequelize": "npm run --prefix backend sequelize",
     "sequelize-cli": "npm run --prefix backend sequelize-cli",
     "start": "npm start --prefix backend",
