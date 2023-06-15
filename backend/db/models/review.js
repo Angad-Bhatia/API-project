@@ -55,7 +55,7 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'Review',
     defaultScope: {
       attributes: {
-        exclude: ['createdAt', 'updatedAt']
+        exclude: []
       }
     }
   });
