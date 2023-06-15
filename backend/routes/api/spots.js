@@ -93,7 +93,7 @@ router.get('/:spotId/reviews', async (req, res) => {
         ]
     });
     if (!spotReviews) {
-        const err = new Error("Spot couldn't be found")
+        const err = new Error("Spot couldn't be found");
         res.statusCode = 404;
         res.json({ message: err.message });
     }

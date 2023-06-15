@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       User.hasMany(models.Booking, {
-        foreignKey: "userId",
-        onDelete: "CASCADE",
+        foreignKey: 'userId',
+        onDelete: 'CASCADE',
         hooks: true
       });
 
@@ -24,8 +24,8 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       User.hasMany(models.Review, {
-        foreignKey: "userId",
-        onDelete: "CASCADE",
+        foreignKey: 'userId',
+        onDelete: 'CASCADE',
         hooks: true
       });
     }
@@ -52,7 +52,7 @@ module.exports = (sequelize, DataTypes) => {
         len: [4, 30],
         isNotEmail(value) {
           if (Validator.isEmail(value)) {
-            throw new Error("Cannot be an email.");
+            throw new Error('Cannot be an email.');
           }
         }
       }
@@ -77,7 +77,7 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'User',
     defaultScope: {
       attributes: {
-        exclude: ["hashedPassword", "email", "createdAt", "updatedAt"]
+        exclude: ['hashedPassword', 'email', 'createdAt', 'updatedAt']
       }
     }
   });

@@ -19,7 +19,7 @@ const setTokenCookie = (res, user) => {
         { expiresIn: parseInt(expiresIn) } // 604,800 seconds = 1 week
     );
 
-    const isProduction = process.env.NODE_ENV === "production";
+    const isProduction = process.env.NODE_ENV === 'production';
 
     // Set the token cookie
     res.cookie('token', token, {
