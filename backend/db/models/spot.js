@@ -28,12 +28,15 @@ module.exports = (sequelize, DataTypes) => {
       Spot.hasMany(models.SpotImage, {
         foreignKey: 'spotId',
         onDelete: 'CASCADE',
-        hooks: true
+        hooks: true,
+        as: 'SpotImages'
       });
 
-      // Spot.belongsTo(models.Users, {
-      //   foreignKey: 'ownerId'
-      // });
+      Spot.belongsTo(models.User, {
+        foreignKey: 'ownerId',
+        as: 'Owner'
+      });
+
     }
   }
   Spot.init({
@@ -125,7 +128,7 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'Spot',
     defaultScope: {
       attributes: {
-        exclude: ['createdAt', 'updatedAt']
+        exclude: []
       }
     }
   });
