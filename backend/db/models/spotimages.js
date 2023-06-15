@@ -22,6 +22,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     url: {
       type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
       validate: {
         isUrl: true
       }

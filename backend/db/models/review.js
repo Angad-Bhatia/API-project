@@ -35,13 +35,18 @@ module.exports = (sequelize, DataTypes) => {
     },
     review: {
       type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
       validate: {
-        len: [2,1000]
+        len: [2,1000],
+        notEmpty: true
       }
     },
     stars: {
       type: DataTypes.INTEGER,
+      allowNull: false,
       validate: {
+        min: 1,
         max: 5
       }
     }
