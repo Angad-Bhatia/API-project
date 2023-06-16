@@ -45,7 +45,6 @@ router.get('/', async (req, res) => {
     });
     const response = [];
     let images;
-    // console.log(allSpots[0].dataValues.SpotImages);
     for (let i = 0; i < allSpots.length; i++) {
         //reset preview image array
         images = [];
@@ -69,6 +68,48 @@ router.get('/', async (req, res) => {
     }
 
     res.json(response);
+});
+
+//GET /api/spots/current (Get all Spots owned by the Current User)
+router.get('/current', requireAuth, async (req, res) => {
+    const { user } = req;
+    const currUser = await User.findByPk(user.id, {
+        attributes: [],
+        include: [
+            {
+                model: Spot,
+                include: [
+                    {
+                        model: SpotImage,
+                        as: 'SpotImages',
+                        attributes: ['preview', 'url']
+                    }
+                ]
+            }
+        ]
+    });
+
+    const response = []
+    let images;
+    for (let i = 0; i < currUser.Spots.length; i++) {
+        images = [];
+        const spotPojo = currUser.Spots[i].toJSON();
+        const newId = currUser.Spots[i].id;
+        spotPojo.avgStarRating = await avgRating(newId);
+        const imgArr = spotPojo.SpotImages;
+        for (let j = 0; j < imgArr.length; j++) {
+            if (imgArr[j].preview) {
+                images.push(imgArr[j].url);
+            }
+        }
+        if (images.length === 1) spotPojo.previewImage = images[0];
+        else if (images.length > 1) spotPojo.previewImage = images;
+        else spotPojo.previewImage = 'No preview images available';
+        delete spotPojo.SpotImages;
+        response.push(spotPojo);
+    }
+
+    res.json({ Spots: response });
 });
 
 //GET /api/spots/:spotId/reviews (Get all Reviews by a Spot's id)
