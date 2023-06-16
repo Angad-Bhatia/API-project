@@ -34,13 +34,6 @@ module.exports = {
         username: 'FakeUser2',
         hashedPassword: bcrypt.hashSync('password3')
       },
-      {
-        firstName: 'Bob',
-        lastName: 'Ownerr',
-        email: 'owner@owner.com',
-        username: 'Owner456',
-        hashedPassword: bcrypt.hashSync('password4')
-      }
     ], {});
   },
 
@@ -48,7 +41,7 @@ module.exports = {
     options.tableName = 'Users';
     const Op = Sequelize.Op;
     await queryInterface.bulkDelete(options, {
-      username: { [Op.in]: ['Demo-lition', 'FakeUser1', 'FakeUser2', 'Owner456'] }
+      username: { [Op.in]: ['Demo-lition', 'FakeUser1', 'FakeUser2'] }
     }, {});
   }
 };
