@@ -70,6 +70,29 @@ router.get('/', async (req, res) => {
     res.json(response);
 });
 
+// POST /api/spots (Create a Spot)
+router.post('/', requireAuth, async (req, res) => {
+    const { user } = req;
+    const ownerId = user.id;
+    const { address, city, state, country, lat, lng, name, description, price } = req.body;
+    const spot = await Spot.create({ ownerId, address, city, state, country, lat, lng, name, description, price });
+    const newSpot = {
+        ownerId: spot.ownerId,
+        address: spot.address,
+        city: spot.city,
+        state: spot.state,
+        country: spot.country,
+        lat: spot.lat,
+        lng: spot.lng,
+        name: spot.name,
+        description: spot.description,
+        price: spot.price
+    }
+
+    res.status(201);
+    return res.json(spot);
+});
+
 //GET /api/spots/current (Get all Spots owned by the Current User)
 router.get('/current', requireAuth, async (req, res) => {
     const { user } = req;

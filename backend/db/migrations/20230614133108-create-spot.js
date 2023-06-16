@@ -29,15 +29,15 @@ module.exports = {
         unique: true
       },
       city: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(85),
         allowNull: false
       },
       state: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(11),
         allowNull: false
       },
       country: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(40),
         allowNull:false
       },
       lat: {
