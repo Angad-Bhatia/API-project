@@ -191,15 +191,23 @@ router.get('/:spotId/reviews', async (req, res) => {
 
 //POST /api/spots/:spotId/images (Add an Image to a Spot based on the Spot's id)
 router.post('/:spotId/images', requireAuth, async (req, res) => {
+    const { user } = req;
     const spotId = req.params.spotId;
     const { url, preview } = req.body;
     const flag = await Spot.findByPk(spotId);
-
+    console.log(flag.id);
     if (!flag) {
         const err = new Error("Spot couldn't be found");
         err.statusCode = 404;
         res.statusCode = err.statusCode || 404;
-        res.json({ message: err.message });
+        return res.json({ message: err.message });
+    }
+
+    if (flag.ownerId !== user.id) {
+        const err = new Error('Forbidden');
+        err.statusCode = 403;
+        res.statusCode = err.statusCode || 403;
+        return res.json({ message: err.message });
     }
 
     const image = await SpotImage.create({ spotId, url, preview });
