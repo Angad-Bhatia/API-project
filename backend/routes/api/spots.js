@@ -32,6 +32,43 @@ const avgRating = async id => {
     return sum / total;
 }
 
+//validate POST middleware func
+const validateSpotPost = [
+    check('address')
+        .exists({ checkFalsy: true })
+        .withMessage('Street address is required'),
+    check('city')
+        .exists({ checkFalsy: true })
+        .withMessage('City is required'),
+    check('state')
+        .exists({ checkFalsy: true })
+        .withMessage('State is required'),
+    check('country')
+        .exists({ checkFalsy: true })
+        .withMessage('Country is required'),
+    check('lat')
+        .exists({ checkFalsy: true })
+        .isFloat({ min: -90, max: 90 })
+        .withMessage('Latitude is not valid (Must be within range -90 to 90)'),
+    check('lng')
+        .exists({ checkFalsy: true })
+        .isFloat({ min: -180, max: 180 })
+        .withMessage('Longitude is not valid (Must be within range -180 to 180)'),
+    check('name')
+        .exists({ checkFalsy: true })
+        .withMessage('Name is required'),
+    check('name')
+        .isLength({ max: 50 })
+        .withMessage('Name must be less than 50 characters'),
+    check('description')
+        .exists({ checkFalsy: true })
+        .withMessage('Description is required'),
+    check('price')
+        .exists({ checkFalsy: true })
+        .withMessage('Price per day is required'),
+    handleValidationErrors
+];
+
 // GET /api/spots (Get all Spots)
 router.get('/', async (req, res) => {
     const allSpots = await Spot.findAll({
@@ -71,23 +108,11 @@ router.get('/', async (req, res) => {
 });
 
 // POST /api/spots (Create a Spot)
-router.post('/', requireAuth, async (req, res) => {
+router.post('/', requireAuth, validateSpotPost, async (req, res) => {
     const { user } = req;
     const ownerId = user.id;
     const { address, city, state, country, lat, lng, name, description, price } = req.body;
     const spot = await Spot.create({ ownerId, address, city, state, country, lat, lng, name, description, price });
-    const newSpot = {
-        ownerId: spot.ownerId,
-        address: spot.address,
-        city: spot.city,
-        state: spot.state,
-        country: spot.country,
-        lat: spot.lat,
-        lng: spot.lng,
-        name: spot.name,
-        description: spot.description,
-        price: spot.price
-    }
 
     res.status(201);
     return res.json(spot);
