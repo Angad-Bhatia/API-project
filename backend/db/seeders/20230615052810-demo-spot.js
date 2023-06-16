@@ -12,7 +12,7 @@ module.exports = {
     options.tableName = 'Spots';
     await queryInterface.bulkInsert(options, [
       {
-        ownerId: 4,
+        ownerId: 3,
         address: '3 Condit Ave',
         city: 'Parsippany',
         state: 'NJ',
@@ -24,7 +24,7 @@ module.exports = {
         price: 300.01
       },
       {
-        ownerId: 4,
+        ownerId: 3,
         address: '1600 Pennsylvania Ave',
         city: 'Richmond',
         state: 'VA',
@@ -36,7 +36,7 @@ module.exports = {
         price: 10000000.01
       },
       {
-        ownerId: 4,
+        ownerId: 3,
         address: '36 Allerton Rd',
         city: 'Pittsburgh',
         state: 'PA',
