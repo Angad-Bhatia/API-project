@@ -33,7 +33,7 @@ const avgRating = async id => {
 }
 
 //validate POST middleware func
-const validateSpotPost = [
+const validateSpot = [
     check('address')
         .exists({ checkFalsy: true })
         .withMessage('Street address is required'),
@@ -108,7 +108,7 @@ router.get('/', async (req, res) => {
 });
 
 // POST /api/spots (Create a Spot)
-router.post('/', requireAuth, validateSpotPost, async (req, res) => {
+router.post('/', requireAuth, validateSpot, async (req, res) => {
     const { user } = req;
     const ownerId = user.id;
     const { address, city, state, country, lat, lng, name, description, price } = req.body;
@@ -226,7 +226,8 @@ router.post('/:spotId/images', requireAuth, async (req, res) => {
     res.json(imgArr[imgArr.length - 1]);
 });
 
-//MUST BE LAST!!!!!!!!!!!! GET /api/spots/:spotId (Get details of a Spot from an id)
+
+//least specific start GET /api/spots/:spotId (Get details of a Spot from an id)
 router.get('/:spotId', async (req, res) => {
     const spot = await Spot.findByPk(req.params.spotId, {
         include: [
@@ -253,6 +254,30 @@ router.get('/:spotId', async (req, res) => {
     const { id, ownerId, address, city, state, country, lat, lng, name, description, price, createdAt, updatedAt, SpotImages, Owner, numReviews, avgStarRating } = spotObj;
     const orderedSpot = { id, ownerId, address, city, state, country, lat, lng, name, description, price, createdAt, updatedAt, numReviews, avgStarRating, SpotImages, Owner };
     res.json(orderedSpot);
+});
+
+//PUT /api/spots/:spotId (Edit a Spot)
+router.put('/:spotId', requireAuth, validateSpot, async (req, res) => {
+    const { user } = req;
+    const spotId = req.params.spotId;
+    const spot = await Spot.findByPk(spotId);
+    if (!spot) {
+        const err = new Error("Spot couldn't be found");
+        err.statusCode = 404;
+        res.statusCode = 404 || err.statusCode;
+        res.json({ message: err.message });
+    }
+
+    console.log(spot.ownerId);
+    console.log(user.id);
+    if (spot.ownerId !== user.id) {
+        res.status(403);
+        res.json({ message: 'Forbidden' });
+    }
+    const { address, city, state, country, lat, lng, name, description, price } = req. body;
+    spot.set({ address, city, state, country, lat, lng, name, description, price });
+    await spot.save();
+    res.json(spot);
 });
 
 module.exports = router;
