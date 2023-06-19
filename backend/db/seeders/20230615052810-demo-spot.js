@@ -55,6 +55,6 @@ module.exports = {
     const Op = Sequelize.Op;
     await queryInterface.bulkDelete(options, {
       // name: { [Op.in]: ['Banana Beach House', 'Apple Farm Cottage', 'Strawberry Land'] }
-    }, {});
+    });
   }
 };

@@ -30,6 +30,6 @@ module.exports = {
     const Op = Sequelize.Op;
     await queryInterface.bulkDelete(options, {
       // url: { [Op.in]: ['https://shorturl.at/bjzMN','https://shorturl.at/pFKM0','https://shorturl.at/jGNR8'] }
-    }, {});
+    });
   }
 };
