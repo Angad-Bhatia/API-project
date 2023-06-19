@@ -232,7 +232,7 @@ router.get('/', async (req, res, next) => {
 });
 
 // POST /api/spots (Create a Spot)
-router.post('/', requireAuth, validateSpot, async (req, res) => {
+router.post('/', requireAuth, validateSpot, async (req, res, next) => {
     const { user } = req;
     const ownerId = user.id;
     const { address, city, state, country, lat, lng, name, description, price } = req.body;
@@ -243,7 +243,7 @@ router.post('/', requireAuth, validateSpot, async (req, res) => {
 });
 
 //GET /api/spots/current (Get all Spots owned by the Current User)
-router.get('/current', requireAuth, async (req, res) => {
+router.get('/current', requireAuth, async (req, res, next) => {
     const { user } = req;
     const currUser = await User.findByPk(user.id, {
         attributes: [],
@@ -420,7 +420,7 @@ router.post('/:spotId/bookings', requireAuth, validateBooking, async (req, res, 
 });
 
 //GET /api/spots/:spotId/reviews (Get all Reviews by a Spot's id)
-router.get('/:spotId/reviews', async (req, res) => {
+router.get('/:spotId/reviews', async (req, res, next) => {
     const spotReviews = await Spot.findByPk(req.params.spotId, {
         attributes: [],
         include: [
@@ -442,14 +442,15 @@ router.get('/:spotId/reviews', async (req, res) => {
     });
     if (!spotReviews) {
         const err = new Error("Spot couldn't be found");
-        res.statusCode = 404;
-        res.json({ message: err.message });
+        err.status = 404;
+        err.title = 'Resource Not Found'
+        return next(err);
     }
     res.json(spotReviews);
 });
 
 //POST /api/spots/:spotId/reviews (Create a Review for a Spot based on the Spot's id)
-router.post('/:spotId/reviews', requireAuth, validateReview, async (req, res) => {
+router.post('/:spotId/reviews', requireAuth, validateReview, async (req, res, next) => {
     const spotId = req.params.spotId;
     const spotFlag = await Spot.findByPk(spotId, {
         include: [
@@ -461,9 +462,9 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async (req, res) =>
 
     if (!spotFlag) {
         const err = new Error("Spot couldn't be found");
-        err.statusCode = 404;
-        res.statusCode = 404;
-        return res.json({ message: err.message });
+        err.status = 404;
+        err.title = 'Resource Not Found'
+        return next(err);
     }
 
     const { user } = req;
@@ -472,9 +473,9 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async (req, res) =>
     for (let i = 0; i < spotFlag.Reviews.length; i++) {
         if (spotFlag.Reviews[i].userId == user.id) {
             const err = new Error('User already has a review for this spot');
-            err.statusCode = 500;
-            res.statusCode = err.statusCode || 500;
-            return res.json({ message: err.message });
+            err.status = 500;
+            err.title = 'Server Error'
+            return next(err);
         }
     }
 
@@ -487,7 +488,7 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async (req, res) =>
 });
 
 //POST /api/spots/:spotId/images (Add an Image to a Spot based on the Spot's id)
-router.post('/:spotId/images', requireAuth, async (req, res) => {
+router.post('/:spotId/images', requireAuth, async (req, res, next) => {
     const { user } = req;
     const spotId = req.params.spotId;
     const { url, preview } = req.body;
@@ -495,16 +496,16 @@ router.post('/:spotId/images', requireAuth, async (req, res) => {
 
     if (!flag) {
         const err = new Error("Spot couldn't be found");
-        err.statusCode = 404;
-        res.statusCode = err.statusCode || 404;
-        return res.json({ message: err.message });
+        err.status = 404;
+        err.title = 'Resource Not Found'
+        return next(err);
     }
 
     if (flag.ownerId !== user.id) {
-        const err = new Error('Forbidden');
-        err.statusCode = 403;
-        res.statusCode = err.statusCode || 403;
-        return res.json({ message: err.message });
+        const err = new Error('Spot does not belong to user');
+        err.status = 403;
+        err.title = 'Forbidden';
+        return next(err);
     }
 
     const image = await SpotImage.create({ spotId, url, preview });
@@ -525,7 +526,7 @@ router.post('/:spotId/images', requireAuth, async (req, res) => {
 
 
 //least specific start GET /api/spots/:spotId (Get details of a Spot from an id)
-router.get('/:spotId', async (req, res) => {
+router.get('/:spotId', async (req, res, next) => {
     const spot = await Spot.findByPk(req.params.spotId, {
         include: [
             {
@@ -542,8 +543,9 @@ router.get('/:spotId', async (req, res) => {
     });
     if (!spot) {
         const err = new Error("Spot couldn't be found");
-        res.statusCode = 404;
-        res.json({ message: err.message });
+        err.title = 'Resource Not Found'
+        err.status = 404;
+        return next(err);
     }
     const spotObj = spot.toJSON();
     spotObj.numReviews = await reviewsNum(req.params.spotId);
@@ -554,20 +556,22 @@ router.get('/:spotId', async (req, res) => {
 });
 
 //PUT /api/spots/:spotId (Edit a Spot)
-router.put('/:spotId', requireAuth, validateSpot, async (req, res) => {
+router.put('/:spotId', requireAuth, validateSpot, async (req, res, next) => {
     const { user } = req;
     const spotId = req.params.spotId;
     const spot = await Spot.findByPk(spotId);
     if (!spot) {
         const err = new Error("Spot couldn't be found");
-        err.statusCode = 404;
-        res.statusCode = 404 || err.statusCode;
-        res.json({ message: err.message });
+        err.status = 404;
+        err.title = 'Resource Not Found';
+        return next(err);
     }
 
     if (spot.ownerId !== user.id) {
-        res.status(403);
-        res.json({ message: 'Forbidden' });
+        const err = new Error('Spot does not belong to user');
+        err.status = 403;
+        err.title = 'Forbidden'
+        return next(err);
     }
 
     const { address, city, state, country, lat, lng, name, description, price } = req.body;
@@ -577,20 +581,22 @@ router.put('/:spotId', requireAuth, validateSpot, async (req, res) => {
 });
 
 //DELETE /api/spots/:spotId (Delete a Spot)
-router.delete('/:spotId', requireAuth, async (req, res) => {
+router.delete('/:spotId', requireAuth, async (req, res, next) => {
     const { user } = req;
     const spotId = req.params.spotId;
     const spot = await Spot.findByPk(spotId);
     if (!spot) {
         const err = new Error("Spot couldn't be found");
-        err.statusCode = 404;
-        res.statusCode = 404 || err.statusCode;
-        res.json({ message: err.message });
+        err.status = 404;
+        err.title = 'Resource Not Found'
+        return next(err);
     }
 
     if (spot.ownerId !== user.id) {
-        res.status(403);
-        res.json({ message: 'Forbidden' });
+        const err = new Error('Spot does not belong to user')
+        err.status = 403;
+        err.title = 'Forbidden';
+        return next(err);
     }
 
     await spot.destroy();

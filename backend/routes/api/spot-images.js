@@ -27,7 +27,6 @@ router.delete('/:imageId', requireAuth, async (req, res, next) => {
     if (!image) {
         const err = new Error("Spot Image couldn't be found");
         err.title = 'Resource Not Found';
-        err.errors = { message: err.message };
         err.status = 404;
         return next(err);
     }
@@ -35,7 +34,6 @@ router.delete('/:imageId', requireAuth, async (req, res, next) => {
     if (user.id !== image.Spot.ownerId) {
         const err = new Error('Spot does not belong to user');
         err.title = 'Forbidden'
-        err.errors = { message: err.message }
         err.status = 403;
         return next(err);
     }
