@@ -69,6 +69,18 @@ const validateSpot = [
     handleValidationErrors
 ];
 
+//validate POST reviews middleware
+const validateReview = [
+    check('review')
+        .exists({ checkFalsy: true })
+        .withMessage('Review text is required'),
+    check('stars')
+        .exists({ checkFalsy: true })
+        .isInt({ min: 1, max: 5 })
+        .withMessage('Stars must be an integer from 1 to 5'),
+    handleValidationErrors
+];
+
 // GET /api/spots (Get all Spots)
 router.get('/', async (req, res) => {
     const allSpots = await Spot.findAll({
@@ -97,9 +109,8 @@ router.get('/', async (req, res) => {
                 images.push(spotImgArr[j].url);
             }
         }
-        if (images.length === 1) spotPojo.previewImage = images[0];
-        else if (images.length > 1) spotPojo.previewImage = images;
-        else spotPojo.previewImage = 'No preview images available';
+        if (images.length > 0) spotPojo.previewImage = images[images.length - 1];
+        else spotPojo.previewImage = 'null';
         delete spotPojo.SpotImages;
         response.push(spotPojo);
     }
@@ -150,9 +161,8 @@ router.get('/current', requireAuth, async (req, res) => {
                 images.push(imgArr[j].url);
             }
         }
-        if (images.length === 1) spotPojo.previewImage = images[0];
-        else if (images.length > 1) spotPojo.previewImage = images;
-        else spotPojo.previewImage = 'No preview images available';
+        if (images.length > 0) spotPojo.previewImage = images[images.length - 1];
+        else spotPojo.previewImage = 'null';
         delete spotPojo.SpotImages;
         response.push(spotPojo);
     }
@@ -187,7 +197,45 @@ router.get('/:spotId/reviews', async (req, res) => {
         res.json({ message: err.message });
     }
     res.json(spotReviews);
-})
+});
+
+//POST /api/spots/:spotId/reviews (Create a Review for a Spot based on the Spot's id)
+router.post('/:spotId/reviews', requireAuth, validateReview, async (req, res) => {
+    const spotId = req.params.spotId;
+    const spotFlag = await Spot.findByPk(spotId, {
+        include: [
+            {
+                model: Review
+            }
+        ]
+    });
+
+    if (!spotFlag) {
+        const err = new Error("Spot couldn't be found");
+        err.statusCode = 404;
+        res.statusCode = 404;
+        return res.json({ message: err.message });
+    }
+
+    const { user } = req;
+    const userId = user.id;
+    console.log(spotFlag.Reviews);
+    for (let i = 0; i < spotFlag.Reviews.length; i++) {
+        if (spotFlag.Reviews[i].userId == user.id) {
+            const err = new Error('User already has a review for this spot');
+            err.statusCode = 500;
+            res.statusCode = err.statusCode || 500;
+            return res.json({ message: err.message });
+        }
+    }
+
+
+    const { review, stars } = req.body;
+    const newReview = await Review.create({ userId, spotId, review, stars });
+
+    res.status(201);
+    res.json(newReview);
+});
 
 //POST /api/spots/:spotId/images (Add an Image to a Spot based on the Spot's id)
 router.post('/:spotId/images', requireAuth, async (req, res) => {
