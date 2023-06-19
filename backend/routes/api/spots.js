@@ -11,7 +11,7 @@ const Op = Sequelize.Op;
 
 const router = express.Router();
 
-const { Spot, Review, SpotImage, ReviewImage } = require('../../db/models');
+const { Spot, Review, SpotImage, ReviewImage, Booking } = require('../../db/models');
 
 const reviewsNum = async id => {
     const count = await Review.count({
@@ -168,6 +168,66 @@ router.get('/current', requireAuth, async (req, res) => {
     }
 
     res.json({ Spots: response });
+});
+
+//GET /api/spots/:spotId/bookings (Get all Bookings for a Spot based on the Spot's id)
+router.get('/:spotId/bookings', requireAuth, async (req, res, next) => {
+    const { user } = req;
+    const spotBookings = await Spot.findByPk(req.params.spotId, {
+        attributes: ['ownerId'],
+        include: [
+            {
+                model: Booking,
+                include: [
+                    {
+                        model: User,
+                        attributes: ['id', 'firstName', 'lastName']
+                    }
+                ]
+            }
+        ]
+    });
+
+    if (!spotBookings) {
+        const err = new Error("Spot couldn't be found");
+        err.title = 'Resource Not Found';
+        err.errors = { message: err.message };
+        err.status = 404;
+        return next(err);
+    }
+
+    const pojo = spotBookings.toJSON();
+
+    if (user.id == spotBookings.ownerId) {
+        delete pojo.ownerId;
+        return res.json(pojo);
+    } else {
+        delete pojo.ownerId;
+        for (let i = 0; i < pojo.Bookings.length; i++) {
+            delete pojo.Bookings[i].User;
+            delete pojo.Bookings[i].id;
+            delete pojo.Bookings[i].userId
+            delete pojo.Bookings[i].createdAt;
+            delete pojo.Bookings[i].updatedAt;
+        }
+        console.log(pojo);
+        return res.json(pojo);
+    }
+    // const bookingsArr =
+    // for (let i = 0;)
+    // const bookingsUser = await Booking.findAll({
+    //     where: {
+    //         spotId: req.params.spotId
+    //     },
+    //     include: [
+    //         {
+    //             model: User,
+    //             attributes: ['id', 'firstName', 'lastName']
+    //         }
+    //     ]
+    // })
+
+    res.json('hi');
 });
 
 //GET /api/spots/:spotId/reviews (Get all Reviews by a Spot's id)
