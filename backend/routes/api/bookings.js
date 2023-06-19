@@ -60,6 +60,9 @@ router.get('/current', requireAuth, async (req, res, next) => {
     res.json({ Bookings: response });
 });
 
+//PUT /api/bookings/:bookingId (Edit a Booking)
+
+
 
 
 module.exports = router;

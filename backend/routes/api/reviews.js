@@ -112,7 +112,7 @@ router.post('/:reviewId/images', requireAuth, async (req, res, next) => {
     }
 
     if (flagReview.userId !== user.id) {
-        const err = new Error('Forbidden');
+        const err = new Error('Review does not belong to user');
         err.title = 'Forbidden'
         err.errors = { message: err.message }
         err.status = 403;

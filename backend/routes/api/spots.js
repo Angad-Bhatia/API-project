@@ -81,6 +81,19 @@ const validateReview = [
     handleValidationErrors
 ];
 
+//validate POST bookings middleware
+const validateBooking = [
+    check('startDate')
+        .exists({ checkFalsy: true })
+        .isISO8601().toDate()
+        .withMessage('Start Date must be in correct format yyyy-mm-dd'),
+    check('endDate')
+        .exists({ checkFalsy: true })
+        .isISO8601().toDate()
+        .withMessage('End Date must be in correct format yyyy-mm-dd'),
+    handleValidationErrors
+];
+
 // GET /api/spots (Get all Spots)
 router.get('/', async (req, res) => {
     const allSpots = await Spot.findAll({
@@ -226,8 +239,84 @@ router.get('/:spotId/bookings', requireAuth, async (req, res, next) => {
     //         }
     //     ]
     // })
+});
 
-    res.json('hi');
+// POST /api/spots/:spotId/bookings (Create a Booking from a Spot based on the Spot's id)
+router.post('/:spotId/bookings', requireAuth, validateBooking, async (req, res, next) => {
+    const { user } = req;
+    const userId = user.id;
+    const spotId = req.params.spotId;
+    const flagSpot = await Spot.findByPk(spotId, {
+        attributes: ['ownerId'],
+        include: [
+            {
+                model: Booking
+            }
+        ]
+    });
+
+    if (!flagSpot) {
+        const err = new Error("Spot couldn't be found");
+        err.title = 'Resource Not Found';
+        err.errors = { message: err.message };
+        err.status = 404;
+        return next(err);
+    }
+
+    if (flagSpot.ownerId == userId) {
+        const err = new Error('Cannot book spot owned by user');
+        err.title = 'Forbidden';
+        err.errors = { message: err.message };
+        err.status = 403;
+        return next(err);
+    }
+
+    const { startDate, endDate } = req.body;
+    const start = Date.parse(startDate);
+    const end = Date.parse(endDate);
+    if (end <= start) {
+        const err = new Error('Bad Request');
+        err.title = 'Bad Request';
+        err.errors = { endDate: 'endDate cannot be on or before startDate' };
+        err.status = 400;
+        return next(err);
+    }
+
+    let errFlag = false;
+    const newErr = new Error('Sorry, this spot is already booked for the specified dates');
+    newErr.title = 'Forbidden'
+    newErr.errors = {};
+    newErr.status = 403;
+
+    const bookingsArr = flagSpot.Bookings;
+    for (let i = 0; i < bookingsArr.length; i++) {
+        if (Date.parse(bookingsArr[i].startDate) == start ||
+            Date.parse(bookingsArr[i].endDate) == start ||
+            (Date.parse(bookingsArr[i].startDate) < start && Date.parse(bookingsArr[i].endDate) > start)
+        ) {
+            errFlag = true;
+            newErr.errors.startDate = 'Start date conflicts with an existing booking';
+        }
+
+        if (Date.parse(bookingsArr[i].startDate) == end ||
+            Date.parse(bookingsArr[i].endDate) == end ||
+            (Date.parse(bookingsArr[i].startDate) < end && Date.parse(bookingsArr[i].endDate) > end)
+        ) {
+            errFlag = true;
+            newErr.errors.endDate = 'End date conflicts with an existing booking';
+        }
+    }
+
+    if (errFlag) {
+        return next(newErr);
+    }
+
+    const newBooking = await Booking.create({ spotId, userId, startDate, endDate });
+    const bookingResponse = await Booking.findOne({
+        where: { spotId, userId, startDate, endDate }
+    });
+
+    res.json(bookingResponse);
 });
 
 //GET /api/spots/:spotId/reviews (Get all Reviews by a Spot's id)
