@@ -94,8 +94,100 @@ const validateBooking = [
     handleValidationErrors
 ];
 
+//validate search params middleware
+const validateQuery = [
+
+];
+
 // GET /api/spots (Get all Spots)
-router.get('/', async (req, res) => {
+router.get('/', async (req, res, next) => {
+    let { page, size, maxLat, minLat, minLng, maxLng, minPrice, maxPrice } = req.query
+
+    let errFlag = false;
+    const queryErr = new Error('Bad Request');
+    queryErr.title = 'Bad Request'
+    queryErr.errors = {};
+    queryErr.status = 400;
+
+    let search = {
+        where: {}
+    }
+
+    if (page !== undefined && (isNaN(Number(page)) || Number(page) < 1)) {
+        queryErr.errors.page = 'Page must be greater than or equal to 1'
+        errFlag = true;
+    } else if (Number(page) > 10) {
+        queryErr.errors.page = 'Page must be less than or equal to 10';
+        errFlag = true;
+    }
+
+    if (size !== undefined && (isNaN(Number(size)) || Number(size) < 1)) {
+        queryErr.errors.size = 'Size must be greater than or equal to 1'
+        errFlag = true;
+    } else if (Number(size) > 20) {
+        queryErr.errors.size = 'Size must be less than or equal to 20';
+        errFlag = true;
+    }
+
+    if (!isNaN(Number(maxLat)) && Number(maxLat) <= 90 && Number(maxLat) >= -90) {
+        search.where.lat = { [Op.lte]: maxLat }
+    } else if (maxLat !== undefined) {
+        queryErr.errors.maxLat = 'Maximum latitude is invalid';
+        errFlag = true;
+    }
+
+    if (!isNaN(Number(minLat)) && Number(minLat) <= 90 && Number(minLat) >= -90) {
+        search.where.lat = { [Op.gte]: minLat }
+    } else if (minLat !== undefined) {
+        queryErr.errors.minLat = 'Minimum latitude is invalid';
+        errFlag = true;
+    }
+
+    if (!isNaN(Number(maxLng)) && Number(maxLng) <= 180 && Number(maxLng) >= -180) {
+        search.where.lng = { [Op.lte]: maxLng }
+    } else if (maxLng !== undefined) {
+        queryErr.errors.maxLng = 'Maximum longitude is invalid';
+        errFlag = true;
+    }
+
+    if (!isNaN(Number(minLng)) && Number(minLng) <= 180 && Number(minLng) >= -180) {
+        search.where.lng = { [Op.gte]: minLng }
+    } else if (minLng !== undefined) {
+        queryErr.errors.minLng = 'Minimum longitude is invalid';
+        errFlag = true;
+    }
+
+    if (!isNaN(Number(minPrice)) && Number(minPrice) >=0) {
+        search.where.price = { [Op.gte]: minPrice }
+    } else if (minPrice !== undefined) {
+        queryErr.errors.minPrice = 'Minimum price must be greater than or equal to 0';
+        errFlag = true;
+    }
+
+    if (!isNaN(Number(maxPrice)) && Number(maxPrice) >=0) {
+        search.where.price = { [Op.lte]: maxPrice }
+    } else if (maxPrice !== undefined) {
+        queryErr.errors.maxPrice = 'Maximum price must be greater than or equal to 0';
+        errFlag = true;
+    }
+
+    if (errFlag) {
+        return next(queryErr);
+    }
+
+    if (page === undefined) page = 1;
+    else parseInt(page);
+    if (size === undefined) size = 20;
+    else parseInt(size);
+
+    const pagination = {};
+
+
+    if (page >= 1 && size >= 1 && page <= 10 && size <= 20) {
+        pagination.limit = size;
+        pagination.offset = size * (page - 1);
+    }
+
     const allSpots = await Spot.findAll({
         include: [
             {
@@ -103,8 +195,11 @@ router.get('/', async (req, res) => {
                 as: 'SpotImages',
                 attributes: ['url', 'preview']
             }
-        ]
+        ],
+        ...search,
+        ...pagination
     });
+
     const response = [];
     let images;
     for (let i = 0; i < allSpots.length; i++) {
@@ -125,10 +220,15 @@ router.get('/', async (req, res) => {
         if (images.length > 0) spotPojo.previewImage = images[images.length - 1];
         else spotPojo.previewImage = 'null';
         delete spotPojo.SpotImages;
+
         response.push(spotPojo);
     }
 
-    res.json(response);
+    res.json({
+        Spots: response,
+        page,
+        size
+    });
 });
 
 // POST /api/spots (Create a Spot)
@@ -223,7 +323,7 @@ router.get('/:spotId/bookings', requireAuth, async (req, res, next) => {
             delete pojo.Bookings[i].createdAt;
             delete pojo.Bookings[i].updatedAt;
         }
-        console.log(pojo);
+
         return res.json(pojo);
     }
     // const bookingsArr =
@@ -368,7 +468,7 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async (req, res) =>
 
     const { user } = req;
     const userId = user.id;
-    console.log(spotFlag.Reviews);
+
     for (let i = 0; i < spotFlag.Reviews.length; i++) {
         if (spotFlag.Reviews[i].userId == user.id) {
             const err = new Error('User already has a review for this spot');
@@ -392,7 +492,7 @@ router.post('/:spotId/images', requireAuth, async (req, res) => {
     const spotId = req.params.spotId;
     const { url, preview } = req.body;
     const flag = await Spot.findByPk(spotId);
-    console.log(flag.id);
+
     if (!flag) {
         const err = new Error("Spot couldn't be found");
         err.statusCode = 404;
