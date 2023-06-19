@@ -37,7 +37,7 @@ module.exports = {
     options.tableName = 'Reviews';
     const Op = Sequelize.Op;
     await queryInterface.bulkDelete(options, {
-      review: { [Op.in]: ['I love this place', 'It stinks', 'Never again'] }
+      // review: { [Op.in]: ['I love this place', 'It stinks', 'Never again'] }
     }, {});
   }
 };
