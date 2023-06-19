@@ -1,6 +1,5 @@
 // backend/routes/api/reviews.js
 const express = require('express');
-require('express-async-errors');
 
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
 const { User, Sequelize } = require('../../db/models');
