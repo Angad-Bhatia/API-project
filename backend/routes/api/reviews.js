@@ -133,7 +133,53 @@ router.post('/:reviewId/images', requireAuth, async (req, res, next) => {
 router.put('/:reviewId', requireAuth, validateReview, async (req, res, next) => {
     const { user } = req;
     const reviewId = req.params.reviewId;
-    const review = await Review.findByPk(reviewId);
+    const userReview = await Review.findByPk(reviewId);
+    if (!userReview) {
+        const err = new Error("Review couldn't be found");
+        err.title = 'Resource Not Found';
+        err.errors = { message: err.message };
+        err.status = 404;
+        return next(err);
+    }
+
+    if (userReview.userId !== user.id) {
+        const err = new Error('Forbidden');
+        err.title = 'Forbidden'
+        err.errors = { message: err.message }
+        err.status = 403;
+        return next(err);
+    }
+
+    const { review, stars } = req.body;
+    userReview.set({ review, stars });
+    await userReview.save();
+    res.json(userReview);
 });
+
+//DELETE /api/reviews/:reviewId
+router.delete('/:reviewId', requireAuth, async (req, res, next) => {
+    const { user } = req;
+    const reviewId = req.params.reviewId;
+    const userReview = await Review.findByPk(reviewId);
+
+    if (!userReview) {
+        const err = new Error("Review couldn't be found");
+        err.title = 'Resource Not Found';
+        err.errors = { message: err.message };
+        err.status = 404;
+        return next(err);
+    }
+
+    if (userReview.userId !== user.id) {
+        const err = new Error('Forbidden');
+        err.title = 'Forbidden'
+        err.errors = { message: err.message }
+        err.status = 403;
+        return next(err);
+    }
+
+    await userReview.destroy();
+    res.json({ message: 'Successfully deleted' });
+})
 
 module.exports = router;

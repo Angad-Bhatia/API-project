@@ -321,7 +321,7 @@ router.put('/:spotId', requireAuth, validateSpot, async (req, res) => {
         res.json({ message: 'Forbidden' });
     }
 
-    const { address, city, state, country, lat, lng, name, description, price } = req. body;
+    const { address, city, state, country, lat, lng, name, description, price } = req.body;
     spot.set({ address, city, state, country, lat, lng, name, description, price });
     await spot.save();
     res.json(spot);
