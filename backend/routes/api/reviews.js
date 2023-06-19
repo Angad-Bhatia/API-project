@@ -142,7 +142,7 @@ router.put('/:reviewId', requireAuth, validateReview, async (req, res, next) => 
     }
 
     if (userReview.userId !== user.id) {
-        const err = new Error('Forbidden');
+        const err = new Error('Review does not belong to user');
         err.title = 'Forbidden'
         err.errors = { message: err.message }
         err.status = 403;
