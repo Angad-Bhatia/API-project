@@ -34,21 +34,21 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER
     },
     startDate: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: false,
       validate: {
         isDate: true,
-        isAfter: '2023-06-11',
-        isBefore: '2026-12-31'
+        isAfter: "2023-06-11",
+        isBefore: "2026-12-31"
       }
     },
     endDate: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: false,
       validate: {
         isDate: true,
         isAfter: this.startDate,
-        isBefore: '2026-12-31'
+        isBefore: "2026-12-31"
       }
     }
   }, {
@@ -56,7 +56,7 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'Booking',
     defaultScope: {
       attributes: {
-        exclude: ['createdAt', 'updatedAt']
+        exclude: []
       }
     }
   });
