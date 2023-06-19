@@ -80,7 +80,6 @@ router.put('/bookingId', requireAuth, validateBooking, async (req, res, next) =>
     if (!userBooking) {
         const err = new Error("Booking couldn't be found");
         err.title = 'Resource Not Found';
-        err.errors = { message: err.message };
         err.status = 404;
         return next(err);
     }
@@ -88,7 +87,6 @@ router.put('/bookingId', requireAuth, validateBooking, async (req, res, next) =>
     if (userBooking.userId !== user.id) {
         const err = new Error('Booking does not belong to user');
         err.title = 'Forbidden'
-        err.errors = { message: err.message }
         err.status = 403;
         return next(err);
     }
@@ -98,9 +96,8 @@ router.put('/bookingId', requireAuth, validateBooking, async (req, res, next) =>
     const start = Date.parse(startDate);
     const end = Date.parse(endDate);
     if (end <= start) {
-        const err = new Error('Bad Request');
+        const err = new Error('endDate cannot be on or before startDate');
         err.title = 'Bad Request';
-        err.errors = { endDate: 'endDate cannot be on or before startDate' };
         err.status = 400;
         return next(err);
     }
@@ -162,7 +159,6 @@ router.delete('/:bookingId', requireAuth, async (req, res, next) => {
     if (!bookingId) {
         const err = new Error("Booking couldn't be found");
         err.title = 'Resource Not Found';
-        err.errors = { message: err.message };
         err.status = 404;
         return next(err);
     }
@@ -170,7 +166,6 @@ router.delete('/:bookingId', requireAuth, async (req, res, next) => {
     if (userBooking.userId !== user.id && userBooking.Spot.ownerId !== user.id) {
         const err = new Error('Booking does not belong to user');
         err.title = 'Forbidden';
-        err.errors = { message: err.message }
         err.status = 403;
         return next(err);
     }
@@ -179,7 +174,6 @@ router.delete('/:bookingId', requireAuth, async (req, res, next) => {
     if (start < Date.now()) {
         const err = new Error("Bookings that have been started can't be deleted");
         err.title = 'Forbidden'
-        err.errors = { message: err.message }
         err.status = 403;
         return next(err);
     }

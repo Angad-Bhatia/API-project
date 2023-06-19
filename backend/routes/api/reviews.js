@@ -24,7 +24,7 @@ const validateReview = [
 ];
 
 //GET /api/reviews/current (Get all Reviews of the Current User)
-router.get('/current', requireAuth, async (req, res) => {
+router.get('/current', requireAuth, async (req, res, next) => {
     const { user } = req;
     const reviews = await Review.findAll({
         where: {
@@ -97,7 +97,6 @@ router.post('/:reviewId/images', requireAuth, async (req, res, next) => {
     if (!flagReview) {
         const err = new Error("Review couldn't be found");
         err.title = 'Resource Not Found';
-        err.errors = { message: err.message };
         err.status = 404;
         return next(err);
     }
@@ -106,7 +105,6 @@ router.post('/:reviewId/images', requireAuth, async (req, res, next) => {
     if (flagReview.ReviewImages.length >= 10) {
         const err = new Error('Maximum number of images for this resource was reached');
         err.title = 'Forbidden';
-        err.errors = { message: err.message };
         err.status = 403;
         return next(err);
     }
@@ -114,7 +112,6 @@ router.post('/:reviewId/images', requireAuth, async (req, res, next) => {
     if (flagReview.userId !== user.id) {
         const err = new Error('Review does not belong to user');
         err.title = 'Forbidden'
-        err.errors = { message: err.message }
         err.status = 403;
         return next(err);
     }
@@ -136,7 +133,6 @@ router.put('/:reviewId', requireAuth, validateReview, async (req, res, next) => 
     if (!userReview) {
         const err = new Error("Review couldn't be found");
         err.title = 'Resource Not Found';
-        err.errors = { message: err.message };
         err.status = 404;
         return next(err);
     }
@@ -144,7 +140,6 @@ router.put('/:reviewId', requireAuth, validateReview, async (req, res, next) => 
     if (userReview.userId !== user.id) {
         const err = new Error('Review does not belong to user');
         err.title = 'Forbidden'
-        err.errors = { message: err.message }
         err.status = 403;
         return next(err);
     }
@@ -164,7 +159,6 @@ router.delete('/:reviewId', requireAuth, async (req, res, next) => {
     if (!userReview) {
         const err = new Error("Review couldn't be found");
         err.title = 'Resource Not Found';
-        err.errors = { message: err.message };
         err.status = 404;
         return next(err);
     }
@@ -172,7 +166,6 @@ router.delete('/:reviewId', requireAuth, async (req, res, next) => {
     if (userReview.userId !== user.id) {
         const err = new Error('Review does not belong to user');
         err.title = 'Forbidden'
-        err.errors = { message: err.message }
         err.status = 403;
         return next(err);
     }
