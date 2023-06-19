@@ -119,5 +119,8 @@ router.post('/:reviewId/images', requireAuth, async (req, res, next) => {
     res.json(imageResponse);
 });
 
+router.put('/:reviewId', requireAuth, async (req, res, next) => {
+    
+});
 
 module.exports = router;
