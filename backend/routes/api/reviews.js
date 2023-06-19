@@ -133,7 +133,7 @@ router.post('/:reviewId/images', requireAuth, async (req, res, next) => {
 router.put('/:reviewId', requireAuth, validateReview, async (req, res, next) => {
     const { user } = req;
     const reviewId = req.params.reviewId;
-    
+    const review = await Review.findByPk(reviewId);
 });
 
 module.exports = router;
