@@ -13,6 +13,17 @@ const router = express.Router();
 
 const { Spot, Review, ReviewImage, SpotImage } = require('../../db/models');
 
+const validateReview = [
+    check('review')
+        .exists({ checkFalsy: true })
+        .withMessage('Review text is required'),
+    check('stars')
+        .exists({ checkFalsy: true })
+        .isInt({ min: 1, max: 5 })
+        .withMessage('Stars must be an integer from 1 to 5'),
+    handleValidationErrors
+];
+
 //GET /api/reviews/current (Get all Reviews of the Current User)
 router.get('/current', requireAuth, async (req, res) => {
     const { user } = req;
@@ -119,7 +130,9 @@ router.post('/:reviewId/images', requireAuth, async (req, res, next) => {
     res.json(imageResponse);
 });
 
-router.put('/:reviewId', requireAuth, async (req, res, next) => {
+router.put('/:reviewId', requireAuth, validateReview, async (req, res, next) => {
+    const { user } = req;
+    const reviewId = req.params.reviewId;
     
 });
 
