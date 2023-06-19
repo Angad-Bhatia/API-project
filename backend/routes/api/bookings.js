@@ -150,6 +150,42 @@ router.put('/bookingId', requireAuth, validateBooking, async (req, res, next) =>
 //DELETE /api/bookings/:bookingId
 router.delete('/:bookingId', requireAuth, async (req, res, next) => {
     const { user } = req;
+    const bookingId = req.params.bookingId;
+    const userBooking = await Booking.findByPk(bookingId, {
+        include: [
+            {
+                model: Spot
+            }
+        ]
+    });
+
+    if (!bookingId) {
+        const err = new Error("Booking couldn't be found");
+        err.title = 'Resource Not Found';
+        err.errors = { message: err.message };
+        err.status = 404;
+        return next(err);
+    }
+
+    if (userBooking.userId !== user.id && userBooking.Spot.ownerId !== user.id) {
+        const err = new Error('Booking does not belong to user');
+        err.title = 'Forbidden';
+        err.errors = { message: err.message }
+        err.status = 403;
+        return next(err);
+    }
+
+    const start = Date.parse(userBooking.startDate);
+    if (start < Date.now()) {
+        const err = new Error("Bookings that have been started can't be deleted");
+        err.title = 'Forbidden'
+        err.errors = { message: err.message }
+        err.status = 403;
+        return next(err);
+    }
+
+    await userBooking.destroy();
+    res.json({ message: 'Successfully deleted' });
 });
 
 
