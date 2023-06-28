@@ -157,14 +157,14 @@ router.get('/', async (req, res, next) => {
         errFlag = true;
     }
 
-    if (!isNaN(Number(minPrice)) && Number(minPrice) >=0) {
+    if (!isNaN(Number(minPrice)) && Number(minPrice) >= 0) {
         search.where.price = { [Op.gte]: minPrice }
     } else if (minPrice !== undefined) {
         queryErr.errors.minPrice = 'Minimum price must be greater than or equal to 0';
         errFlag = true;
     }
 
-    if (!isNaN(Number(maxPrice)) && Number(maxPrice) >=0) {
+    if (!isNaN(Number(maxPrice)) && Number(maxPrice) >= 0) {
         search.where.price = { [Op.lte]: maxPrice }
     } else if (maxPrice !== undefined) {
         queryErr.errors.maxPrice = 'Maximum price must be greater than or equal to 0';
@@ -175,10 +175,17 @@ router.get('/', async (req, res, next) => {
         return next(queryErr);
     }
 
-    if (page === undefined) page = 1;
-    else parseInt(page);
-    if (size === undefined) size = 20;
-    else parseInt(size);
+    if (page === undefined) {
+        page = 1
+    } else {
+        parseInt(page)
+    }
+
+    if (size === undefined) {
+        size = 20
+    } else {
+        parseInt(size)
+    }
 
     const pagination = {};
 
@@ -210,17 +217,20 @@ router.get('/', async (req, res, next) => {
         const newId = allSpots[i].id;
         //assign each spot POJO and avg rating
         spotPojo.avgStarRating = await avgRating(newId);
-        //
+
         const spotImgArr = spotPojo.SpotImages;
         for (let j = 0; j < spotImgArr.length; j++) {
             if (spotImgArr[j].preview) {
                 images.push(spotImgArr[j].url);
             }
         }
-        if (images.length > 0) spotPojo.previewImage = images[images.length - 1];
-        else spotPojo.previewImage = 'null';
-        delete spotPojo.SpotImages;
+        if (images.length > 0) {
+            spotPojo.previewImage = images[images.length - 1]
+        } else {
+            spotPojo.previewImage = 'null'
+        }
 
+        delete spotPojo.SpotImages;
         response.push(spotPojo);
     }
 
@@ -358,7 +368,7 @@ router.post('/:spotId/bookings', requireAuth, validateBooking, async (req, res, 
         err.status = 400;
         return next(err);
     }
-    
+
     const { user } = req;
     const userId = user.id;
     const spotId = req.params.spotId;
