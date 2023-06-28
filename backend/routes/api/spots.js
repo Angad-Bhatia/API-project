@@ -326,23 +326,39 @@ router.get('/:spotId/bookings', requireAuth, async (req, res, next) => {
 
         return res.json(pojo);
     }
-    // const bookingsArr =
-    // for (let i = 0;)
-    // const bookingsUser = await Booking.findAll({
-    //     where: {
-    //         spotId: req.params.spotId
-    //     },
-    //     include: [
-    //         {
-    //             model: User,
-    //             attributes: ['id', 'firstName', 'lastName']
-    //         }
-    //     ]
-    // })
 });
 
 // POST /api/spots/:spotId/bookings (Create a Booking from a Spot based on the Spot's id)
 router.post('/:spotId/bookings', requireAuth, validateBooking, async (req, res, next) => {
+    const { startDate, endDate } = req.body;
+
+    const yearS =  startDate.getFullYear()
+    const monthS = ('0' + (startDate.getMonth() + 1)).slice(-2);
+    const dayS = ('0' + (startDate.getDate() + 1)).slice(-2);
+    const start = `${yearS}-${monthS}-${dayS}`;
+
+    const yearE =  endDate.getFullYear()
+    const monthE = ('0' + (endDate.getMonth() + 1)).slice(-2);
+    const dayE = ('0' + (endDate.getDate() + 1)).slice(-2);
+    const end = `${yearE}-${monthE}-${dayE}`;
+
+    if (end <= start) {
+        const err = new Error('Bad Request');
+        err.title = 'Bad Request';
+        err.errors = { endDate: 'endDate cannot be on or before startDate' };
+        err.status = 400;
+        return next(err);
+    }
+
+    const today = new Date().toISOString().slice(0, 10);
+    if (start < today) {
+        const err = new Error('Bad Request');
+        err.title = 'Bad Request';
+        err.errors = { startDate: 'startDate cannot be before today' };
+        err.status = 400;
+        return next(err);
+    }
+    
     const { user } = req;
     const userId = user.id;
     const spotId = req.params.spotId;
@@ -371,16 +387,6 @@ router.post('/:spotId/bookings', requireAuth, validateBooking, async (req, res, 
         return next(err);
     }
 
-    const { startDate, endDate } = req.body;
-    const start = Date.parse(startDate);
-    const end = Date.parse(endDate);
-    if (end <= start) {
-        const err = new Error('Bad Request');
-        err.title = 'Bad Request';
-        err.errors = { endDate: 'endDate cannot be on or before startDate' };
-        err.status = 400;
-        return next(err);
-    }
 
     let errFlag = false;
     const newErr = new Error('Sorry, this spot is already booked for the specified dates');
@@ -389,18 +395,19 @@ router.post('/:spotId/bookings', requireAuth, validateBooking, async (req, res, 
     newErr.status = 403;
 
     const bookingsArr = flagSpot.Bookings;
+
     for (let i = 0; i < bookingsArr.length; i++) {
-        if (Date.parse(bookingsArr[i].startDate) == start ||
-            Date.parse(bookingsArr[i].endDate) == start ||
-            (Date.parse(bookingsArr[i].startDate) < start && Date.parse(bookingsArr[i].endDate) > start)
+        if ((bookingsArr[i].startDate) == start ||
+            (bookingsArr[i].endDate) == start ||
+            ((bookingsArr[i].startDate) < start && (bookingsArr[i].endDate) > start)
         ) {
             errFlag = true;
             newErr.errors.startDate = 'Start date conflicts with an existing booking';
         }
 
-        if (Date.parse(bookingsArr[i].startDate) == end ||
-            Date.parse(bookingsArr[i].endDate) == end ||
-            (Date.parse(bookingsArr[i].startDate) < end && Date.parse(bookingsArr[i].endDate) > end)
+        if (bookingsArr[i].startDate == end ||
+            bookingsArr[i].endDate == end ||
+            (bookingsArr[i].startDate < end && bookingsArr[i].endDate > end)
         ) {
             errFlag = true;
             newErr.errors.endDate = 'End date conflicts with an existing booking';
@@ -411,9 +418,9 @@ router.post('/:spotId/bookings', requireAuth, validateBooking, async (req, res, 
         return next(newErr);
     }
 
-    const newBooking = await Booking.create({ spotId, userId, startDate, endDate });
+    const newBooking = await Booking.create({ spotId, userId, startDate: start, endDate: end });
     const bookingResponse = await Booking.findOne({
-        where: { spotId, userId, startDate, endDate }
+        where: { spotId, userId, startDate: start, endDate: end }
     });
 
     res.json(bookingResponse);

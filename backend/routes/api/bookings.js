@@ -73,10 +73,40 @@ router.get('/current', requireAuth, async (req, res, next) => {
 });
 
 //PUT /api/bookings/:bookingId (Edit a Booking)
-router.put('/bookingId', requireAuth, validateBooking, async (req, res, next) => {
+router.put('/:bookingId', requireAuth, validateBooking, async (req, res, next) => {
+    const { startDate, endDate } = req.body;
+
+    const yearS =  startDate.getFullYear()
+    const monthS = ('0' + (startDate.getMonth() + 1)).slice(-2);
+    const dayS = ('0' + (startDate.getDate() + 1)).slice(-2);
+    const start = `${yearS}-${monthS}-${dayS}`;
+
+    const yearE =  endDate.getFullYear()
+    const monthE = ('0' + (endDate.getMonth() + 1)).slice(-2);
+    const dayE = ('0' + (endDate.getDate() + 1)).slice(-2);
+    const end = `${yearE}-${monthE}-${dayE}`;
+
+    if (end <= start) {
+        const err = new Error('Bad Request');
+        err.title = 'Bad Request';
+        err.errors = { endDate: 'endDate cannot be on or before startDate' };
+        err.status = 400;
+        return next(err);
+    }
+
+    const today = new Date().toISOString().slice(0, 10);
+    if (start < today) {
+        const err = new Error('Bad Request');
+        err.title = 'Bad Request';
+        err.errors = { startDate: 'startDate cannot be before today' };
+        err.status = 400;
+        return next(err);
+    }
+
     const { user } = req;
     const bookingId = req.params.bookingId;
     const userBooking = await Booking.findByPk(bookingId);
+
     if (!userBooking) {
         const err = new Error("Booking couldn't be found");
         err.title = 'Resource Not Found';
@@ -90,17 +120,27 @@ router.put('/bookingId', requireAuth, validateBooking, async (req, res, next) =>
         err.status = 403;
         return next(err);
     }
-
-    const { startDate, endDate } = req.body;
-
-    const start = Date.parse(startDate);
-    const end = Date.parse(endDate);
-    if (end <= start) {
-        const err = new Error('endDate cannot be on or before startDate');
-        err.title = 'Bad Request';
-        err.status = 400;
+    
+    const bookingStart = userBooking.startDate
+    if (bookingStart < today) {
+        const err = new Error("Past bookings can't be modified");
+        err.title = 'Forbidden'
+        err.errors = { message: err.message }
+        err.status = 403;
         return next(err);
     }
+
+    const spotId = userBooking.spotId;
+    const flagSpot = await Spot.findByPk(spotId, {
+        attributes: [],
+        include: [
+            {
+                model: Booking
+            }
+        ]
+    });
+
+
 
     let errFlag = false;
     const newErr = new Error('Sorry, this spot is already booked for the specified dates');
@@ -109,18 +149,19 @@ router.put('/bookingId', requireAuth, validateBooking, async (req, res, next) =>
     newErr.status = 403;
 
     const bookingsArr = flagSpot.Bookings;
+
     for (let i = 0; i < bookingsArr.length; i++) {
-        if (Date.parse(bookingsArr[i].startDate) == start ||
-            Date.parse(bookingsArr[i].endDate) == start ||
-            (Date.parse(bookingsArr[i].startDate) < start && Date.parse(bookingsArr[i].endDate) > start)
+        if ((bookingsArr[i].startDate) == start ||
+            (bookingsArr[i].endDate) == start ||
+            ((bookingsArr[i].startDate) < start && (bookingsArr[i].endDate) > start)
         ) {
             errFlag = true;
             newErr.errors.startDate = 'Start date conflicts with an existing booking';
         }
 
-        if (Date.parse(bookingsArr[i].startDate) == end ||
-            Date.parse(bookingsArr[i].endDate) == end ||
-            (Date.parse(bookingsArr[i].startDate) < end && Date.parse(bookingsArr[i].endDate) > end)
+        if (bookingsArr[i].startDate == end ||
+            bookingsArr[i].endDate == end ||
+            (bookingsArr[i].startDate < end && bookingsArr[i].endDate > end)
         ) {
             errFlag = true;
             newErr.errors.endDate = 'End date conflicts with an existing booking';
@@ -131,15 +172,7 @@ router.put('/bookingId', requireAuth, validateBooking, async (req, res, next) =>
         return next(newErr);
     }
 
-    if (start < Date.now()) {
-        const err = new Error("Past bookings can't be modified");
-        err.title = 'Forbidden'
-        err.errors = { message: err.message }
-        err.status = 403;
-        return next(err);
-    }
-
-    userBooking.set({ startDate, endDate });
+    userBooking.set({ startDate: start, endDate: end });
     await userBooking.save();
     res.json(userBooking);
 });
