@@ -1,0 +1,41 @@
+.errors {
+    color: red;
+}
+
+/* body {
+    height: 100%;
+}
+#root {
+    height: 50%;
+} */
+
+#login-form {
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+    font-family: Arial, Helvetica, sans-serif;
+    height: 300px;
+    padding-top: 0px;
+}
+
+h1 {
+    text-align: center;
+}
+
+.credentials {
+    display: flex;
+    flex-direction: column;
+    width: 25%
+}
+
+#password {
+    margin-top: .5%;
+    margin-bottom: 1%;
+}
+
+#login-btn {
+    width: 25%;
+    height: 15%;
+    box-shadow: 2px 2px 2px gray;
+}
