@@ -21,6 +21,7 @@ li {
 
 #home-container {
     color: red;
+    margin-left: 1%;
 }
 
 #home-img {
@@ -33,9 +34,9 @@ li {
     align-items: center;
 }
 
-#home-text.active {
+#home-text {
     text-decoration: none;
-    font-weight: bolder;
+    font-weight: bold;
     color:rgb(225, 79, 79);
     font-family: Arial, Helvetica, sans-serif;
 }
@@ -45,6 +46,8 @@ li {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 0%;
+    /* min-height: 100%; */
 }
 
 #profile-btn {
@@ -55,8 +58,24 @@ li {
 }
 
 #btn-container {
-    width: 10%;
-    height: 100%;
+    display: block;
+    min-height: 100%;
+    width: 6.5%;
+    /* padding: 0px; */
+    /* border: 0px; */
+    /* margin-top: 0px; */
+}
+
+#home-text:hover {
+    cursor: pointer;
+    font-weight: bolder;
+    text-decoration: underline;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#profile-btn:hover {
+    cursor: pointer;
+    background-color: rgb(179, 191, 245);
 }
 
 .profile-options:hover {

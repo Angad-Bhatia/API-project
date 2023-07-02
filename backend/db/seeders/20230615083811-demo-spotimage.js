@@ -13,18 +13,18 @@ module.exports = {
     await queryInterface.bulkInsert(options, [
       {
         spotId: 1,
-        url: 'https://shorturl.at/aALT0',
+        url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7FoePMWa6ckvkLQ0AOgg3Nf91D58Qt5XDVdUsvDadbb4b8O5ROJxRmTqM8V2o2JKWUCE&usqp=CAU',
         preview: true
       },
       {
         spotId: 2,
-        url: 'https://shorturl.at/rIUW0',
+        url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEJZGSyQCe0EEI0NNHjs8FnT4x0GFPhtKTWfbzCjQl_aO7GasXc87Qo5-X7YvNvEXj5mQ&usqp=CAU',
         preview: true
       },
       {
         spotId: 3,
-        url: 'https://shorturl.at/jnFG6',
-        preview: false
+        url: 'https://www.luxuryhomemagazine.com/lhm_listings/73132/Strawberry-Park-001-(002)_-NEW1.jpg',
+        preview: true
       }
     ], {});
   },
