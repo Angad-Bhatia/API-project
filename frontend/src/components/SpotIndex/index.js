@@ -1,34 +1,32 @@
-// frontend/src/components/Navigation/index.js
-import React from 'react';
+// frontend/src/components/SpotShow/index.js
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
 
 import SpotIndexItem from "../SpotIndexItem"
 
-import { thunkLoadSpots } from '../../store/spot';
+import { thunkLoadSpots } from '../../store/spots';
 import './SpotIndex.css';
 
 function SpotIndex () {
-    const spots = useSelector(state => state.spot.spots);
+    const spotsObj = useSelector((state) => state.spots.allSpots ? state.spots.allSpots : []);
+    const spots = Object.values(spotsObj);
     const dispatch = useDispatch();
-
 
     useEffect(() => {
         dispatch(thunkLoadSpots());
     }, [dispatch])
 
-    if (!spots) {
-        return null
-    };
+    console.log("SpotIndex", spots);
 
-    const spotsArr = Object.values(spots);
-    console.log("SpotIndex spotsArr:", Object.values(spots));
+    if (!spots.length) {
+        return null;
+    };
 
     return (
         <>
             <section>
                 <ul id="spots-list">
-                    {spotsArr.map(spot => (
+                    {spots.map(spot => (
                         <SpotIndexItem
                             spot={spot}
                             key={spot.id}

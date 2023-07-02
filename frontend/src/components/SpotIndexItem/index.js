@@ -5,7 +5,7 @@ import './SpotIndexItem.css';
 
 function SpotIndexItem ({ spot }) {
     const { city, state, price, avgStarRating, previewImage } = spot;
-    console.log("indexItem, previewImage:", spot);
+    console.log("indexItem, spot:", spot);
     return (
         <Link to={`/spots/${spot.id}`}>
             <li className="spot-li">
@@ -15,7 +15,7 @@ function SpotIndexItem ({ spot }) {
                 <div className='address-rating'>
                     <p className='address'>{city}, {state}</p>
                     <p className='rating'>
-                        <i class="fa-solid fa-star" style={{"color": "#00040a"}}></i>
+                        <i className="fa-solid fa-star" style={{"color": "#00040a"}}></i>
                         {avgStarRating}
                     </p>
                 </div>
