@@ -1,5 +1,5 @@
 const LOAD_SPOTS = "spots/loadSpots"
-const SHOW_SPOT = "spots/showSpot"
+const RECEIVE_SPOT = "spots/receiveSpot"
 
 const loadSpots = (spots) => {
     return {
@@ -8,9 +8,9 @@ const loadSpots = (spots) => {
     };
 };
 
-const showSpot = (spot) => {
+const receiveSpot = (spot) => {
     return {
-        type: SHOW_SPOT,
+        type: RECEIVE_SPOT,
         spot
     }
 }
@@ -29,12 +29,31 @@ export const thunkShowSpot = (spotId) => async (dispatch) => {
     const res = await fetch (`/api/spots/${spotId}`);
     if (res.ok) {
         const spot = await res.json();
-        console.log('thunkshow, spot: ', spot);
-        dispatch(showSpot(spot));
+        dispatch(receiveSpot(spot));
         return spot;
     } else {
         const err = await res.json();
         return err
+    }
+}
+
+export const thunkCreateSpot = (spot) => async (dispatch) => {
+    const { country, address, city, state, description, name, price } = spot
+    const reqBody = { address, city, state, country, lat: 90, lng: 90, name, description, price }
+    const res = await fetch ('/api/spots', {
+        method: "POST",
+        headers: { "Content-Type" : "application/json" },
+        body: JSON.stringify(reqBody)
+    });
+    if (res.ok) {
+        const newSpot = await res.json();
+        console.log('thunkcreate, newSpot: ', spot);
+        dispatch(receiveSpot(newSpot));
+        return newSpot;
+    } else {
+        const err = await res.json();
+        console.log('IN thunkCreateSpot, err: ', err);
+        return err;
     }
 }
 
@@ -54,16 +73,16 @@ const spotsReducer = (state = initialState, action) => {
                 loadSpotsState.allSpots[spotId] = spot;
             });
             return loadSpotsState;
-        case SHOW_SPOT:
-            const showSpotState = { ...state };
+        case RECEIVE_SPOT:
+            const receiveSpotState = { ...state };
             // console.log('action.spot:', action.spot)
             const id = action.spot.id;
-            if (showSpotState.allSpots) {
-                showSpotState.allSpots[id] = action.spot;
-                console.log('case showspot, spot: ', showSpotState.allSpots[id])
+            if (receiveSpotState.allSpots) {
+                receiveSpotState.allSpots[id] = action.spot;
+                console.log('case receivespot, spot: ', receiveSpotState.allSpots[id])
             }
-            console.log('case showspot, showSpotState', showSpotState);
-            return showSpotState;
+            console.log('case showspot, receiveSpotState', receiveSpotState);
+            return receiveSpotState;
         default:
             return state;
     }

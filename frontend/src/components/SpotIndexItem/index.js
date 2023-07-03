@@ -4,7 +4,11 @@ import { Link } from 'react-router-dom'
 import './SpotIndexItem.css';
 
 function SpotIndexItem ({ spot }) {
-    const { city, state, price, avgStarRating, previewImage } = spot;
+    const { city, state, price, avgStarRating, numReviews, previewImage } = spot;
+    let stars = avgStarRating;
+    if (numReviews < 1) {
+        stars = 'New';
+    }
     console.log("indexItem, spot:", spot);
     return (
         <Link to={`/spots/${spot.id}`}>
@@ -16,7 +20,7 @@ function SpotIndexItem ({ spot }) {
                     <p className='address'>{city}, {state}</p>
                     <p className='rating'>
                         <i className="fa-solid fa-star" style={{"color": "#00040a"}}></i>
-                        {avgStarRating}
+                        {stars}
                     </p>
                 </div>
                 <div className="price-container">

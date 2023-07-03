@@ -27,8 +27,11 @@ function SpotShow() {
     }
     const { Owner, SpotImages, address, avgStarRating, city, country, description, name, numReviews, price, state } = spot;
     let plural;
+    let stars = avgStarRating;
     if (numReviews > 1) {
         plural = 's';
+    } else if (numReviews < 1) {
+        stars = 'New';
     }
 
     return (
@@ -44,11 +47,24 @@ function SpotShow() {
                     <h3>Hosted by {Owner.firstName} {Owner.lastName}</h3>
                     <p>{description}</p>
                 </div>
+                <div id="reserve-cont">
+                    <div id="reserve-info">
+                        <div id="reserve-price">
+                            <div id="actual-price">${price}</div>
+                            <p id="night">night</p>
+                        </div>
+                        <div id="reserve-reviews">
+                        <i className="fa-solid fa-star" style={{"color": "#00040a"}}></i>
+                        {stars} &nbsp;&nbsp; {numReviews} review{plural}
+                        </div>
+                    </div>
+                    <button id="reserve-btn">Reserve</button>
+                </div>
             </div>
             <div id="reviews-cont">
                 <h2>
                     <i className="fa-solid fa-star" style={{"color": "#00040a"}}></i>
-                    {avgStarRating} &nbsp;&nbsp;{numReviews} review{plural}
+                    {stars} &nbsp;&nbsp;{numReviews} review{plural}
                 </h2>
                 <div id="review-btn">** Create Review btn if logged-in **</div>
                 <SpotReviewsIndex

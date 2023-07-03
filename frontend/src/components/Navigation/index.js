@@ -3,6 +3,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import ProfileButton from './ProfileButton';
+import CreateSpotForm from '../CreateSpotForm';
 import './Navigation.css';
 
 function Navigation({ isLoaded }){
@@ -17,9 +18,14 @@ function Navigation({ isLoaded }){
         </NavLink>
       </li>
       {isLoaded && (
-        <li className= "navs" id="btn-container">
-          <ProfileButton user={sessionUser} />
-        </li>
+        <div id="right-nav-cont">
+          {sessionUser && (
+            <NavLink exact to="/spots/new" id="new-spot">Create a New Spot</NavLink>
+          )}
+          <li className= "navs" id="btn-container">
+            <ProfileButton user={sessionUser} />
+          </li>
+        </div>
       )}
     </ul>
   );
