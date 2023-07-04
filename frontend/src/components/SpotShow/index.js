@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from "react-router-dom";
 
-import { thunkShowSpot } from "../../store/spots";
+import { thunkLoadSpots, thunkShowSpot } from "../../store/spots";
 
 import SpotReviewsIndex from "../SpotReviewsIndex";
 
@@ -14,8 +14,9 @@ function SpotShow() {
         state.spots.allSpots ? state.spots.allSpots[spotId] : null
     );
 
-    console.log("selected spot", spot);
+    // console.log("selected spot", spot);
     const dispatch = useDispatch();
+
 
     useEffect(() => {
         console.log('SPOTSHOW component, spot:', spot);

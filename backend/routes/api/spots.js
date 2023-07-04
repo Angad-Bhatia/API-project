@@ -36,9 +36,11 @@ const avgRating = async id => {
 const validateSpot = [
     check('address')
         .exists({ checkFalsy: true })
+        .isLength({ min: 2 })
         .withMessage('Street address is required'),
     check('city')
         .exists({ checkFalsy: true })
+        .isLength({ min: 2 })
         .withMessage('City is required'),
     check('state')
         .exists({ checkFalsy: true })
@@ -56,16 +58,18 @@ const validateSpot = [
         .withMessage('Longitude is not valid (Must be within range -180 to 180)'),
     check('name')
         .exists({ checkFalsy: true })
+        .isLength({ min: 2 })
         .withMessage('Name is required'),
     check('name')
         .isLength({ max: 50 })
         .withMessage('Name must be less than 50 characters'),
     check('description')
         .exists({ checkFalsy: true })
-        .withMessage('Description is required'),
+        .isLength({ min: 30 })
+        .withMessage('Description needs a minimum of 30 characters'),
     check('price')
         .exists({ checkFalsy: true })
-        .withMessage('Price per day is required'),
+        .withMessage('Price is required'),
     handleValidationErrors
 ];
 
@@ -247,7 +251,6 @@ router.post('/', requireAuth, validateSpot, async (req, res, next) => {
     const ownerId = user.id;
     const { address, city, state, country, lat, lng, name, description, price } = req.body;
     const spot = await Spot.create({ ownerId, address, city, state, country, lat, lng, name, description, price });
-
     res.status(201);
     return res.json(spot);
 });

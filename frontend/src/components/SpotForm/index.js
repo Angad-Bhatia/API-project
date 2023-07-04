@@ -7,10 +7,11 @@ import { thunkCreateSpot } from '../../store/spots';
 import "./SpotForm.css";
 
 const SpotForm = ({ spot, images, formType }) => {
-    console.log('IN SpotForm comp, from arg, spot: ', spot);
     const history = useHistory();
     const dispatch = useDispatch();
-    const [errors, setErrors] = useState({ image1: 'hi' });
+    const imgErr = {};
+    const [errors, setErrors] = useState({});
+    const [imgErrors, setImgErrors] = useState({});
     const [country, setCountry] = useState(spot.country);
     const [address, setAddress] = useState(spot.address);
     const [city, setCity] = useState(spot.city);
@@ -24,6 +25,8 @@ const SpotForm = ({ spot, images, formType }) => {
     const [image4, setImage4] = useState(images.image4);
     const [image5, setImage5] = useState(images.image5);
 
+    const imagesObj = {image1, image2, image3, image4, image5};
+
     let btnText = 'Create Spot';
     if (formType !== 'Create a new spot') {
         btnText = 'Update Spot';
@@ -32,18 +35,39 @@ const SpotForm = ({ spot, images, formType }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setErrors({});
+        if (!image1) {
+            imgErr.image1 = 'Preview image is required.'
+        }
+        for (let key in imagesObj) {
+            if (!imagesObj[key].endsWith('.png') &&
+                !imagesObj[key].endsWith('.jpg') &&
+                !imagesObj[key].endsWith('.jpeg')
+            ) {
+
+            }
+        }
         spot = { ...spot, country, address, city, state, description, name, price, image1, image2, image3, image4, image5 };
 
         if (formType === 'Create a new Spot') {
-            const newSpot = await dispatch(thunkCreateSpot(spot));
-            spot = newSpot;
+            console.log('IN SpotForm comp, from arg, spot: ', spot);
+            const newSpot = await dispatch(thunkCreateSpot(spot))
+            .catch(async (res) => {
+                const data = await res.json();
+                if (data && data.errors) {
+                    setErrors({ ...data.errors });
+                    console.log("IN handleSubmit, data.errors:", data.errors);
+                    console.log('setting errors in handlesubmit, errors:', errors);
+                }
+            });
+            if (!Object.keys(errors).length) {
+                spot = newSpot;
+            }
         }
 
-        if (spot.errors) {
-            setErrors(spot.errors);
-        } else {
-            // history.push(`/spots/${spot.id}`);
-        }
+        // if (!Object.keys(errors).length) {
+        //     history.push(`/spots/${spot.id}`)
+        // }
+
     }
 
     return (
