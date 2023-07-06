@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from "react-router-dom";
 
-import { thunkLoadSpots, thunkShowSpot } from "../../store/spots";
+import { thunkShowSpot } from "../../store/spots";
 
 import SpotReviewsIndex from "../SpotReviewsIndex";
 
@@ -19,7 +19,7 @@ function SpotShow() {
 
 
     useEffect(() => {
-        console.log('SPOTSHOW component, spot:', spot);
+        // console.log('SPOTSHOW component, spot:', spot);
         dispatch(thunkShowSpot(spotId));
     }, [dispatch, spotId]);
 
@@ -35,12 +35,17 @@ function SpotShow() {
         stars = 'New';
     }
 
+    const previewImg = SpotImages.find(img => img.preview).url;
+
+
     return (
         <>
             <h2>{name}</h2>
             <p>{city}, {state}, {country}</p>
             <div id="images-cont">
-                <div id="main-image">!! !MainImageGoesHere! !!</div>
+                <div id="main-image">
+                    <img id="previewImage" src={previewImg} alt="No Preview Available"></img>
+                </div>
                 <div id="other-images">** Other Images Goes Here **</div>
             </div>
             <div id="all-info-cont">

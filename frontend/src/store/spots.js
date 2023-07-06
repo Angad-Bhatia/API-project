@@ -31,7 +31,7 @@ export const thunkLoadSpots = () => async (dispatch) => {
     if (res.ok) {
         const data = await res.json();
         dispatch(loadSpots(data.Spots));
-        console.log('thunk, spotsArr:', data.Spots);
+        // console.log('thunk, spotsArr:', data.Spots);
         return data.Spots;
     }
 }
@@ -63,7 +63,7 @@ export const thunkCreateSpot = (spot) => async (dispatch) => {
     let errFlag = false;
     if (res.status < 400) {
         const newSpot = await res.json();
-        console.log('thunkcreate, newSpot: ', newSpot);
+        // console.log('thunkcreate, newSpot: ', newSpot);
         let previewFlag = false;
 
         for (let image in imageInputs) {
@@ -100,9 +100,22 @@ export const thunkCreateSpot = (spot) => async (dispatch) => {
         }
     } else {
         const err = await res.json();
-        console.log('IN thunkCreateSpot, err: ', errs);
+        // console.log('IN thunkCreateSpot, err: ', errs);
         return {errs, ...err};
     }
+}
+
+export const thunkLoadUserSpots = () => async (dispatch) => {
+    const res = await fetch("/api/spots/current");
+    if (res.ok) {
+        const data = await res.json();
+        dispatch(loadSpots(data.Spots));
+        return data.Spots;
+    }
+}
+
+export const thunkLoadSpotImages = (spotId) => async (dispatch) => {
+    const res = await fetch('')
 }
 
 const initialState = { allSpots: null };
@@ -112,9 +125,9 @@ const spotsReducer = (state = initialState, action) => {
     switch (action.type) {
         case LOAD_SPOTS:
             const loadSpotsState = { ...state };
-            if (!loadSpotsState.allSpots) {
+            // if (!loadSpotsState.allSpots) {
                 loadSpotsState.allSpots = {};
-            }
+            // }
             const spotsArr = action.spots;
             spotsArr.forEach(spot => {
                 const spotId = spot.id;
@@ -122,14 +135,15 @@ const spotsReducer = (state = initialState, action) => {
             });
             return loadSpotsState;
         case RECEIVE_SPOT:
+            console.log('load', state.allSpots)
             const receiveSpotState = { ...state };
-            // console.log('action.spot:', action.spot)
+            console.log('receive spot, state: ', receiveSpotState.allSpots);
             const id = action.spot.id;
             if (receiveSpotState.allSpots) {
                 receiveSpotState.allSpots[id] = action.spot;
-                console.log('case receivespot, spot: ', receiveSpotState.allSpots[id])
+                // console.log('case receivespot, spot: ', receiveSpotState.allSpots[id])
             }
-            console.log('case showspot, receiveSpotState', receiveSpotState);
+            // console.log('case showspot, receiveSpotState', receiveSpotState);
             return receiveSpotState;
         case RECEIVE_SPOT_IMAGES:
             const receiveSpotImageState = { ...state };

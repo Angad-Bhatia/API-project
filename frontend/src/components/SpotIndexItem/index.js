@@ -9,12 +9,12 @@ function SpotIndexItem ({ spot }) {
     if (numReviews < 1) {
         stars = 'New';
     }
-    console.log("indexItem, spot:", spot);
+    // console.log("indexItem, spot:", spot);
     return (
         <Link to={`/spots/${spot.id}`}>
             <li className="spot-li">
                 <div className='image-container'>
-                    <img className="preview" src={previewImage}></img>
+                    <img className="preview" src={previewImage} alt="No Preview Image Available"></img>
                 </div>
                 <div className='address-rating'>
                     <p className='address'>{city}, {state}</p>

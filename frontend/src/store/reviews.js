@@ -13,7 +13,7 @@ export const thunkLoadSpotReviews = (spotId) => async (dispatch) => {
     if (res.ok) {
         const data = await res.json();
         dispatch(loadSpotReviews(data.Reviews))
-        console.log('IN: reviewsReducer(reviews.js), data.Reviews:', data.Reviews)
+        // console.log('IN: reviewsReducer(reviews.js), data.Reviews:', data.Reviews)
         return data.Reviews;
     }
 }
@@ -32,7 +32,7 @@ const reviewsReducer = (state = initialState, action) => {
                 const reviewId = review.id;
                 loadSpotReviewsState.allReviews[reviewId] = review;
             })
-            console.log('reviewsreducer, review 1:', action.reviews[0]);
+            // console.log('reviewsreducer, review 1:', action.reviews[0]);
             return loadSpotReviewsState;
         default:
             return state;

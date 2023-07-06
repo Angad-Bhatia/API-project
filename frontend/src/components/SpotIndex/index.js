@@ -1,4 +1,4 @@
-// frontend/src/components/SpotShow/index.js
+// frontend/src/components/SpotIndex/index.js
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -16,7 +16,6 @@ function SpotIndex () {
         dispatch(thunkLoadSpots());
     }, [dispatch])
 
-    console.log("SpotIndex", spots);
 
     if (!spots.length) {
         return null;

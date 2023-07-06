@@ -1,0 +1,19 @@
+#form-cont {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    /* align-items: center; */
+    width: fit-content;
+    border: 5px solid red
+}
+
+h2 {
+    /* text-align: center; */
+}

@@ -16,7 +16,7 @@ function SpotReviewsIndex({ spotId }) {
         dispatch(thunkLoadSpotReviews(spotId));
     }, [dispatch, spotId]);
 
-    console.log('ShowReviews comp, reviews', reviews)
+    // console.log('ShowReviews comp, reviews', reviews)
 
 
     return (
@@ -24,6 +24,7 @@ function SpotReviewsIndex({ spotId }) {
             {reviews.map(review => (
                 <SpotReviewsIndexItem
                     reviewObj={review}
+                    key={review.id}
                 />
             ))}
         </ul>
