@@ -25,10 +25,13 @@ export const spotValidation = (spot) => {
         errs.flag = true;
     }
 
-    const dec = spot.price.indexOf('.');
+    let dec = 0;
+    if (spot.price) {
+        dec = spot.price.toString().indexOf('.');
+    }
     let floats = '';
-    if (dec !== -1) {
-        floats = spot.price.slice(dec + 1);
+    if (dec !== -1 && spot.price) {
+        floats = spot.price.toString().slice(dec + 1);
     }
 
     if (spot.price === '' || spot.price < 0 || isNaN(Number(spot.price)) || floats.length > 2) {
@@ -39,11 +42,33 @@ export const spotValidation = (spot) => {
     return errs;
 }
 
-export const isValidUrl = urlString=> {
-    try {
-        return Boolean(new URL(urlString));
+export const imageValidation = (imagesObj) => {
+    const isValidUrl = urlString=> {
+        try {
+            return Boolean(new URL(urlString));
+        }
+        catch(e){
+            return false;
+        }
     }
-    catch(e){
-        return false;
+    const imgErr = { flag: false }
+    const { image1, image2, image3, image4, image5 } = imagesObj;
+    if (!image1) {
+        imgErr.image1 = 'Preview image is required.'
+        imgErr.flag = true;
     }
+    for (let key in imagesObj) {
+        if (imagesObj[key] &&
+            ((!imagesObj[key].endsWith('.png') &&
+            !imagesObj[key].endsWith('.jpg') &&
+            !imagesObj[key].endsWith('.jpeg')) ||
+            !isValidUrl(imagesObj[key]))
+            )
+        {
+            imgErr[key] = 'Image URL must be a valid URL that ends in .png, .jpg, or .jpeg';
+            imgErr.flag = true;
+        }
+    }
+
+    return imgErr;
 }

@@ -19,10 +19,6 @@ const SpotIndexUser = () => {
     }, [dispatch])
 
 
-    const onUpdate = (e, spot) => {
-        e.preventDefault();
-        history.push(`/spots/${spot.id}/edit`);
-    }
     if (!spots.length) {
         return null;
     };
@@ -38,7 +34,10 @@ const SpotIndexUser = () => {
                                 key={spot.id}
                             />
                             <div className='user-crud-btn-conts'>
-                                <button className='update-btns'>Update</button>
+                                <button onClick={async (e) => {
+                                    e.preventDefault();
+                                    history.push(`/spots/${spot.id}/edit`);
+                                }} className='update-btns'>Update</button>
                                 <button className='delete-btns'>Delete</button>
                             </div>
                         </div>

@@ -69,8 +69,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(11),
       allowNull: false,
       validate: {
-        isIn: [states],
-        len: [4,11],
+        len: [2, 30],
         notEmpty: true
       }
     },

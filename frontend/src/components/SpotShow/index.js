@@ -10,11 +10,12 @@ import "./SpotShow.css";
 
 function SpotShow() {
     const { spotId } = useParams();
+    console.log('spotShow, spotId: ', spotId);
     const spot = useSelector((state) =>
         state.spots.allSpots ? state.spots.allSpots[spotId] : null
     );
-
     // console.log("selected spot", spot);
+
     const dispatch = useDispatch();
 
 

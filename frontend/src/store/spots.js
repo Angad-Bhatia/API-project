@@ -36,7 +36,17 @@ export const thunkLoadSpots = () => async (dispatch) => {
     }
 }
 
+export const thunkLoadUserSpots = () => async (dispatch) => {
+    const res = await fetch("/api/spots/current");
+    if (res.ok) {
+        const data = await res.json();
+        dispatch(loadSpots(data.Spots));
+        return data.Spots;
+    }
+}
+
 export const thunkShowSpot = (spotId) => async (dispatch) => {
+
     const res = await fetch (`/api/spots/${spotId}`);
     if (res.ok) {
         const spot = await res.json();
@@ -55,15 +65,14 @@ export const thunkCreateSpot = (spot) => async (dispatch) => {
     const imageArr = [];
     const res = await csrfFetch ("/api/spots", {
         method: "POST",
-        // headers: { "Content-Type" : "application/json" },
         body: JSON.stringify(reqBody)
     });
 
     const errs = {};
     let errFlag = false;
+
     if (res.status < 400) {
         const newSpot = await res.json();
-        // console.log('thunkcreate, newSpot: ', newSpot);
         let previewFlag = false;
 
         for (let image in imageInputs) {
@@ -79,7 +88,7 @@ export const thunkCreateSpot = (spot) => async (dispatch) => {
 
                 if (imagesRes.ok) {
                     const newImage = await imagesRes.json();
-                    if (newImage.preview === true) {
+                    if (newImage.preview) {
                         imageArr.unshift(newImage);
                     } else {
                         imageArr.push(newImage);
@@ -96,6 +105,7 @@ export const thunkCreateSpot = (spot) => async (dispatch) => {
             dispatch(receiveSpotImages(imageArr, newSpot.id));
             return newSpot;
         } else {
+            errFlag = true;
             return errs;
         }
     } else {
@@ -105,17 +115,72 @@ export const thunkCreateSpot = (spot) => async (dispatch) => {
     }
 }
 
-export const thunkLoadUserSpots = () => async (dispatch) => {
-    const res = await fetch("/api/spots/current");
-    if (res.ok) {
-        const data = await res.json();
-        dispatch(loadSpots(data.Spots));
-        return data.Spots;
-    }
-}
+export const thunkUpdateSpot = (spot) => async (dispatch) => {
+    const { country, address, city, state, description, name, price, image1, image2, image3, image4, image5 } = spot;
+    const reqBody = { address, city, state, country, lat: 90, lng: 90, name, description, price };
+    const imageInputs = { image1, image2, image3, image4, image5 }
+    const imageArr = [];
+    let spotImagesArr;
+    // console.log('thunk update, spot: ', spot.SpotImages);
 
-export const thunkLoadSpotImages = (spotId) => async (dispatch) => {
-    const res = await fetch('')
+
+    const res = await csrfFetch(`/api/spots/${spot.id}`, {
+        method: 'PUT',
+        body: JSON.stringify(reqBody)
+    });
+
+    const errs = {};
+    let errFlag = false;
+
+    if (res.status < 400) {
+        const updatedSpot = await res.json();
+        let previewFlag = false;
+        console.log('thunkUpdate, before if, spot, spot.SpotImages', spot, spot.SpotImages)
+        if (spot && spot.SpotImages && spot.SpotImages.length) {
+            spotImagesArr = spot.SpotImages;
+            for (let i = 0; i < spotImagesArr.length; i++) {
+                const img = spotImagesArr[i];
+                console.log('thunkUpdate, in delImg loop, img: ', img);
+                const deleteRes = await csrfFetch(`/api/spot-images/${img.id}`, { method: 'DELETE' });
+            }
+        }
+
+        for (let image in imageInputs) {
+            if (image === 'image1') {
+                previewFlag = true;
+            }
+            const reqImageBody = { url: imageInputs[image], preview: previewFlag };
+            console.log('thunkUpdate, before imagePost, reqImageBody', reqImageBody);
+            const imageRes = await csrfFetch(`/api/spots/${updatedSpot.id}/images`, {
+                method: 'POST',
+                body: JSON.stringify(reqImageBody)
+            });
+
+            if (imageRes.ok) {
+                const updatedImage = await imageRes.json();
+                if (updatedImage.preview) {
+                    imageArr.unshift(updatedImage);
+                } else {
+                    imageArr.push(updatedImage);
+                }
+            } else {
+                errs.imageErrs[image] = await imageRes.json();
+                errFlag = true;
+            }
+        }
+
+        if (!errFlag) {
+            dispatch(receiveSpot(updatedSpot));
+            dispatch(receiveSpotImages(imageArr, updatedSpot.id));
+            return updatedSpot;
+        } else {
+            errFlag = true;
+            return errs;
+        }
+    } else {
+        const err = await res.json();
+        return { errs, ...err };
+    }
 }
 
 const initialState = { allSpots: null };
@@ -135,9 +200,9 @@ const spotsReducer = (state = initialState, action) => {
             });
             return loadSpotsState;
         case RECEIVE_SPOT:
-            console.log('load', state.allSpots)
+            // console.log('load', state.allSpots)
             const receiveSpotState = { ...state };
-            console.log('receive spot, state: ', receiveSpotState.allSpots);
+            // console.log('receive spot, state: ', receiveSpotState.allSpots);
             const id = action.spot.id;
             if (receiveSpotState.allSpots) {
                 receiveSpotState.allSpots[id] = action.spot;

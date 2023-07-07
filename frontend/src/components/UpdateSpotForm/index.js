@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import { thunkShowSpot } from "../../store/spots";
@@ -12,27 +12,30 @@ const UpdateSpotForm = () => {
     const spot = useSelector((state) => state.spots.allSpots ? state.spots.allSpots[spotId] : null);
     useEffect(() => {
         dispatch((thunkShowSpot(spotId)));
+    }, [dispatch]);
 
-    }, [dispatch])
+    if (!spot || !spot.id || !spot.SpotImages) return null;
     const imagesArr = spot.SpotImages;
+
+
     const images = {};
-    let count = 0;
+    let count = 1;
 
     for (let i = 0; i < imagesArr.length; i++) {
         const img = imagesArr[i];
         if (img.preview) {
-            images['image1'] = img;
-            count --;
+            images['image1'] = img.url;
         } else {
-            count += 2;
+            count += 1;
             images[`image${count}`] = img;
         }
-    }
+    };
+
     return (
         <SpotForm
         spot={spot}
         images={images}
-        formtype='Update your Spot'
+        formType='Update your Spot'
         />
     );
 };

@@ -2,20 +2,35 @@ import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
-import { thunkCreateSpot } from '../../store/spots';
+import { thunkCreateSpot, thunkUpdateSpot } from '../../store/spots';
 
-import { spotValidation, isValidUrl } from '../../helpers';
+import { spotValidation, imageValidation } from '../../helpers';
 
 import "./SpotForm.css";
 
 const SpotForm = ({ spot, images, formType }) => {
-    const states = ['Alabama', 'Alaska', 'American Samoa', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'District of Columbia', 'Florida', 'Georgia', 'Guam', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Minor Outlying Islands', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Northern Mariana Islands', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Puerto Rico', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'U.S. Virgin Islands', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
-    const countries = ['Afghanistan','Albania','Algeria','Andorra','Angola','Antigua and Barbuda','Argentina','Armenia','Australia','Austria','Azerbaijan','The Bahamas','Bahrain','Bangladesh','Barbados','Belarus','Belgium','Belize','Benin','Bhutan','Bolivia','Bosnia and Herzegovina','Botswana','Brazil','Brunei','Bulgaria','Burkina Faso','Burundi','Cabo Verde','Cambodia','Cameroon','Canada','Central African Republic','Chad','Chile','China','Colombia','Comoros','Democratic Republic of the Congo','Costa Rica','Côte d"Ivoire', 'Croatia','Cuba','Cyprus','Czech Republic','Denmark','Djibouti','Dominica','Dominican Republic','East Timor (Timor-Leste)','Ecuador','Egypt','El Salvador','Equatorial Guinea','Eritrea','Estonia','Eswatini','Ethiopia','Fiji','Finland','France','Gabon','The Gambia','Georgia','Germany','Ghana','Greece','Grenada','Guatemala','Guinea','Guinea-Bissau','Guyana','Haiti','Honduras','Hungary','Iceland','India','Indonesia','Iran','Iraq','Ireland','Israel','Italy','Jamaica','Japan','Jordan','Kazakhstan','Kenya','Kiribati','Korea, North','Korea, South','Kosovo','Kuwait','Kyrgyzstan','Laos','Latvia','Lebanon','Lesotho','Liberia','Libya','Liechtenstein','Lithuania','Luxembourg','Madagascar','Malawi','Malaysia','Maldives','Mali','Malta','Marshall Islands','Mauritania','Mauritius','Mexico','Micronesia, Federated States of','Moldova','Monaco','Mongolia','Montenegro','Morocco','Mozambique','Myanmar (Burma)','Namibia','Nauru','Nepal','Netherlands','New Zealand','Nicaragua','Niger','Nigeria','North Macedonia','Norway','Oman','Pakistan','Palau','Panama','Papua New Guinea','Paraguay','Peru','Philippines','Poland','Portugal','Qatar','Romania','Russia','Rwanda','Saint Kitts and Nevis','Saint Lucia','Saint Vincent and the Grenadines','Samoa','San Marino','Sao Tome and Principe','Saudi Arabia','Senegal','Serbia','Seychelles','Sierra Leone','Singapore','Slovakia','Slovenia','Solomon Islands','Somalia','South Africa','Spain','Sri Lanka','Sudan','Sudan, South','Suriname','Sweden','Switzerland','Syria','Taiwan','Tajikistan','Tanzania','Thailand','Togo','Tonga','Trinidad and Tobago','Tunisia','Turkey','Turkmenistan','Tuvalu','Uganda','Ukraine','United Arab Emirates','United Kingdom','United States of America','Uruguay','Uzbekistan','Vanuatu','Vatican City','Venezuela','Vietnam','Yemen','Zambia','Zimbabwe']
+    let states = ['Alabama', 'Alaska', 'American Samoa', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'District of Columbia', 'Florida', 'Georgia', 'Guam', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Minor Outlying Islands', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Northern Mariana Islands', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Puerto Rico', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'U.S. Virgin Islands', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
+    let countries = ['Afghanistan','Albania','Algeria','Andorra','Angola','Antigua and Barbuda','Argentina','Armenia','Australia','Austria','Azerbaijan','The Bahamas','Bahrain','Bangladesh','Barbados','Belarus','Belgium','Belize','Benin','Bhutan','Bolivia','Bosnia and Herzegovina','Botswana','Brazil','Brunei','Bulgaria','Burkina Faso','Burundi','Cabo Verde','Cambodia','Cameroon','Canada','Central African Republic','Chad','Chile','China','Colombia','Comoros','Democratic Republic of the Congo','Costa Rica','Côte d"Ivoire', 'Croatia','Cuba','Cyprus','Czech Republic','Denmark','Djibouti','Dominica','Dominican Republic','East Timor (Timor-Leste)','Ecuador','Egypt','El Salvador','Equatorial Guinea','Eritrea','Estonia','Eswatini','Ethiopia','Fiji','Finland','France','Gabon','The Gambia','Georgia','Germany','Ghana','Greece','Grenada','Guatemala','Guinea','Guinea-Bissau','Guyana','Haiti','Honduras','Hungary','Iceland','India','Indonesia','Iran','Iraq','Ireland','Israel','Italy','Jamaica','Japan','Jordan','Kazakhstan','Kenya','Kiribati','Korea, North','Korea, South','Kosovo','Kuwait','Kyrgyzstan','Laos','Latvia','Lebanon','Lesotho','Liberia','Libya','Liechtenstein','Lithuania','Luxembourg','Madagascar','Malawi','Malaysia','Maldives','Mali','Malta','Marshall Islands','Mauritania','Mauritius','Mexico','Micronesia, Federated States of','Moldova','Monaco','Mongolia','Montenegro','Morocco','Mozambique','Myanmar (Burma)','Namibia','Nauru','Nepal','Netherlands','New Zealand','Nicaragua','Niger','Nigeria','North Macedonia','Norway','Oman','Pakistan','Palau','Panama','Papua New Guinea','Paraguay','Peru','Philippines','Poland','Portugal','Qatar','Romania','Russia','Rwanda','Saint Kitts and Nevis','Saint Lucia','Saint Vincent and the Grenadines','Samoa','San Marino','Sao Tome and Principe','Saudi Arabia','Senegal','Serbia','Seychelles','Sierra Leone','Singapore','Slovakia','Slovenia','Solomon Islands','Somalia','South Africa','Spain','Sri Lanka','Sudan','Sudan, South','Suriname','Sweden','Switzerland','Syria','Taiwan','Tajikistan','Tanzania','Thailand','Togo','Tonga','Trinidad and Tobago','Tunisia','Turkey','Turkmenistan','Tuvalu','Uganda','Ukraine','United Arab Emirates','United Kingdom','United States of America','Uruguay','Uzbekistan','Vanuatu','Vatican City','Venezuela','Vietnam','Yemen','Zambia','Zimbabwe']
 
+    let btnText = 'Create Spot';
+    if (formType !== 'Create a new Spot') {
+        btnText = 'Update Spot';
+        const adjCountries = countries;
+        const adjStates = states;
+        const countryInd = countries.indexOf(spot.country);
+        const stateInd = states.indexOf(spot.state);
+        if (countryInd > -1) {
+            adjCountries.splice(countryInd, 1);
+            countries = adjCountries
+        }
+        if (stateInd > -1) {
+            adjStates.splice(stateInd, 1);
+            states = adjStates
+        }
+    }
 
     const history = useHistory();
     const dispatch = useDispatch();
-    const imgErr = { flag: false };
     const [errors, setErrors] = useState({});
     const [imgErrors, setImgErrors] = useState({});
     const [country, setCountry] = useState(spot.country);
@@ -33,54 +48,43 @@ const SpotForm = ({ spot, images, formType }) => {
 
     const imagesObj = { image1, image2, image3, image4, image5 };
 
-    let btnText = 'Create Spot';
-    if (formType !== 'Create a new spot') {
-        btnText = 'Update Spot';
-    }
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         setErrors({ flag: false });
         setImgErrors({ flag: false })
-        imgErr.flag = false;
-        if (!image1) {
-            imgErr.image1 = 'Preview image is required.'
-            imgErr.flag = true;
-        }
-        for (let key in imagesObj) {
-            if (imagesObj[key] &&
-                ((!imagesObj[key].endsWith('.png') &&
-                !imagesObj[key].endsWith('.jpg') &&
-                !imagesObj[key].endsWith('.jpeg')) ||
-                !isValidUrl(imagesObj[key]))
-                ) {
-                    imgErr[key] = 'Image URL must be a valid URL that ends in .png, .jpg, or .jpeg';
-                    imgErr.flag = true;
-                }
-            }
-            setImgErrors(imgErr);
+
         spot = { ...spot, country, address, city, state, description, name, price, image1, image2, image3, image4, image5 };
         const spotErrs = spotValidation(spot);
+        const imgErr = imageValidation(imagesObj);
         setErrors(spotErrs);
+        setImgErrors(imgErr);
 
-        if (formType === 'Create a new Spot' && !imgErrors.flag&& !errors.flag) {
-            console.log('hi');
+        if (formType === 'Create a new Spot' && imgErrors.flag == false && errors.flag == false) {
             const newSpot = await dispatch(thunkCreateSpot(spot))
             .catch(async (res) => {
                 const data = await res.json();
-                console.log('data after dispatch, data: ', data);
                 if (data && data.errors) {
                     setErrors({ ...data.errors, flag: true });
-                } else {
                 }
             });
+
             spot = newSpot;
-            if (spot && spot.id && !imgErrors.flag&& !errors.flag) {
+            if (spot && spot.id && imgErrors.flag == false && errors.flag == false) {
+                history.push(`/spots/${spot.id}`);
+            }
+        } else if (formType === 'Update your Spot' && spot.id && imgErrors.flag == false && errors.flag == false) {
+            const updatedSpot = await dispatch(thunkUpdateSpot(spot))
+            .catch(async (res) => {
+                const data = await res.json();
+                if (data && data.errors) {
+                    setErrors({ ...data.errors, flag: true });
+                }
+            });
+
+            if (spot && spot.id && imgErrors.flag == false && errors.flag == false) {
                 history.push(`/spots/${spot.id}`);
             }
         }
-        // console.log('successful sibmission, spot & newSpot:', spot)
-
     }
 
     return (
@@ -102,10 +106,9 @@ const SpotForm = ({ spot, images, formType }) => {
                                 <select id='country' name='country'
                                     onChange={(e) => setCountry(e.target.value)}
                                 >
-                                    <option value="" selected>Select Country</option>
-                                    {countries.map(country => (
-                                        <option value={country}
-                                        >{country}</option>
+                                    <option value={country} selected>{country}</option>
+                                    {countries.map(countryEl => (
+                                        <option value={countryEl}>{countryEl}</option>
                                     ))}
                                 </select>
                             </label>
@@ -145,7 +148,7 @@ const SpotForm = ({ spot, images, formType }) => {
                                     onChange={(e) => setState(e.target.value)}
                                     className='state-inputs'
                                 >
-                                    <option value="" selected>Select State</option>
+                                    <option value={state} selected>{state}</option>
                                     {states.map(state => (
                                         <option value={state}>{state}</option>))}
                                 </select>}
@@ -217,7 +220,7 @@ const SpotForm = ({ spot, images, formType }) => {
                                 <input type="text"
                                     value={image1}
                                     placeholder='Preview Image URL'
-                                    onChange={(e) => setImage1(e.target.value)}
+                                    onInput={(e) => setImage1(e.target.value)}
                                 ></input>
                                 <div className='errors'>{imgErrors.prev}</div>
                                 <div className="errors">{imgErrors.image1}</div>
@@ -257,15 +260,10 @@ const SpotForm = ({ spot, images, formType }) => {
                         </ul>
                     </li>
                 </ul>
-                <button type="submit">Create Spot</button>
+                <button type="submit">{btnText}</button>
             </form>
         </div>
     )
 }
-
-// {country === 'United States of America' && <select id="state" name="state">
-//                                     {states.map(state => (
-//                                         <option value={state}>{state}</option>))}
-//                                 </select>}
 
 export default SpotForm;

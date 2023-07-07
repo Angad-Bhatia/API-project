@@ -31,8 +31,8 @@ function App() {
           <Route exact path="/spots/current">
             <SpotIndexUser/>
           </Route>
-          <Route>
-            <UpdateSpotForm exact path="/spots/:spotId/edit"/>
+          <Route exact path="/spots/:spotId/edit">
+            <UpdateSpotForm/>
           </Route>
           <Route exact path="/spots/:spotId">
             <SpotShow/>

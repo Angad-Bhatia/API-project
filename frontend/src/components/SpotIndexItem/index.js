@@ -1,17 +1,24 @@
 import React from 'react';
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom';
 
 import './SpotIndexItem.css';
 
 function SpotIndexItem ({ spot }) {
+    const history = useHistory();
     const { city, state, price, avgStarRating, numReviews, previewImage } = spot;
     let stars = avgStarRating;
     if (numReviews < 1) {
         stars = 'New';
     }
     // console.log("indexItem, spot:", spot);
+    const onClick = (e) => {
+        e.preventDefault();
+        history.push(`/spots/${spot.id}`);
+
+    }
     return (
-        <Link to={`/spots/${spot.id}`}>
+        // <Link to={`/spots/${spot.id}`}>
+        <button onClick={onClick}>
             <li className="spot-li">
                 <div className='image-container'>
                     <img className="preview" src={previewImage} alt="No Preview Image Available"></img>
@@ -28,7 +35,8 @@ function SpotIndexItem ({ spot }) {
                     <p className='night'>night</p>
                 </div>
             </li>
-        </Link>
+        </button>
+        // </Link>
     )
 }
 
