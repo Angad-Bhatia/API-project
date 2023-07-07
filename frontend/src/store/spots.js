@@ -2,6 +2,7 @@ import { csrfFetch } from "./csrf";
 
 const LOAD_SPOTS = "spots/loadSpots";
 const RECEIVE_SPOT = "spots/receiveSpot";
+const DELETE_SPOT = "spots/deleteSpot"
 const RECEIVE_SPOT_IMAGES = "spots/receiveSpotImages";
 
 const loadSpots = (spots) => {
@@ -15,6 +16,13 @@ const receiveSpot = (spot) => {
     return {
         type: RECEIVE_SPOT,
         spot
+    }
+}
+
+const deleteSpot = (spotId) => {
+    return {
+        type: DELETE_SPOT,
+        spotId
     }
 }
 
@@ -183,6 +191,16 @@ export const thunkUpdateSpot = (spot) => async (dispatch) => {
     }
 }
 
+export const thunkDeleteSpot = (spotId) => async (dispatch) => {
+    const res = await csrfFetch(`/api/spots/${spotId}`, { method: 'DELETE' });
+    if (res.ok) {
+        console.log('resOkay')
+        const data = await res.json();
+        dispatch(deleteSpot(spotId))
+        return data;
+    }
+}
+
 const initialState = { allSpots: null };
 
 const spotsReducer = (state = initialState, action) => {
@@ -210,6 +228,13 @@ const spotsReducer = (state = initialState, action) => {
             }
             // console.log('case showspot, receiveSpotState', receiveSpotState);
             return receiveSpotState;
+        case DELETE_SPOT:
+            const deleteSpotState = { ...state };
+            const deleteId = action.spotId;
+            if (deleteSpotState.allSpots[deleteId]) {
+                delete deleteSpotState.allSpots[deleteId];
+            }
+            return deleteSpotState;
         case RECEIVE_SPOT_IMAGES:
             const receiveSpotImageState = { ...state };
             const spotIdForImage = action.spotId;

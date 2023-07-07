@@ -2,6 +2,8 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from "react-router-dom";
+import OpenModalMenuItem from '../Navigation/OpenModalMenuItem';
+import DeleteSpotModal from '../DeleteSpotModal';
 
 import SpotIndexItem from "../SpotIndexItem";
 
@@ -38,7 +40,14 @@ const SpotIndexUser = () => {
                                     e.preventDefault();
                                     history.push(`/spots/${spot.id}/edit`);
                                 }} className='update-btns'>Update</button>
-                                <button className='delete-btns'>Delete</button>
+                                <button className='delete-btns'>
+                                    <OpenModalMenuItem
+                                        itemText="Delete"
+                                        modalComponent={<DeleteSpotModal
+                                        spot={spot}
+                                        />}
+                                    />
+                                </button>
                             </div>
                         </div>
 

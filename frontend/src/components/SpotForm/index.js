@@ -48,7 +48,7 @@ const SpotForm = ({ spot, images, formType }) => {
 
     const imagesObj = { image1, image2, image3, image4, image5 };
 
-    const handleSubmit = async (e) => {
+    async function handleSubmit(e) {
         e.preventDefault();
         setErrors({ flag: false });
         setImgErrors({ flag: false })
