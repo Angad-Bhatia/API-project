@@ -33,7 +33,7 @@ module.exports = {
         allowNull: false
       },
       state: {
-        type: Sequelize.STRING(11),
+        type: Sequelize.STRING(20),
         allowNull: false
       },
       country: {
