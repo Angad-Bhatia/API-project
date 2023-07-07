@@ -20,7 +20,7 @@ module.exports = {
         lat: -90,
         lng: 180,
         name: 'Banana Beach House',
-        description: 'Best place in the world. House has a good wi-fi connection. The beach is a 3 minute walk away',
+        description: 'House has a good wi-fi connection. The beach is 3 minutes away',
         price: 300.01
       },
       {
@@ -32,7 +32,7 @@ module.exports = {
         lat: -20,
         lng: 150,
         name: 'Apple Farm Cottage',
-        description: 'The place has 3 bedrooms and 3 bathrooms. The wi-fi supports a limited number of devices, but there is about 2 acres of open grass in the backyard.',
+        description: '3 bedrooms and 3 bathrooms. 2 acres in the backyard.',
         price: 10000000.01
       },
       {
@@ -44,7 +44,7 @@ module.exports = {
         lat: 70,
         lng: -180,
         name: 'Strawberry Land',
-        description: 'The location includes 2 bedrooms and one and a half bathrooms. A TV is in the living room. There is also a ping-pong table, as well as a pool table.',
+        description: 'There is a ping-pong table and a pool table.',
         price: 300.21
       }
     ], {});
