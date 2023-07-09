@@ -4,6 +4,7 @@ import "./SpotReviewsIndexItem.css";
 
 function SpotReviewsIndexItem ({ reviewObj }) {
     const { User, createdAt, review } = reviewObj;
+    const firstName = User.firstName
     const year = createdAt.slice(0, 4);
     const monthNum = Number(createdAt.slice(5, 7));
     function getMonthName(monthNumber) {
@@ -13,7 +14,9 @@ function SpotReviewsIndexItem ({ reviewObj }) {
     }
 
     const month = getMonthName(monthNum);
-
+    if (!reviewObj) {
+        return null
+    }
     return (
         <li id="review-item">
             <h5>{User.firstName}</h5>

@@ -35,7 +35,7 @@ export const spotValidation = (spot) => {
     }
 
     if (spot.price === '' || spot.price < 0 || isNaN(Number(spot.price)) || floats.length > 2) {
-        errs.price = 'Price must be a valid amount greater than 0'
+        errs.price = 'Price must be a valid number greater than 0'
         errs.flag = true;
     }
 
@@ -59,13 +59,15 @@ export const imageValidation = (imagesObj) => {
     }
     for (let key in imagesObj) {
         if (imagesObj[key] &&
-            ((!imagesObj[key].endsWith('.png') &&
+            (!imagesObj[key].endsWith('.png') &&
             !imagesObj[key].endsWith('.jpg') &&
-            !imagesObj[key].endsWith('.jpeg')) ||
-            !isValidUrl(imagesObj[key]))
+            !imagesObj[key].endsWith('.jpeg'))
             )
         {
-            imgErr[key] = 'Image URL must be a valid URL that ends in .png, .jpg, or .jpeg';
+            imgErr[key] = 'Image URL must end in .png, .jpg, or .jpeg';
+            imgErr.flag = true;
+        } else if (imagesObj[key] && !isValidUrl(imagesObj[key])) {
+            imgErr[key] = 'Image URL must be a valid URL and start with "https://"';
             imgErr.flag = true;
         }
     }

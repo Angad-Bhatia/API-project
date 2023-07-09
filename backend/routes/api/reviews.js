@@ -15,7 +15,8 @@ const { Spot, Review, ReviewImage, SpotImage } = require('../../db/models');
 const validateReview = [
     check('review')
         .exists({ checkFalsy: true })
-        .withMessage('Review text is required'),
+        .isLength({ min: 10 })
+        .withMessage('Review text must be 10 or more characters'),
     check('stars')
         .exists({ checkFalsy: true })
         .isInt({ min: 1, max: 5 })

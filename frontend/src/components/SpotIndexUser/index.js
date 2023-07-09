@@ -45,12 +45,12 @@ const SpotIndexUser = () => {
                                         itemText="Delete"
                                         modalComponent={<DeleteSpotModal
                                         spot={spot}
+                                        key={spot.id}
                                         />}
                                     />
                                 </button>
                             </div>
                         </div>
-
                     ))}
                 </ul>
             </section>

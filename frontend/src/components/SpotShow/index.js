@@ -1,28 +1,27 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from "react-router-dom";
 
-import { thunkShowSpot } from "../../store/spots";
-
 import SpotReviewsIndex from "../SpotReviewsIndex";
-
+import { thunkShowSpot } from "../../store/spots";
 import "./SpotShow.css";
 
 function SpotShow() {
-    const { spotId } = useParams();
-    console.log('spotShow, spotId: ', spotId);
-    const spot = useSelector((state) =>
-        state.spots.allSpots ? state.spots.allSpots[spotId] : null
-    );
-    // console.log("selected spot", spot);
-
     const dispatch = useDispatch();
+    const { spotId } = useParams();
+    const [flag, setFlag] = useState(true);
 
+    const user = useSelector((state) => state.session.user ? state.session.user : null);
+    const spot = useSelector((state) => state.spots.allSpots ? state.spots.allSpots[spotId] : {});
 
     useEffect(() => {
-        // console.log('SPOTSHOW component, spot:', spot);
         dispatch(thunkShowSpot(spotId));
-    }, [dispatch, spotId]);
+        // console.log(spot, user);
+        setFlag(true);
+        if (spot && user && spot.ownerId == user.id) {
+            setFlag(false);
+        }
+    }, [dispatch, spotId, spot.ownerId, user.id]);
 
     if (!spot || !spot.Owner) {
         return null;
@@ -73,9 +72,9 @@ function SpotShow() {
                     <i className="fa-solid fa-star" style={{"color": "#00040a"}}></i>
                     {stars} &nbsp;&nbsp;{numReviews} review{plural}
                 </h2>
-                <div id="review-btn">** Create Review btn if logged-in **</div>
                 <SpotReviewsIndex
                     spotId={spotId}
+                    numReviews={numReviews}
                 />
             </div>
         </>

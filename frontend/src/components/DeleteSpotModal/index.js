@@ -1,16 +1,16 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
+
 import { useModal } from '../../context/Modal';
 import { thunkDeleteSpot, thunkLoadUserSpots } from '../../store/spots';
-
-import "./DeleteSpotModal.css";
+import "./DeleteSpot.css";
 
 function DeleteSpotModal({ spot }) {
-    const yes = 'Yes (Delete Spot)'
-    const no ='No (Keep Spot)'
-    console.log(spot);
     const dispatch = useDispatch();
     const { closeModal } = useModal();
+    
+    const yes = 'Yes (Delete Spot)'
+    const no ='No (Keep Spot)'
 
     const onDelete = async (e) => {
         e.preventDefault();

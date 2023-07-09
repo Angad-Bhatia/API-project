@@ -118,7 +118,6 @@ export const thunkCreateSpot = (spot) => async (dispatch) => {
         }
     } else {
         const err = await res.json();
-        // console.log('IN thunkCreateSpot, err: ', errs);
         return {errs, ...err};
     }
 }
@@ -218,15 +217,13 @@ const spotsReducer = (state = initialState, action) => {
             });
             return loadSpotsState;
         case RECEIVE_SPOT:
-            // console.log('load', state.allSpots)
             const receiveSpotState = { ...state };
-            // console.log('receive spot, state: ', receiveSpotState.allSpots);
             const id = action.spot.id;
-            if (receiveSpotState.allSpots) {
-                receiveSpotState.allSpots[id] = action.spot;
-                // console.log('case receivespot, spot: ', receiveSpotState.allSpots[id])
+            if (!receiveSpotState.allSpots) {
+                receiveSpotState.allSpots = {};
             }
-            // console.log('case showspot, receiveSpotState', receiveSpotState);
+
+            receiveSpotState.allSpots[id] = action.spot;
             return receiveSpotState;
         case DELETE_SPOT:
             const deleteSpotState = { ...state };
