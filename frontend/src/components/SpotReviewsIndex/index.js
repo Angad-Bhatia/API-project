@@ -26,12 +26,12 @@ function SpotReviewsIndex({ spotId, numReviews }) {
         if (reviewsObj) {
             setReviews(Object.values(reviewsObj[`spot${spotId}`]))
         }
-    }, [reviewsObj]);
+    }, [reviewsObj, spotId]);
 
     useEffect(() => {
-        const foundReview = reviews.find(review => review.userId == user.id)
+        const foundReview = reviews.find(review => review.userId === user.id)
         setUserReview(foundReview ? foundReview : null);
-    }, [reviews]);
+    }, [reviews, user.id]);
 
     useEffect(() => {
         const reviewsArr = reviews;
@@ -64,6 +64,8 @@ function SpotReviewsIndex({ spotId, numReviews }) {
                 {reviews.map(review => (
                     <SpotReviewsIndexItem
                         reviewObj={review}
+                        userId={user.id}
+                        spotId={spot.id}
                         key={review.id}
                     />
                 ))}

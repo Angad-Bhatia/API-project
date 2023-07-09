@@ -1,12 +1,12 @@
 import React from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 import './SpotIndexItem.css';
 
 function SpotIndexItem ({ spot }) {
     const history = useHistory();
     const { city, state, price, avgStarRating, numReviews, previewImage } = spot;
-    let stars = avgStarRating;
+    let stars = Math.round(avgStarRating * 10) / 10;;
     if (numReviews < 1) {
         stars = 'New';
     }
@@ -21,13 +21,13 @@ function SpotIndexItem ({ spot }) {
         <button onClick={onClick}>
             <li className="spot-li">
                 <div className='image-container'>
-                    <img className="preview" src={previewImage} alt="No Preview Image Available"></img>
+                    <img className="preview" src={previewImage} alt="No Preview Available"></img>
                 </div>
                 <div className='address-rating'>
                     <p className='address'>{city}, {state}</p>
                     <p className='rating'>
                         <i className="fa-solid fa-star" style={{"color": "#00040a"}}></i>
-                        {stars}
+                        {stars ? stars : "New"}
                     </p>
                 </div>
                 <div className="price-container">

@@ -12,14 +12,13 @@ function CreateReviewModal({ spotId }) {
     const { closeModal } = useModal();
 
     const [reviewText, setReviewTest] = useState('');
-    const [stars, setStars] = useState(1);
+    const [stars, setStars] = useState(0);
     const [errors, setErrors] = useState({});
-    console.log('handlesubmit, spotId', reviewText.length);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setErrors({});
-        const newReview = await dispatch(thunkCreateSpotReview(spotId, reviewText, stars))
+        await dispatch(thunkCreateSpotReview(spotId, reviewText, stars))
             // .then(closeModal)
             .catch(async (res) => {
                 const data = await res.json();
@@ -72,7 +71,7 @@ function CreateReviewModal({ spotId }) {
             {errors.stars && (
                 <p>{errors.stars}</p>
             )}
-            <button type="submit">Submit Your Review</button>
+            <button type="submit" disabled={!stars || reviewText.length < 30}>Submit Your Review</button>
             {errors.message && (
                 <p>{errors.message}</p>
             )}

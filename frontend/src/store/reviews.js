@@ -1,7 +1,8 @@
 import { csrfFetch } from "./csrf";
 
 const LOAD_SPOTREVIEWS = "reviews/loadSpotReviews";
-const RECEIVE_SPOTREVIEW = "reviews/createSpotReviews";
+const RECEIVE_SPOTREVIEW = "reviews/receiveSpotReview";
+const DELETE_SPOTREVIEW = "reviews/deleteSpotReview"
 
 const loadSpotReviews = (reviews, spotId) => {
     return {
@@ -17,6 +18,13 @@ const receiveSpotReview = (review, spotId) => {
         review,
         spotId
     };
+}
+
+const deleteSpotReview = (reviewId) => {
+    return {
+        type: DELETE_SPOTREVIEW,
+        reviewId
+    }
 }
 
 export const thunkLoadSpotReviews = (spotId) => async (dispatch) => {
@@ -46,6 +54,15 @@ export const thunkCreateSpotReview = (spotId, review, stars) => async (dispatch)
     }
 }
 
+export const thunkDeleteSpotReview = (reviewId) => async (dispatch) => {
+    const res = await csrfFetch(`/api/reviews/${reviewId}`, { method: 'DELETE' });
+    if (res.ok) {
+        const data = await res.json();
+        dispatch(deleteSpotReview(reviewId));
+        return data;
+    }
+}
+
 const initialState = { allReviews: null };
 
 const reviewsReducer = (state = initialState, action) => {
@@ -55,16 +72,11 @@ const reviewsReducer = (state = initialState, action) => {
             const spotId = action.spotId;
             const loadReviewsArr = action.reviews;
 
-            // if (!loadReviewsArr.length) {
-            //     return loadSpotReviewsState;
-            // }
-
             if (!loadSpotReviewsState.allReviews) {
                 loadSpotReviewsState.allReviews = {};
             }
 
             loadSpotReviewsState.allReviews[`spot${spotId}`] = {};
-            // const thisSpotReviews = loadSpotReviewsState.allReviews[`spot${spotId}`]
 
             loadReviewsArr.forEach(review => {
                 const reviewId = review.id;
@@ -88,6 +100,13 @@ const reviewsReducer = (state = initialState, action) => {
             currSpotReviews[newReview.id] = newReview;
 
             return receiveSpotReviewState;
+        case DELETE_SPOTREVIEW:
+            const deleteSpotReviewState = { ...state };
+            const delId = action.reviewId;
+            if (deleteSpotReviewState && deleteSpotReviewState[delId]) {
+                delete deleteSpotReviewState[delId];
+            }
+            return deleteSpotReviewState;
         default:
             return state;
     }

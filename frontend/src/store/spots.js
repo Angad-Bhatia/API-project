@@ -148,7 +148,7 @@ export const thunkUpdateSpot = (spot) => async (dispatch) => {
             for (let i = 0; i < spotImagesArr.length; i++) {
                 const img = spotImagesArr[i];
                 console.log('thunkUpdate, in delImg loop, img: ', img);
-                const deleteRes = await csrfFetch(`/api/spot-images/${img.id}`, { method: 'DELETE' });
+                await csrfFetch(`/api/spot-images/${img.id}`, { method: 'DELETE' });
             }
         }
 
@@ -195,7 +195,7 @@ export const thunkDeleteSpot = (spotId) => async (dispatch) => {
     if (res.ok) {
         console.log('resOkay')
         const data = await res.json();
-        dispatch(deleteSpot(spotId))
+        dispatch(deleteSpot(spotId));
         return data;
     }
 }
@@ -228,7 +228,7 @@ const spotsReducer = (state = initialState, action) => {
         case DELETE_SPOT:
             const deleteSpotState = { ...state };
             const deleteId = action.spotId;
-            if (deleteSpotState.allSpots[deleteId]) {
+            if (deleteSpotState.allSpots && deleteSpotState.allSpots[deleteId]) {
                 delete deleteSpotState.allSpots[deleteId];
             }
             return deleteSpotState;

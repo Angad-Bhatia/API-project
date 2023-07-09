@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from "react-router-dom";
 
@@ -9,34 +9,30 @@ import "./SpotShow.css";
 function SpotShow() {
     const dispatch = useDispatch();
     const { spotId } = useParams();
-    const [flag, setFlag] = useState(true);
 
-    const user = useSelector((state) => state.session.user ? state.session.user : null);
     const spot = useSelector((state) => state.spots.allSpots ? state.spots.allSpots[spotId] : {});
-
+    const { Owner, SpotImages, avgStarRating, city, country, description, name, numReviews, price, state } = spot;
     useEffect(() => {
         dispatch(thunkShowSpot(spotId));
-        // console.log(spot, user);
-        setFlag(true);
-        if (spot && user && spot.ownerId == user.id) {
-            setFlag(false);
-        }
-    }, [dispatch, spotId, spot.ownerId, user.id]);
+    }, [dispatch, spotId]);
 
     if (!spot || !spot.Owner) {
         return null;
     }
-    const { Owner, SpotImages, address, avgStarRating, city, country, description, name, numReviews, price, state } = spot;
-    let plural;
-    let stars = avgStarRating;
+    let numReviewsText;
+    let stars;
     if (numReviews > 1) {
-        plural = 's';
-    } else if (numReviews < 1) {
-        stars = 'New';
+        stars = Math.round(avgStarRating * 10) / 10;
+        numReviewsText = `${numReviews} reviews`
+    } else if (numReviews === 0) {
+        numReviewsText = ''
+        stars = 'New'
+    } else if (numReviews === 1) {
+        numReviewsText = '1 review'
     }
 
     const previewImg = SpotImages.find(img => img.preview).url;
-
+    const otherArr = SpotImages.slice(1);
 
     return (
         <>
@@ -44,9 +40,15 @@ function SpotShow() {
             <p>{city}, {state}, {country}</p>
             <div id="images-cont">
                 <div id="main-image">
-                    <img id="previewImage" src={previewImg} alt="No Preview Available"></img>
+                    <img id="preview" src={previewImg} alt="Preview Not Available"></img>
                 </div>
-                <div id="other-images">** Other Images Goes Here **</div>
+                <div id="other-images-cont">
+                    {otherArr.length ?
+                        otherArr.map(image => (
+                            <img id={`other-${image.id}`} src={image.url} alt="Not Available" className="other-images"></img>
+                        )) : null
+                    }
+                </div>
             </div>
             <div id="all-info-cont">
                 <div id="details-cont">
@@ -61,7 +63,7 @@ function SpotShow() {
                         </div>
                         <div id="reserve-reviews">
                         <i className="fa-solid fa-star" style={{"color": "#00040a"}}></i>
-                        {stars} &nbsp;&nbsp; {numReviews} review{plural}
+                        {stars} &nbsp;&nbsp; {numReviewsText}
                         </div>
                     </div>
                     <button id="reserve-btn">Reserve</button>
@@ -70,12 +72,13 @@ function SpotShow() {
             <div id="reviews-cont">
                 <h2>
                     <i className="fa-solid fa-star" style={{"color": "#00040a"}}></i>
-                    {stars} &nbsp;&nbsp;{numReviews} review{plural}
+                    {stars} &nbsp;&nbsp; {numReviewsText}
                 </h2>
-                <SpotReviewsIndex
+                {numReviews ? <SpotReviewsIndex
                     spotId={spotId}
                     numReviews={numReviews}
-                />
+                /> : null
+                }
             </div>
         </>
     )
