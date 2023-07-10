@@ -14,7 +14,7 @@ function DeleteSpotModal({ spot }) {
 
     const onDelete = async (e) => {
         e.preventDefault();
-        console.log('deleteClick')
+        // console.log('deleteClick')
         return dispatch(thunkDeleteSpot(spot.id))
             .then(closeModal)
             // .then(dispatch(thunkLoadUserSpots()));

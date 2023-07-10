@@ -30,7 +30,7 @@ function SpotReviewsIndex({ spotId, numReviews }) {
     useEffect(() => {
         if (reviewsObj) {
             const reviewsArr = Object.values(reviewsObj[`spot${spotId}`]);
-            console.log('order', reviewsArr)
+            // console.log('order', reviewsArr)
             if(reviewsArr.length > 1) {
                 reviewsArr.sort((a, b) => b.createdAt - a.createdAt)
             }

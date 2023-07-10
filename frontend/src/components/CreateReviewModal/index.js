@@ -72,7 +72,7 @@ function CreateReviewModal({ spotId }) {
             {errors.stars && (
                 <p>{errors.stars}</p>
             )}
-            <button id="submit-review-btn" type="submit" disabled={!stars || reviewText.length < 30}>Submit Your Review</button>
+            <button id="submit-review-btn" type="submit" disabled={!stars || reviewText.length < 10}>Submit Your Review</button>
             {errors.message && (
                 <p>{errors.message}</p>
             )}

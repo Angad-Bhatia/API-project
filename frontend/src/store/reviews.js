@@ -102,7 +102,7 @@ const reviewsReducer = (state = initialState, action) => {
             // console.log('receiveState', receiveSpotReviewState);
             return receiveSpotReviewState;
         case DELETE_SPOTREVIEW:
-            // console.log('state.allReviews', state.allReviews)
+            console.log('state.allReviews', state.allReviews)
             const deleteSpotReviewState = { ...state };
             const delId = action.reviewId;
             // console.log('spotReviews before', deleteSpotReviewState.allReviews[`spot${action.spotId}`])

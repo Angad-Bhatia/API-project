@@ -24,13 +24,18 @@ const SpotIndexUser = () => {
 
     if (!spots.length) {
         return (
-            <h1>User does not own any spots</h1>
+            <>
+                <h2>Manage Spots</h2>
+                <button id='create-spot-user-index-btn'>
+                    <NavLink exact to="/spots/new" id="create-spot-user-index">Create a New Spot</NavLink>
+                </button>
+            </>
         )
     };
 
     return (
         <>
-            <h2>Manage Your Spots</h2>
+            <h2>Manage Spots</h2>
             <button id='create-spot-user-index-btn'>
                 <NavLink exact to="/spots/new" id="create-spot-user-index">Create a New Spot</NavLink>
             </button>
