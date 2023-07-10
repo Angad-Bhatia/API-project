@@ -21,7 +21,7 @@ module.exports = {
         lng: 180,
         name: 'Banana Beach House',
         description: 'House has a good wi-fi connection. The beach is 3 minutes away',
-        price: 300.01
+        price: 300
       },
       {
         ownerId: 3,
@@ -33,7 +33,7 @@ module.exports = {
         lng: 150,
         name: 'Apple Farm Cottage',
         description: '3 bedrooms and 3 bathrooms. 2 acres in the backyard.',
-        price: 10000000.01
+        price: 200
       },
       {
         ownerId: 3,
@@ -45,7 +45,7 @@ module.exports = {
         lng: -180,
         name: 'Strawberry Land',
         description: 'There is a ping-pong table and a pool table.',
-        price: 300.21
+        price: 300
       },
       {
         ownerId: 3,
@@ -57,7 +57,7 @@ module.exports = {
         lng: -180,
         name: 'Popsicle',
         description: 'It is an absolutely lavish place to stay at',
-        price: 420.99
+        price: 420
       },
       {
         ownerId: 3,
@@ -105,7 +105,7 @@ module.exports = {
         lng: -180,
         name: "Heaven's Gate",
         description: 'Extremely luxurious cabin with fooseball table.',
-        price: 209.99
+        price: 209
       },
       {
         ownerId: 3,

@@ -20,10 +20,11 @@ const receiveSpotReview = (review, spotId) => {
     };
 }
 
-const deleteSpotReview = (reviewId) => {
+const deleteSpotReview = (reviewId, spotId) => {
     return {
         type: DELETE_SPOTREVIEW,
-        reviewId
+        reviewId,
+        spotId
     }
 }
 
@@ -54,11 +55,11 @@ export const thunkCreateSpotReview = (spotId, review, stars) => async (dispatch)
     }
 }
 
-export const thunkDeleteSpotReview = (reviewId) => async (dispatch) => {
+export const thunkDeleteSpotReview = (reviewId, spotId) => async (dispatch) => {
     const res = await csrfFetch(`/api/reviews/${reviewId}`, { method: 'DELETE' });
     if (res.ok) {
         const data = await res.json();
-        dispatch(deleteSpotReview(reviewId));
+        dispatch(deleteSpotReview(reviewId, spotId));
         return data;
     }
 }
@@ -88,24 +89,28 @@ const reviewsReducer = (state = initialState, action) => {
             const receiveSpotReviewState = { ...state };
             const newReview = action.review;
 
-            if (!receiveSpotReviewState.allReviews) {
+            if (receiveSpotReviewState.allReviews === null) {
                 receiveSpotReviewState.allReviews = {};
             }
 
             if (!receiveSpotReviewState.allReviews[`spot${action.spotId}`]) {
                 receiveSpotReviewState.allReviews[`spot${action.spotId}`] = {};
             };
-
+            // console.log('before adding new review', receiveSpotReviewState)
             const currSpotReviews = receiveSpotReviewState.allReviews[`spot${action.spotId}`];
             currSpotReviews[newReview.id] = newReview;
-
+            // console.log('receiveState', receiveSpotReviewState);
             return receiveSpotReviewState;
         case DELETE_SPOTREVIEW:
+            // console.log('state.allReviews', state.allReviews)
             const deleteSpotReviewState = { ...state };
             const delId = action.reviewId;
-            if (deleteSpotReviewState && deleteSpotReviewState[delId]) {
-                delete deleteSpotReviewState[delId];
+            // console.log('spotReviews before', deleteSpotReviewState.allReviews[`spot${action.spotId}`])
+            if (deleteSpotReviewState.allReviews && deleteSpotReviewState.allReviews[`spot${action.spotId}`] && deleteSpotReviewState.allReviews[`spot${action.spotId}`][delId]) {
+                delete deleteSpotReviewState.allReviews[`spot${action.spotId}`][delId];
+                // console.log('spotReviews after deletion', deleteSpotReviewState.allReviews[`spot${action.spotId}`])
             }
+            // console.log('returned state, deleteSpotReviewsState', deleteSpotReviewState);
             return deleteSpotReviewState;
         default:
             return state;

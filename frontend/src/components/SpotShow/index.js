@@ -39,13 +39,13 @@ function SpotShow() {
             <h2>{name}</h2>
             <p>{city}, {state}, {country}</p>
             <div id="images-cont">
-                <div id="main-image">
+                <div id="preview-cont">
                     <img id="preview" src={previewImg} alt="Preview Not Available"></img>
                 </div>
                 <div id="other-images-cont">
                     {otherArr.length ?
                         otherArr.map(image => (
-                            <img id={`other-${image.id}`} src={image.url} alt="Not Available" className="other-images"></img>
+                            <img id={`other-${image.id}`} key={image.id} src={image.url} alt="Not Available" className="other-images"></img>
                         )) : null
                     }
                 </div>
@@ -59,11 +59,11 @@ function SpotShow() {
                     <div id="reserve-info">
                         <div id="reserve-price">
                             <div id="actual-price">${price}</div>
-                            <p id="night">night</p>
+                            <p id="night">&nbsp;night</p>
                         </div>
                         <div id="reserve-reviews">
-                        <i className="fa-solid fa-star" style={{"color": "#00040a"}}></i>
-                        {stars} &nbsp;&nbsp; {numReviewsText}
+                            <i className="fa-solid fa-star" style={{"color": "#00040a"}}></i>
+                            {stars} &nbsp;&nbsp; {numReviewsText}
                         </div>
                     </div>
                     <button id="reserve-btn">Reserve</button>
@@ -74,11 +74,10 @@ function SpotShow() {
                     <i className="fa-solid fa-star" style={{"color": "#00040a"}}></i>
                     {stars} &nbsp;&nbsp; {numReviewsText}
                 </h2>
-                {numReviews ? <SpotReviewsIndex
+                <SpotReviewsIndex
                     spotId={spotId}
                     numReviews={numReviews}
-                /> : null
-                }
+                />
             </div>
         </>
     )

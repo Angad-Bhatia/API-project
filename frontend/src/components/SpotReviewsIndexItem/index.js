@@ -22,12 +22,14 @@ function SpotReviewsIndexItem ({ reviewObj, userId, spotId }) {
         }
     }, [userId, User.id]);
 
+
+
     const month = getMonthName(monthNum);
     if (!reviewObj || !User) {
         return null
     }
     return (
-        <li id="review-item">
+        <li key={reviewObj.id}>
             <h5>{User.firstName}</h5>
             <h6>{month} {year}</h6>
             <p>{review}</p>

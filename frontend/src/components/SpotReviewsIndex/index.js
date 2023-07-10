@@ -16,11 +16,16 @@ function SpotReviewsIndex({ spotId, numReviews }) {
     const [flag, setFlag] = useState(true);
     const [reviews, setReviews] = useState([]);
     const [userReview, setUserReview] = useState({});
+    const [toggle, setToggle] = useState(true);
 
 
     useEffect(() => {
         dispatch(thunkLoadSpotReviews(spotId));
     }, [dispatch, spotId]);
+
+    useEffect(() => {
+        dispatch(thunkLoadSpotReviews(spotId));
+    }, [dispatch, toggle]);
 
     useEffect(() => {
         if (reviewsObj) {
@@ -34,25 +39,38 @@ function SpotReviewsIndex({ spotId, numReviews }) {
     }, [reviews, user.id]);
 
     useEffect(() => {
+        setFlag(true);
         const reviewsArr = reviews;
         const ind = reviews.indexOf(userReview);
         if (ind > -1) {
+            console.log('user review should not exist')
             setFlag(false);
             reviewsArr.unshift(reviewsArr.splice(ind, 1)[0]);
             setReviews(reviewsArr);
         }
+        if ((spot.ownerId && spot.ownerId === user.id)) {
+            setFlag(false);
+            console.log('spot.ownerId does not equal user.id')
+        }
     }, [userReview, reviews]);
 
-    useEffect(() => {
-        setFlag(true);
-        if ((spot.id && spot.ownerId === user.id)) {
-            setFlag(false);
-        }
-    }, [spot, user]);
+    // useEffect(() => {
+    //     setFlag(true);
+    //     console.log('spotOwnerId and user.id', spot.ownerId, user.id)
+    //     if ((spot.ownerId && spot.ownerId === user.id)) {
+    //         setFlag(false);
+    //         console.log('spot.ownerId does not equal user.id')
+    //     }
+    // }, [spot, user]);
+
+    const buttonToggle = (e) => {
+        e.preventDefault();
+        setToggle(!toggle);
+    }
 
     return (
         <div id="reviews-cont">
-            {flag && <button id="review-btn">
+            {flag && <button id="review-btn" onClick={buttonToggle}>
                 <OpenModalMenuItem
                     itemText="Post Your Review"
                     modalComponent={<CreateReviewModal
@@ -60,7 +78,7 @@ function SpotReviewsIndex({ spotId, numReviews }) {
                     />}
                 />
             </button>}
-            {numReviews && <ul id="reviews-list">
+            {numReviews ? <ul id="reviews-list">
                 {reviews.map(review => (
                     <SpotReviewsIndexItem
                         reviewObj={review}
@@ -69,7 +87,7 @@ function SpotReviewsIndex({ spotId, numReviews }) {
                         key={review.id}
                     />
                 ))}
-            </ul>}
+            </ul> : null}
         </div>
     )
 }

@@ -6,9 +6,10 @@ import './SpotIndexItem.css';
 function SpotIndexItem ({ spot }) {
     const history = useHistory();
     const { city, state, price, avgStarRating, numReviews, previewImage } = spot;
-    let stars = Math.round(avgStarRating * 10) / 10;;
+    let starsIndex = Math.round(avgStarRating * 10) / 10;
+    console.log('starratings', avgStarRating, starsIndex);
     if (numReviews < 1) {
-        stars = 'New';
+        starsIndex = 'New';
     }
     // console.log("indexItem, spot:", spot);
     const onClick = (e) => {
@@ -27,7 +28,7 @@ function SpotIndexItem ({ spot }) {
                     <p className='address'>{city}, {state}</p>
                     <p className='rating'>
                         <i className="fa-solid fa-star" style={{"color": "#00040a"}}></i>
-                        {stars ? stars : "New"}
+                        {starsIndex ? starsIndex : "New"}
                     </p>
                 </div>
                 <div className="price-container">

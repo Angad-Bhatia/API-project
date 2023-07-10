@@ -49,16 +49,16 @@ function CreateReviewModal({ spotId }) {
             <input type="radio" id="custom-radio1" onClick={(e) => setStars(e.target.value)} name="custom-radio1" className="custom-radio" value={1} />
                 <label htmlFor="custom-radio1" className="custom-radio-label">1</label>
 
-            <input type="radio" id="custom-radio2" onClick={(e) => setStars(e.target.value)} name="custom-radio2" className="custom-radio" value={1} />
+            <input type="radio" id="custom-radio2" onClick={(e) => setStars(e.target.value)} name="custom-radio2" className="custom-radio" value={2} />
                 <label htmlFor="custom-radio2" className="custom-radio-label">2</label>
             {/* </input> */}
-            <input type="radio" id="custom-radio3" onClick={(e) => setStars(e.target.value)} name="custom-radio3" className="custom-radio" value={1} />
+            <input type="radio" id="custom-radio3" onClick={(e) => setStars(e.target.value)} name="custom-radio3" className="custom-radio" value={3} />
                 <label htmlFor="custom-radio3" className="custom-radio-label">3</label>
             {/* </input> */}
-            <input type="radio" id="custom-radio4" onClick={(e) => setStars(e.target.value)} name="custom-radio4" className="custom-radio" value={1} />
+            <input type="radio" id="custom-radio4" onClick={(e) => setStars(e.target.value)} name="custom-radio4" className="custom-radio" value={4} />
                 <label htmlFor="custom-radio4" className="custom-radio-label">4</label>
             {/* </input> */}
-            <input type="radio" id="custom-radio5" onClick={(e) => setStars(e.target.value)} name="custom-radio5" className="custom-radio" value={1} />
+            <input type="radio" id="custom-radio5" onClick={(e) => setStars(e.target.value)} name="custom-radio5" className="custom-radio" value={5} />
                 <label htmlFor="custom-radio5" className="custom-radio-label">5</label>
             {/* </input> */}
                 {/* <i className="fa-solid fa-star" style={{"color": "#00040a"}}></i>

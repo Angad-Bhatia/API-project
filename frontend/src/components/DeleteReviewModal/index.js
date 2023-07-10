@@ -17,11 +17,11 @@ function DeleteReviewModal({ id, spotId }) {
         closeModal();
     }
 
-    const onClickYes = async (e) => {
+    const onClickYes = (e) => {
         e.preventDefault();
-        await dispatch(thunkDeleteSpotReview(id))
+        return dispatch(thunkDeleteSpotReview(id, spotId))
+            .then(history.push(`/spots/${spotId}`))
             .then(closeModal)
-            .then(history.push(`/spots/${spotId}`));
     }
     return (
         <div id="delete-review-modal-cont">
