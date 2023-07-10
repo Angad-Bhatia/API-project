@@ -73,9 +73,9 @@
 }
 
 #reserve-btn {
+    height: 100%;
     color: white;
     background-color: rgb(251, 89, 89);
-    height: 100%;
     border-radius: 5px;
     box-shadow: 2px 2px 2px gray;
 }

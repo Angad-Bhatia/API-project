@@ -1,7 +1,8 @@
 // frontend/src/components/SpotIndexUser/index.js
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from "react-router-dom";
+import { useHistory, NavLink } from "react-router-dom";
+
 import OpenModalMenuItem from '../Navigation/OpenModalMenuItem';
 import DeleteSpotModal from '../DeleteSpotModal';
 
@@ -22,11 +23,17 @@ const SpotIndexUser = () => {
 
 
     if (!spots.length) {
-        return null;
+        return (
+            <h1>User does not own any spots</h1>
+        )
     };
 
     return (
         <>
+            <h2>Manage Your Spots</h2>
+            <button id='create-spot-user-index-btn'>
+                <NavLink exact to="/spots/new" id="create-spot-user-index">Create a New Spot</NavLink>
+            </button>
             <section>
                 <ul id="spots-list">
                     {spots.map(spot => (

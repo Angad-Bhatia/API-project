@@ -1,0 +1,40 @@
+#delete-review-modal-cont {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+#del-review-confirmation-text {
+    width: 90%;
+    text-align: center;
+}
+
+#del-review-btn-cont {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+    height: 40%;
+}
+
+.y-n-del-review-btns {
+    width: 90%;
+    height: 40%;
+}
+
+#yes-del-review-btn {
+    color: white;
+    background-color: rgb(251, 89, 89);
+    border-radius: 5px;
+    box-shadow: 2px 2px 2px gray;
+}
+
+#no-del-review-btn {
+    box-shadow: 2px 2px 2px gray;
+    color: white;
+    border-radius: 5px;
+    background-color: rgb(75, 75, 75);
+}

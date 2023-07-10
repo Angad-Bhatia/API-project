@@ -1,5 +1,5 @@
 // frontend/src/components/SignupFormPage/index.js
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
 import * as sessionActions from "../../store/session";
@@ -14,8 +14,20 @@ function SignupFormModal() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
+  const [isDisabled, setIsDisabled] = useState(true);
   const { closeModal } = useModal();
 
+  useEffect(() => {
+    setIsDisabled(true);
+    if (email.length &&
+      username.length &&
+      firstName.length &&
+      lastName.length &&
+      password.length &&
+      confirmPassword.length) {
+        setIsDisabled(false);
+    }
+  }, [email, username, firstName, lastName, password, confirmPassword])
   const handleSubmit = (e) => {
     e.preventDefault();
     if (password === confirmPassword) {
@@ -43,74 +55,68 @@ function SignupFormModal() {
   };
 
   return (
-    <>
-      <h1>Sign Up</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Email
+    <div id="sign-up-modal-cont">
+      <h2 id="signup-modal-header">Sign Up</h2>
+        {errors.email && <p className="signup-errors">{errors.email}</p>}
+        {errors.username && <p className="signup-errors">{errors.username}</p>}
+        {errors.firstName && <p className="signup-errors">{errors.firstName}</p>}
+        {errors.lastName && <p className="signup-errors">{errors.lastName}</p>}
+        {errors.password && <p className="signup-errors">{errors.password}</p>}
+        {errors.confirmPassword && (
+          <p className="signup-errors">{errors.confirmPassword}</p>
+        )}
+      <form onSubmit={handleSubmit} id='signup-actual-form'>
           <input
             type="text"
+            className="signup-actual-inputs"
+            placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-        </label>
-        {errors.email && <p>{errors.email}</p>}
-        <label>
-          Username
           <input
             type="text"
+            className="signup-actual-inputs"
+            placeholder="Username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
           />
-        </label>
-        {errors.username && <p>{errors.username}</p>}
-        <label>
-          First Name
           <input
             type="text"
+            className="signup-actual-inputs"
+            placeholder="First Name"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
             required
           />
-        </label>
-        {errors.firstName && <p>{errors.firstName}</p>}
-        <label>
-          Last Name
           <input
             type="text"
+            className="signup-actual-inputs"
+            placeholder="Last Name"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
             required
           />
-        </label>
-        {errors.lastName && <p>{errors.lastName}</p>}
-        <label>
-          Password
           <input
             type="password"
+            className="signup-actual-inputs"
+            placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-        </label>
-        {errors.password && <p>{errors.password}</p>}
-        <label>
-          Confirm Password
           <input
             type="password"
+            className="signup-actual-inputs"
+            placeholder="Confirm Password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             required
           />
-        </label>
-        {errors.confirmPassword && (
-          <p>{errors.confirmPassword}</p>
-        )}
-        <button type="submit">Sign Up</button>
+        <button type="submit" disabled={isDisabled} id="modal-signup-btn">Sign Up</button>
       </form>
-    </>
+    </div>
   );
 }
 

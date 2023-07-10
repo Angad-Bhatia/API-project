@@ -1,0 +1,39 @@
+#delete-spot-modal-cont {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+#del-confirmation-text {
+    width: 90%;
+}
+
+#del-spot-y-n-cont {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+    height: 40%;
+}
+
+.y-n-del-spot-btns {
+    width: 90%;
+    height: 40%;
+}
+
+#yes-del-spot-btn {
+    color: white;
+    background-color: rgb(251, 89, 89);
+    border-radius: 5px;
+    box-shadow: 2px 2px 2px gray;
+}
+
+#no-del-spot-btn {
+    box-shadow: 2px 2px 2px gray;
+    color: white;
+    border-radius: 5px;
+    background-color: rgb(75, 75, 75);
+}

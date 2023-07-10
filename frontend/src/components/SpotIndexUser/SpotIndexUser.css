@@ -1,6 +1,27 @@
 .user-spot-conts {
-    border: 2px solid red;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+}
+
+#create-spot-user-index-btn {
+    box-shadow: 2px 2px 2px gray;
+    background-color: rgb(75, 75, 75);
+}
+
+#create-spot-user-index {
+    color: white;
+}
+
+.update-btns {
+    box-shadow: 2px 2px 2px gray;
+    color: white;
+    background-color: rgb(75, 75, 75);
+}
+
+.delete-btns {
+    box-shadow: 2px 2px 2px gray;
+    color: white;
+    background-color: rgb(75, 75, 75);
+    margin-left: 2%;
 }

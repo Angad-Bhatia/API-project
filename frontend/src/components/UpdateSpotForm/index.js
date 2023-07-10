@@ -27,7 +27,7 @@ const UpdateSpotForm = () => {
             images['image1'] = img.url;
         } else {
             count += 1;
-            images[`image${count}`] = img;
+            images[`image${count}`] = img.url;
         }
     };
 
