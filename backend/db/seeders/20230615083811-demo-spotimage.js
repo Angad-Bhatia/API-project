@@ -18,22 +18,22 @@ module.exports = {
       },
       {
         spotId: 1,
-        url: 'https://mediavault.point2.com/p2h/listing/643d/ffab/b39c/84d359c248d9d0b9f2ea/nwm_large.jpg',
+        url: 'https://media.architecturaldigest.com/photos/571e97c5741fcddb16b559c9/4:3/w_4555,h_3416,c_limit/modernist-decor-inspiration-01.jpg',
         preview: false
       },
       {
         spotId: 1,
-        url: 'https://mediacloud.theweek.com/image/upload/f_auto,t_content-image-mobile@1/v1679070874/TWS1122.Props.DesMoinessExt.jpg',
+        url: 'https://as2.ftcdn.net/v2/jpg/02/61/89/29/1000_F_261892957_6jyBXvEgM79iYr1eEiJKCosnVPJdvHHr.jpg',
         preview: false
       },
       {
         spotId: 1,
-        url: 'https://www.onlyinyourstate.com/wp-content/uploads/2016/11/brucemore.jpg',
+        url: 'https://media.architecturaldigest.com/photos/6442da171870ecdbed029950/16:9/w_5521,h_3105,c_limit/AVD%20House%20-%20High%20Res-061.jpg',
         preview: false
       },
       {
         spotId: 1,
-        url: 'https://www.onlyinyourstate.com/wp-content/uploads/2016/11/brucemore.jpg',
+        url: 'https://hips.hearstapps.com/hmg-prod/images/307-primary-bedroom-1656015778.jpg',
         preview: false
       },
       {
