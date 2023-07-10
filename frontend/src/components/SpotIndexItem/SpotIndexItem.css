@@ -1,30 +1,62 @@
+.spot-show-btn {
+    border: none;
+    position: relative;
+    width: 100%;
+    height: 75%;
+    /* display: inline-block; */
+    /* z-index: 1; */
+}
+.spot-show-btn:hover {
+    cursor: pointer;
+}
+
+.spot-show-btn .tooltip {
+    visibility: hidden;
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 2%;
+    left: 50%;
+}
+
+.spot-show-btn:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+
 .spot-li {
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 100%;
+    height: auto;
     text-align: center;
+    border: none;
+    position: relative;
+    height: 75%;
 }
 
-.preview {
-    width: 97%;
+.preview-images-index {
+    width: 100%;
+    height: 100%;
     margin-left: auto;
     margin-right: auto;
-    height: auto;
+    /* height: auto; */
     align-self: center;
     border-radius: 20px;
 }
 
-.image-container {
+.image-container-index {
     flex-grow: 1;
     flex-shrink: 1;
     flex-basis: 1;
     background-color: rgb(182, 176, 176);
     display: flex;
     text-align: center;
-    padding-top: 4%;
-    padding-bottom: 4%;
+    /* padding-top: 4%;
+    padding-bottom: 4%; */
     border-radius: 20px;
+    height: 100%;
 }
 
 .address-rating {

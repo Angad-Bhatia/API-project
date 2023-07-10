@@ -5,15 +5,73 @@
     align-items: center;
 }
 
-form {
+#actual-spot-form {
     display: flex;
     flex-direction: column;
     /* justify-content: center; */
     /* align-items: center; */
-    width: fit-content;
-    border: 5px solid red
+    width: 60%;
+    /* border: 5px solid red */
 }
 
-h2 {
-    /* text-align: center; */
+.prompt-containers {
+    display: flex;
+    flex-direction: column;
+    /* align-content: start; */
+    /* justify-content: space-around; */
+}
+
+.prompt-headers {
+    /* text-align: bottom; */
+    margin-bottom: auto;
+}
+
+.spot-form-li-conts {
+    border-bottom: 2px solid black;
+    padding-bottom: 5%;
+}
+
+#submit-spot-form-btn {
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: rgb(255, 84, 84);
+    color: white;
+    box-shadow: 10px 10px 10px gray;
+}
+
+.input-containers {
+    width: 95%;
+}
+
+.full-length-containers-spot-form {
+    width: 95%;
+}
+
+#city-state-cont {
+    display: flex;
+    justify-content: space-between;
+}
+
+#city-actual-input {
+    width: 170%;
+}
+
+#photo-list {
+    padding-left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.image-inputs {
+    padding-top: 5%;
+}
+
+#photo-input-1 {
+    padding-top: 0;
+}
+
+.errors-cont {
+    display: flex;;
 }

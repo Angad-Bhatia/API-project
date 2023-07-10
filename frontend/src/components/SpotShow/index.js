@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from "react-router-dom";
 
@@ -12,24 +12,37 @@ function SpotShow() {
 
     const spot = useSelector((state) => state.spots.allSpots ? state.spots.allSpots[spotId] : {});
     const { Owner, SpotImages, avgStarRating, city, country, description, name, numReviews, price, state } = spot;
+
+    const [numReviewsText, setNumReviewsText] = useState('');
+    const [stars, setStars] = useState('');
+
     useEffect(() => {
         dispatch(thunkShowSpot(spotId));
     }, [dispatch, spotId]);
 
+    useEffect(() => {
+        if (numReviews > 1) {
+            setStars(Math.round(avgStarRating * 10) / 10);
+            setNumReviewsText(`${numReviews} reviews`);
+        } else if (numReviews === 0) {
+            setNumReviewsText('');
+            setStars('New');
+        } else if (numReviews === 1) {
+            setStars(avgStarRating);
+            setNumReviewsText('1 review');
+        }
+    }, [numReviews, avgStarRating])
+
+    const onClickReserve = (e) => {
+        e.preventDefault();
+        alert('Feature Coming Soon...');
+    }
+
     if (!spot || !spot.Owner) {
         return null;
     }
-    let numReviewsText;
-    let stars;
-    if (numReviews > 1) {
-        stars = Math.round(avgStarRating * 10) / 10;
-        numReviewsText = `${numReviews} reviews`
-    } else if (numReviews === 0) {
-        numReviewsText = ''
-        stars = 'New'
-    } else if (numReviews === 1) {
-        numReviewsText = '1 review'
-    }
+    // let numReviewsText;
+    // let stars;
 
     const previewImg = SpotImages.find(img => img.preview).url;
     const otherArr = SpotImages.slice(1);
@@ -37,7 +50,7 @@ function SpotShow() {
     return (
         <>
             <h2>{name}</h2>
-            <p>{city}, {state}, {country}</p>
+            <p id='city-state-country-text'>{city}, {state}, {country}</p>
             <div id="images-cont">
                 <div id="preview-cont">
                     <img id="preview" src={previewImg} alt="Preview Not Available"></img>
@@ -66,7 +79,7 @@ function SpotShow() {
                             {stars} &nbsp;&nbsp; {numReviewsText}
                         </div>
                     </div>
-                    <button id="reserve-btn">Reserve</button>
+                    <button id="reserve-btn" onClick={onClickReserve}>Reserve</button>
                 </div>
             </div>
             <div id="reviews-cont">

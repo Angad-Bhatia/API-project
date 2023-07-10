@@ -16,7 +16,7 @@ li {
     flex-direction: column;
     text-align: left;
     border: 2px solid black;
-    padding: 0;
+    padding: 1%;
 }
 
 #home-container {
@@ -47,12 +47,16 @@ li {
     justify-content: space-between;
     align-items: center;
     padding: 0%;
+    background-color: white;
     /* min-height: 100%; */
 }
-
+#home-img {
+    background-color: black;
+}
 #right-nav-cont {
     /* border: 5px solid red; */
-    width: fit-content;
+    /* height: 100%; */
+    width: 30%;
     display: flex;
     justify-content: space-between;
 }
@@ -71,8 +75,9 @@ li {
 
 #btn-container {
     display: flex;
+    flex-direction: column;
     min-height: 100%;
-    width: 20%;
+    width: 100%;
     align-items: center;
     /* padding: 0px; */
     /* border: 0px; */
@@ -95,4 +100,29 @@ li {
     cursor: pointer;
     font-weight: bold;
     background-color: rgb(179, 191, 245);
+}
+
+/* .logged-in-right-nav { */
+    /* background-color: rgb(255, 177, 177); */
+/* } */
+
+#manage-spots-link-li {
+    border-top: 2px solid black;
+    border-bottom: 2px solid black;;
+}
+
+#logout-btn-li-cont {
+    text-align: center;
+    padding-top: 10%;
+    padding-bottom: 10%;
+}
+
+#nav-logout-btn {
+    border-radius: 20px;
+    color: white;
+    background-color: rgb(60, 60, 60);
+}
+
+#nav-logout-btn:hover {
+    cursor: pointer;
 }

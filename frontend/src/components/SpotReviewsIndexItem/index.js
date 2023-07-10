@@ -5,7 +5,7 @@ import DeleteReviewModal from '../DeleteReviewModal';
 import "./SpotReviewsIndexItem.css";
 
 function SpotReviewsIndexItem ({ reviewObj, userId, spotId }) {
-    const { id, User, createdAt, review } = reviewObj;
+    const { id, User, createdAt, review, stars } = reviewObj;
     const year = createdAt.slice(0, 4);
     const monthNum = Number(createdAt.slice(5, 7));
     function getMonthName(monthNumber) {
@@ -29,9 +29,9 @@ function SpotReviewsIndexItem ({ reviewObj, userId, spotId }) {
         return null
     }
     return (
-        <li key={reviewObj.id}>
-            <h5>{User.firstName}</h5>
-            <h6>{month} {year}</h6>
+        <li key={reviewObj.id} className="review-li">
+            <h3>{User.firstName} &nbsp; &nbsp; {stars}&nbsp;Stars</h3>
+            <h4>{month} {year}</h4>
             <p>{review}</p>
             {delFlag && <button id="delete-review-btn">
                 <OpenModalMenuItem

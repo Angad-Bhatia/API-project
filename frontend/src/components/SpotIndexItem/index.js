@@ -5,24 +5,24 @@ import './SpotIndexItem.css';
 
 function SpotIndexItem ({ spot }) {
     const history = useHistory();
-    const { city, state, price, avgStarRating, numReviews, previewImage } = spot;
+    const { city, state, price, name, avgStarRating, numReviews, previewImage } = spot;
     let starsIndex = Math.round(avgStarRating * 10) / 10;
     console.log('starratings', avgStarRating, starsIndex);
     if (numReviews < 1) {
         starsIndex = 'New';
     }
-    // console.log("indexItem, spot:", spot);
+
     const onClick = (e) => {
         e.preventDefault();
         history.push(`/spots/${spot.id}`);
 
     }
     return (
-        // <Link to={`/spots/${spot.id}`}>
-        <button onClick={onClick}>
-            <li className="spot-li">
-                <div className='image-container'>
-                    <img className="preview" src={previewImage} alt="No Preview Available"></img>
+        <li className="spot-li">
+            <button className="spot-show-btn" onClick={onClick}>
+            <span className="tooltip">{name}</span>
+                <div className='image-container-index'>
+                    <img className="preview-images-index" src={previewImage} alt="No Preview Available"></img>
                 </div>
                 <div className='address-rating'>
                     <p className='address'>{city}, {state}</p>
@@ -35,9 +35,8 @@ function SpotIndexItem ({ spot }) {
                     <p className='price-text'>${price}&nbsp;</p>
                     <p className='night'>night</p>
                 </div>
-            </li>
-        </button>
-        // </Link>
+            </button>
+        </li>
     )
 }
 

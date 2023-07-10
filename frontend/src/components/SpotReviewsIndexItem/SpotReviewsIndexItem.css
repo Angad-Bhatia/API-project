@@ -1,0 +1,14 @@
+h4 {
+    color: gray;
+}
+
+#delete-review-btn {
+    box-shadow: 2px 2px 2px gray;
+    color: white;
+    background-color: rgb(75, 75, 75);
+}
+
+.review-li {
+    width: 100%;
+    border-top: 2px solid gray;
+}

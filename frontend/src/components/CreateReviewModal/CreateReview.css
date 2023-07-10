@@ -1,0 +1,52 @@
+#review-form-cont {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    /* border: 2px solid red; */
+}
+
+#review-form-textarea {
+    width: 95%;
+    height: 40%;
+    background-color: rgb(232, 232, 255);
+}
+
+#submit-review-btn {
+    height: 15%;
+    width: 95%;
+    background-color: rgb(255, 84, 84);
+    color: white;
+    box-shadow: 5px 5px 5px gray;
+}
+
+#submit-review-btn:disabled {
+    background-color: white;
+    color: rgb(179, 179, 179);
+}
+
+#custom-radio1:hover{
+    content: url('https://w7.pngwing.com/pngs/421/559/png-transparent-star-favorite-solid-icon-thumbnail.png')
+}
+#star-row {
+    width: 95%;
+    text-align: center;
+    padding-bottom: 0;
+}
+.custom-radio {
+    content: url('https://static.thenounproject.com/png/1371880-200.png');
+    height: 60%;
+    width: 8%;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.custom-radio:checked {
+    content: url('https://w7.pngwing.com/pngs/421/559/png-transparent-star-favorite-solid-icon-thumbnail.png')
+}
+
+.custom-radio:hover {
+    content: url('https://w7.pngwing.com/pngs/421/559/png-transparent-star-favorite-solid-icon-thumbnail.png')
+}

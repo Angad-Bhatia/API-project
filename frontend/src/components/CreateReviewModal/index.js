@@ -37,8 +37,9 @@ function CreateReviewModal({ spotId }) {
         <form id='review-form-cont' onSubmit={handleSubmit}>
             <h2>How was your stay?</h2>
             <textarea
+            id="review-form-textarea"
                 value={reviewText}
-                placeholder='Just a quick review.'
+                placeholder='Leave your review here...'
                 onChange={(e) => setReviewTest(e.target.value)}
                 required
             ></textarea>
@@ -46,20 +47,20 @@ function CreateReviewModal({ spotId }) {
                 <p>{errors.review}</p>
             )}
             <div id='star-row'>
-            <input type="radio" id="custom-radio1" onClick={(e) => setStars(e.target.value)} name="custom-radio1" className="custom-radio" value={1} />
-                <label htmlFor="custom-radio1" className="custom-radio-label">1</label>
+            <input type="radio" id="custom-radio1" onClick={(e) => setStars(e.target.value)} name="review-radio-name" className="custom-radio" value={1} />
+                <label htmlFor="custom-radio1" className="custom-radio-label"></label>
 
-            <input type="radio" id="custom-radio2" onClick={(e) => setStars(e.target.value)} name="custom-radio2" className="custom-radio" value={2} />
-                <label htmlFor="custom-radio2" className="custom-radio-label">2</label>
+            <input type="radio" id="custom-radio2" onClick={(e) => setStars(e.target.value)} name="review-radio-name" className="custom-radio" value={2} />
+                <label htmlFor="custom-radio2" className="custom-radio-label"></label>
             {/* </input> */}
-            <input type="radio" id="custom-radio3" onClick={(e) => setStars(e.target.value)} name="custom-radio3" className="custom-radio" value={3} />
-                <label htmlFor="custom-radio3" className="custom-radio-label">3</label>
+            <input type="radio" id="custom-radio3" onClick={(e) => setStars(e.target.value)} name="review-radio-name" className="custom-radio" value={3} />
+                <label htmlFor="custom-radio3" className="custom-radio-label"></label>
             {/* </input> */}
-            <input type="radio" id="custom-radio4" onClick={(e) => setStars(e.target.value)} name="custom-radio4" className="custom-radio" value={4} />
-                <label htmlFor="custom-radio4" className="custom-radio-label">4</label>
+            <input type="radio" id="custom-radio4" onClick={(e) => setStars(e.target.value)} name="review-radio-name" className="custom-radio" value={4} />
+                <label htmlFor="custom-radio4" className="custom-radio-label"></label>
             {/* </input> */}
-            <input type="radio" id="custom-radio5" onClick={(e) => setStars(e.target.value)} name="custom-radio5" className="custom-radio" value={5} />
-                <label htmlFor="custom-radio5" className="custom-radio-label">5</label>
+            <input type="radio" id="custom-radio5" onClick={(e) => setStars(e.target.value)} name="review-radio-name" className="custom-radio" value={5} />
+                <label htmlFor="custom-radio5" className="custom-radio-label"></label>
             {/* </input> */}
                 {/* <i className="fa-solid fa-star" style={{"color": "#00040a"}}></i>
                 <i className="fa-solid fa-star" style={{"color": "#00040a"}}></i>
@@ -71,7 +72,7 @@ function CreateReviewModal({ spotId }) {
             {errors.stars && (
                 <p>{errors.stars}</p>
             )}
-            <button type="submit" disabled={!stars || reviewText.length < 30}>Submit Your Review</button>
+            <button id="submit-review-btn" type="submit" disabled={!stars || reviewText.length < 30}>Submit Your Review</button>
             {errors.message && (
                 <p>{errors.message}</p>
             )}

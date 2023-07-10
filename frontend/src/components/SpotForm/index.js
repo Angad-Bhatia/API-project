@@ -69,9 +69,9 @@ const SpotForm = ({ spot, images, formType }) => {
             });
 
             spot = newSpot;
-            if (spot && spot.id && imgErrors.flag == false && errors.flag == false) {
-                history.push(`/spots/${spot.id}`);
-            }
+            // if (spot && spot.id && imgErrors.flag == false && errors.flag == false) {
+            //     history.push(`/spots/${spot.id}`);
+            // }
         } else if (formType === 'Update your Spot' && spot.id && imgErrors.flag == false && errors.flag == false) {
             const updatedSpot = await dispatch(thunkUpdateSpot(spot))
             .catch(async (res) => {
@@ -80,30 +80,29 @@ const SpotForm = ({ spot, images, formType }) => {
                     setErrors({ ...data.errors, flag: true });
                 }
             });
-
-            if (spot && spot.id && imgErrors.flag == false && errors.flag == false) {
-                history.push(`/spots/${spot.id}`);
-            }
+        }
+        if (spot && spot.id && imgErrors.flag == false && errors.flag == false) {
+            history.push(`/spots/${spot.id}`);
         }
     }
 
     return (
         <div id="form-cont">
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} id="actual-spot-form">
                 <ul id="form-list">
                 <h2>{formType}</h2>
-                    <li id="location-cont">
+                    <li id="location-cont" className='spot-form-li-conts'>
                         <div id='prompt-location' className='prompt-containers'>
-                            <h4 id='location-header'>Where's your place located</h4>
+                            <h3 id='location-header' className='prompt-headers'>Where's your place located</h3>
                             <p id="location-text">Guests will only get your exact address once they booked a reservation.</p>
                         </div>
                         <div id="location-input" className='input-containers'>
                             <label>
                                 <div id='country-errors' className='errors-cont'>
-                                    Country
+                                    Country&nbsp;&nbsp;
                                     <div className="errors">{errors.country}</div>
                                 </div>
-                                <select id='country' name='country'
+                                <select id='country' name='country' className='full-length-containers-spot-form'
                                     onChange={(e) => setCountry(e.target.value)}
                                 >
                                     <option value={country} selected>{country}</option>
@@ -114,10 +113,11 @@ const SpotForm = ({ spot, images, formType }) => {
                             </label>
                             <label>
                                 <div id='address-errors' className='errors-cont'>
-                                    Street Address
+                                    Street Address&nbsp;&nbsp;
                                     <div className="errors">{errors.address}</div>
                                 </div>
                                 <input type="text"
+                                    className='full-length-containers-spot-form'
                                     value={address}
                                     placeholder='Address'
                                     onChange={(e) => setAddress(e.target.value)}
@@ -126,19 +126,20 @@ const SpotForm = ({ spot, images, formType }) => {
                             <div id="city-state-cont">
                                 <label>
                                 <div id='city-errors' className='errors-cont'>
-                                    City
+                                    City&nbsp;&nbsp;
                                     <div className="errors">{errors.city}</div>
                                 </div>
                                 <input type="text"
+                                    id='city-actual-input'
                                     value={city}
                                     placeholder='City'
                                     onChange={(e) => setCity(e.target.value)}
                                 ></input>
                                 </label>
-                                ,&nbsp;&nbsp;
+
                                 <label>
                                 <div id='state-errors' className='errors-cont'>
-                                    State
+                                    State&nbsp;&nbsp;
                                     <div className="errors">{errors.state}</div>
                                 </div>
                                 {country == 'United States of America' &&
@@ -162,14 +163,15 @@ const SpotForm = ({ spot, images, formType }) => {
                             </div>
                         </div>
                     </li>
-                    <li id="description-cont">
+                    <li id="description-cont" className='spot-form-li-conts'>
                         <div id='prompt-description' className='prompt-containers'>
-                            <h4 id="description-header">Describe your place to guests</h4>
+                            <h3 id="description-header" className='prompt-headers'>Describe your place to guests</h3>
                             <p id='description-text'>Mention the best features of your space, any special amentities
                             like fast wifi or parking, and what you love about the neighborhood.</p>
                         </div>
                         <div id="description-input" className='input-containers'>
                             <textarea
+                                className='full-length-containers-spot-form'
                                 value={description}
                                 placeholder='Description'
                                 onChange={(e) => setDescription(e.target.value)}
@@ -178,13 +180,14 @@ const SpotForm = ({ spot, images, formType }) => {
                             <div className="errors">{errors.description}</div>
                         </div>
                     </li>
-                    <li id="title-cont">
+                    <li id="title-cont" className='spot-form-li-conts'>
                         <div id='prompt-title' className='prompt-containers'>
-                            <h4 id='title-header'>Create a title for your spot</h4>
+                            <h3 id='title-header' className='prompt-headers'>Create a title for your spot</h3>
                             <p id='title-text'>Catch guests' attention with a spot title that highlights what makes your place special.</p>
                         </div>
                         <div id='title-input' className='input-containers'>
                             <input type="text"
+                                className='full-length-containers-spot-form'
                                 value={name}
                                 placeholder='Name of your spot'
                                 onChange={(e) => setName(e.target.value)}
@@ -192,9 +195,9 @@ const SpotForm = ({ spot, images, formType }) => {
                             <div className="errors">{errors.name}</div>
                         </div>
                     </li>
-                    <li id="price-cont">
+                    <li id="price-cont" className='spot-form-li-conts'>
                         <div id='prompt-price' className='prompt-containers'>
-                            <h4 id='price-header'>Set a base price for your spot</h4>
+                            <h3 id='price-header' className='prompt-headers'>Set a base price for your spot</h3>
                             <p id='price-text'>Competitive pricing can help your listing stand out and
                             rank higher in search results.</p>
                         </div>
@@ -202,6 +205,7 @@ const SpotForm = ({ spot, images, formType }) => {
                             <label>
                                 $
                                 <input type="text"
+                                    className='full-length-containers-spot-form'
                                     value={price}
                                     placeholder='Price per night (USD)'
                                     onChange={(e) => setPrice(e.target.value)}
@@ -210,14 +214,15 @@ const SpotForm = ({ spot, images, formType }) => {
                             </label>
                         </div>
                     </li>
-                    <li id="photos-cont">
+                    <li id="photos-cont" className='spot-form-li-conts'>
                         <div id='prompt-photo' className='prompt-containers'>
-                            <h4 id='photo-header'>Liven up your spot with photos</h4>
+                            <h3 id='photo-header' className='prompt-headers'>Liven up your spot with photos</h3>
                             <p id='photo-text'>Submit a link to at least one photo to publish your spot.</p>
                         </div>
                         <ul id='photo-list'>
                             <li id='photo-input-1' className='input-containers image-inputs'>
                                 <input type="text"
+                                    className='full-length-containers-spot-form'
                                     value={image1}
                                     placeholder='Preview Image URL'
                                     onInput={(e) => setImage1(e.target.value)}
@@ -227,6 +232,7 @@ const SpotForm = ({ spot, images, formType }) => {
                             </li>
                             <li id='photo-input-2' className='input-containers image-inputs'>
                                 <input type="text"
+                                    className='full-length-containers-spot-form'
                                     value={image2}
                                     placeholder='Image URL'
                                     onChange={(e) => setImage2(e.target.value)}
@@ -235,6 +241,7 @@ const SpotForm = ({ spot, images, formType }) => {
                             </li>
                             <li id='photo-input-3' className='input-containers image-inputs'>
                                 <input type="text"
+                                    className='full-length-containers-spot-form'
                                     value={image3}
                                     placeholder='Image URL'
                                     onChange={(e) => setImage3(e.target.value)}
@@ -243,6 +250,7 @@ const SpotForm = ({ spot, images, formType }) => {
                             </li>
                             <li id='photo-input-4' className='input-containers image-inputs'>
                                 <input type="text"
+                                    className='full-length-containers-spot-form'
                                     value={image4}
                                     placeholder='Image URL'
                                     onChange={(e) => setImage4(e.target.value)}
@@ -251,6 +259,7 @@ const SpotForm = ({ spot, images, formType }) => {
                             </li>
                             <li id='photo-input-5' className='input-containers image-inputs'>
                                 <input type="text"
+                                    className='full-length-containers-spot-form'
                                     value={image5}
                                     placeholder='Image URL'
                                     onChange={(e) => setImage5(e.target.value)}
@@ -260,7 +269,7 @@ const SpotForm = ({ spot, images, formType }) => {
                         </ul>
                     </li>
                 </ul>
-                <button type="submit">{btnText}</button>
+                <button type="submit" id="submit-spot-form-btn">{btnText}</button>
             </form>
         </div>
     )

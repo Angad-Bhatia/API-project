@@ -4,6 +4,9 @@
     margin-right: 5%;
 }
 
+#city-state-country-text {
+    font-size: 1.1em;
+}
 #images-cont {
     display: flex;
     justify-content: center;
@@ -35,6 +38,8 @@
 #all-info-cont {
     display: flex;
     justify-content: space-between;
+    padding-bottom: 1%;
+    border-bottom: 2px solid gray;
     /* margin-left: 5%; */
 }
 
@@ -63,7 +68,6 @@
 }
 
 #actual-price {
-    border: 1px solid red;
     font-size: 2em;
     font-weight: bold;
 }
@@ -74,4 +78,8 @@
     height: 100%;
     border-radius: 5px;
     box-shadow: 2px 2px 2px gray;
+}
+
+#details-cont {
+    width: 70%;
 }

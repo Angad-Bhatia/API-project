@@ -1,0 +1,11 @@
+#review-btn {
+    width: fit-content;
+    background-color: rgb(91, 91, 91);
+    color: white;
+    box-shadow: 10px 10px 10px gray;
+}
+
+#reviews-cont {
+    display: flex;
+    flex-direction: column;
+}

@@ -34,23 +34,29 @@ function SpotReviewsIndex({ spotId, numReviews }) {
     }, [reviewsObj, spotId]);
 
     useEffect(() => {
-        const foundReview = reviews.find(review => review.userId === user.id)
-        setUserReview(foundReview ? foundReview : null);
-    }, [reviews, user.id]);
+        if (user) {
+            const foundReview = reviews.find(review => review.userId === user.id)
+            setUserReview(foundReview ? foundReview : null);
+        }
+    }, [reviews, user]);
 
     useEffect(() => {
         setFlag(true);
         const reviewsArr = reviews;
         const ind = reviews.indexOf(userReview);
+        if(!user || !user.id) {
+            setFlag(false);
+            return;
+        }
         if (ind > -1) {
-            console.log('user review should not exist')
             setFlag(false);
             reviewsArr.unshift(reviewsArr.splice(ind, 1)[0]);
             setReviews(reviewsArr);
+            return;
         }
-        if ((spot.ownerId && spot.ownerId === user.id)) {
+        if ((spot && user && spot.ownerId && spot.ownerId === user.id)) {
             setFlag(false);
-            console.log('spot.ownerId does not equal user.id')
+            return;
         }
     }, [userReview, reviews]);
 
@@ -63,8 +69,8 @@ function SpotReviewsIndex({ spotId, numReviews }) {
     //     }
     // }, [spot, user]);
 
-    const buttonToggle = (e) => {
-        e.preventDefault();
+    const buttonToggle = () => {
+        // e.preventDefault();
         setToggle(!toggle);
     }
 
@@ -76,13 +82,15 @@ function SpotReviewsIndex({ spotId, numReviews }) {
                     modalComponent={<CreateReviewModal
                         spotId={spotId}
                     />}
+                    onModalClose={buttonToggle}
                 />
             </button>}
+            {flag && !numReviews && <p>Be the first to post a review!</p>}
             {numReviews ? <ul id="reviews-list">
                 {reviews.map(review => (
                     <SpotReviewsIndexItem
                         reviewObj={review}
-                        userId={user.id}
+                        userId={user ? user.id : null}
                         spotId={spot.id}
                         key={review.id}
                     />

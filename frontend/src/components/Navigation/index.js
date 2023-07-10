@@ -12,7 +12,6 @@ function Navigation({ isLoaded }){
     <ul id="nav-bar">
       <li className="navs" id="home-container">
         <NavLink exact to="/" id="home-text">
-          {/* <i className="fa-duotone fa-cloud-rainbow" style={{"--fa-primary-color": "#f77d5f", "--fa-secondary-color": "#f8b6a5"}}></i> */}
           <img id="home-img" src="https://1000logos.net/wp-content/uploads/2021/12/Akatsuki-Logo.jpg" alt="not available"></img>
           CloudBnB
         </NavLink>
@@ -20,9 +19,9 @@ function Navigation({ isLoaded }){
       {isLoaded && (
         <li id="right-nav-cont">
           {sessionUser && (
-            <NavLink exact to="/spots/new" id="new-spot">Create a New Spot</NavLink>
+            <NavLink exact to="/spots/new" id="new-spot" className={sessionUser ? "logged-in-right-nav" : 'other-unused'}>Create a New Spot &nbsp; &nbsp; </NavLink>
           )}
-          <div className= "navs" id="btn-container">
+          <div className="navs" id="btn-container">
             <ProfileButton user={sessionUser} />
           </div>
         </li>

@@ -1,5 +1,7 @@
 #spots-list {
     display: grid;
     grid-template-columns: 25% 25% 25% 25%;
-    column-gap: 3%;
+    grid-auto-rows: 1fr;
+    column-gap: 2%;
+    /* row-gap: 1%; */
 }
