@@ -49,10 +49,10 @@
     box-shadow: 2px 2px 2px gray;
     display: flex;
     flex-direction: column;
-    width: 23%;
+    width: 30%;
     /* margin-right: 6%; */
-    padding-left: .5%;
-    padding-right: .5%;
+    padding-left: 1.5%;
+    padding-right: 1.5%;
     padding-bottom: .5%;
 }
 
