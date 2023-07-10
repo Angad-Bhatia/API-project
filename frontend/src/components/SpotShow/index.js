@@ -28,7 +28,7 @@ function SpotShow() {
             setNumReviewsText('');
             setStars('New');
         } else if (numReviews === 1) {
-            setStars(avgStarRating);
+            setStars(parseFloat(avgStarRating).toFixed(1));
             setNumReviewsText('· 1 review');
         }
     }, [numReviews, avgStarRating])
