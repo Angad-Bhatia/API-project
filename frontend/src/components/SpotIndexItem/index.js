@@ -1,17 +1,21 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import './SpotIndexItem.css';
 
 function SpotIndexItem ({ spot }) {
     const history = useHistory();
-    const { city, state, price, name, avgStarRating, numReviews, previewImage } = spot;
-    let starsIndex = Math.round(avgStarRating * 10) / 10;
-    console.log('starratings', avgStarRating, starsIndex);
-    if (numReviews < 1) {
-        starsIndex = 'New';
-    }
+    const { city, state, price, name, avgStarRating, previewImage } = spot;
+    const [starsIndex, setStarsIndex] = useState(avgStarRating);
 
+    useEffect(() => {
+        if (!avgStarRating) {
+            setStarsIndex('New');
+        } else {
+            setStarsIndex((Math.round(avgStarRating * 10) / 10).toFixed(1))
+        }
+
+    },[spot]);
     const onClick = (e) => {
         e.preventDefault();
         history.push(`/spots/${spot.id}`);

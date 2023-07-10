@@ -30,7 +30,7 @@ function SpotReviewsIndexItem ({ reviewObj, userId, spotId }) {
     }
     return (
         <li key={reviewObj.id} className="review-li">
-            <h3>{User.firstName} &nbsp; &nbsp; {stars}&nbsp;Stars</h3>
+            <h3>{User.firstName} &nbsp; &nbsp; &nbsp; Rating:&nbsp;{stars}</h3>
             <h4>{month} {year}</h4>
             <p>{review}</p>
             {delFlag && <button id="delete-review-btn">

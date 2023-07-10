@@ -95,3 +95,7 @@ h1 {
     color: rgb(51, 51, 193);
     background-color: white;
 }
+
+#demo-login-btn:hover {
+    cursor: pointer;
+}

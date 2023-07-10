@@ -173,7 +173,7 @@ const SpotForm = ({ spot, images, formType }) => {
                             <textarea
                                 className='full-length-containers-spot-form'
                                 value={description}
-                                placeholder='Description'
+                                placeholder='Please write at least 30 characters'
                                 onChange={(e) => setDescription(e.target.value)}
                             >
                             </textarea>

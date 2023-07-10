@@ -22,14 +22,14 @@ function SpotShow() {
 
     useEffect(() => {
         if (numReviews > 1) {
-            setStars(Math.round(avgStarRating * 10) / 10);
+            setStars(parseFloat(avgStarRating).toFixed(1));
             setNumReviewsText(`${numReviews} reviews`);
         } else if (numReviews === 0) {
             setNumReviewsText('');
             setStars('New');
         } else if (numReviews === 1) {
             setStars(avgStarRating);
-            setNumReviewsText('1 review');
+            setNumReviewsText('· 1 review');
         }
     }, [numReviews, avgStarRating])
 
@@ -76,7 +76,7 @@ function SpotShow() {
                         </div>
                         <div id="reserve-reviews">
                             <i className="fa-solid fa-star" style={{"color": "#00040a"}}></i>
-                            {stars} &nbsp;&nbsp; {numReviewsText}
+                            {stars} {numReviewsText}
                         </div>
                     </div>
                     <button id="reserve-btn" onClick={onClickReserve}>Reserve</button>
@@ -85,7 +85,7 @@ function SpotShow() {
             <div id="reviews-cont">
                 <h2>
                     <i className="fa-solid fa-star" style={{"color": "#00040a"}}></i>
-                    {stars} &nbsp;&nbsp; {numReviewsText}
+                    {stars} {numReviewsText}
                 </h2>
                 <SpotReviewsIndex
                     spotId={spotId}

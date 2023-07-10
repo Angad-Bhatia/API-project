@@ -29,7 +29,12 @@ function SpotReviewsIndex({ spotId, numReviews }) {
 
     useEffect(() => {
         if (reviewsObj) {
-            setReviews(Object.values(reviewsObj[`spot${spotId}`]))
+            const reviewsArr = Object.values(reviewsObj[`spot${spotId}`]);
+            console.log('order', reviewsArr)
+            if(reviewsArr.length > 1) {
+                reviewsArr.sort((a, b) => b.createdAt - a.createdAt)
+            }
+            setReviews(reviewsArr);
         }
     }, [reviewsObj, spotId]);
 
