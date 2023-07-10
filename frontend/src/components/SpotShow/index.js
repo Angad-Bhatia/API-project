@@ -23,7 +23,7 @@ function SpotShow() {
     useEffect(() => {
         if (numReviews > 1) {
             setStars(parseFloat(avgStarRating).toFixed(1));
-            setNumReviewsText(`${numReviews} reviews`);
+            setNumReviewsText(`· ${numReviews} reviews`);
         } else if (numReviews === 0) {
             setNumReviewsText('');
             setStars('New');
