@@ -17,10 +17,10 @@ function SpotReviewsIndexItem ({ reviewObj, userId, spotId }) {
 
 
     useEffect(() => {
-        if (userId === User.id) {
+        if (User && userId === User.id) {
             setDelFlag(true)
         }
-    }, [userId, User.id]);
+    }, [userId, User]);
 
 
 

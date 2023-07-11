@@ -7,6 +7,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
+    margin-bottom: 0;
     height: 80%;
     width: 100%;
 }
@@ -25,13 +26,13 @@
 }
 
 .signup-actual-inputs {
-    width: 95%;
+    width: 90%;
     background-color: rgb(235, 235, 255);
 }
 
 #modal-signup-btn {
-    width: 98%;
-    height: 20%;
+    width: 92%;
+    height: 15%;
     background-color: rgb(255, 84, 84);
     color: white;
     box-shadow: 5px 5px 5px gray;

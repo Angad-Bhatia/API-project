@@ -206,7 +206,7 @@ const spotsReducer = (state = initialState, action) => {
     // let newState;
     switch (action.type) {
         case LOAD_SPOTS:
-            const loadSpotsState = { ...state };
+            const loadSpotsState = { allSpots: { ...state.allSpots } };
             // if (!loadSpotsState.allSpots) {
                 loadSpotsState.allSpots = {};
             // }
@@ -217,7 +217,7 @@ const spotsReducer = (state = initialState, action) => {
             });
             return loadSpotsState;
         case RECEIVE_SPOT:
-            const receiveSpotState = { ...state };
+            const receiveSpotState = { allSpots: { ...state.allSpots } };
             const id = action.spot.id;
             if (!receiveSpotState.allSpots) {
                 receiveSpotState.allSpots = {};
@@ -226,14 +226,14 @@ const spotsReducer = (state = initialState, action) => {
             receiveSpotState.allSpots[id] = action.spot;
             return receiveSpotState;
         case DELETE_SPOT:
-            const deleteSpotState = { ...state };
+            const deleteSpotState = { allSpots: { ...state.allSpots } };
             const deleteId = action.spotId;
             if (deleteSpotState.allSpots && deleteSpotState.allSpots[deleteId]) {
                 delete deleteSpotState.allSpots[deleteId];
             }
             return deleteSpotState;
         case RECEIVE_SPOT_IMAGES:
-            const receiveSpotImageState = { ...state };
+            const receiveSpotImageState = { allSpots: { ...state.allSpots } };
             const spotIdForImage = action.spotId;
             if (receiveSpotImageState.allSpots[spotIdForImage]) {
                 receiveSpotImageState.allSpots[spotIdForImage].SpotImages = action.images;

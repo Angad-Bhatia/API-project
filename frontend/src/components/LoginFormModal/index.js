@@ -43,7 +43,7 @@ function LoginFormModal() {
     <div id="login-form-cont">
       <h1>Log In</h1>
       {errors.credential && (
-          <p className="errors">{errors.credential}</p>
+          <p className="errors" id="login-errors">{errors.credential}</p>
         )}
       <form id="actual-login-form" onSubmit={handleSubmit}>
           <input

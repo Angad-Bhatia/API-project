@@ -67,11 +67,7 @@ const SpotForm = ({ spot, images, formType }) => {
                     setErrors({ ...data.errors, flag: true });
                 }
             });
-
             spot = newSpot;
-            // if (spot && spot.id && imgErrors.flag == false && errors.flag == false) {
-            //     history.push(`/spots/${spot.id}`);
-            // }
         } else if (formType === 'Update your Spot' && spot.id && imgErrors.flag == false && errors.flag == false) {
             const updatedSpot = await dispatch(thunkUpdateSpot(spot))
             .catch(async (res) => {
@@ -85,6 +81,7 @@ const SpotForm = ({ spot, images, formType }) => {
             history.push(`/spots/${spot.id}`);
         }
     }
+
 
     return (
         <div id="form-cont">
