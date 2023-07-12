@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 
 import { useModal } from '../../context/Modal';
-import { thunkDeleteSpot, thunkLoadUserSpots } from '../../store/spots';
+import { thunkDeleteSpot } from '../../store/spots';
 import "./DeleteSpot.css";
 
 function DeleteSpotModal({ spot }) {
@@ -14,11 +14,8 @@ function DeleteSpotModal({ spot }) {
 
     const onDelete = async (e) => {
         e.preventDefault();
-        // console.log('deleteClick')
         return dispatch(thunkDeleteSpot(spot.id))
             .then(closeModal)
-            // .then(dispatch(thunkLoadUserSpots()));
-
     }
 
     const onNo = (e) => {

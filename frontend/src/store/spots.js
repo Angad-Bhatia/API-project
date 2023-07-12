@@ -39,7 +39,6 @@ export const thunkLoadSpots = () => async (dispatch) => {
     if (res.ok) {
         const data = await res.json();
         dispatch(loadSpots(data.Spots));
-        // console.log('thunk, spotsArr:', data.Spots);
         return data.Spots;
     }
 }
@@ -54,7 +53,6 @@ export const thunkLoadUserSpots = () => async (dispatch) => {
 }
 
 export const thunkShowSpot = (spotId) => async (dispatch) => {
-
     const res = await fetch (`/api/spots/${spotId}`);
     if (res.ok) {
         const spot = await res.json();
@@ -128,8 +126,6 @@ export const thunkUpdateSpot = (spot) => async (dispatch) => {
     const imageInputs = { image1, image2, image3, image4, image5 }
     const imageArr = [];
     let spotImagesArr;
-    // console.log('thunk update, spot: ', spot.SpotImages);
-
 
     const res = await csrfFetch(`/api/spots/${spot.id}`, {
         method: 'PUT',
@@ -142,12 +138,10 @@ export const thunkUpdateSpot = (spot) => async (dispatch) => {
     if (res.status < 400) {
         const updatedSpot = await res.json();
         let previewFlag = false;
-        // console.log('thunkUpdate, before if, spot, spot.SpotImages', spot, spot.SpotImages)
         if (spot && spot.SpotImages && spot.SpotImages.length) {
             spotImagesArr = spot.SpotImages;
             for (let i = 0; i < spotImagesArr.length; i++) {
                 const img = spotImagesArr[i];
-                // console.log('thunkUpdate, in delImg loop, img: ', img);
                 await csrfFetch(`/api/spot-images/${img.id}`, { method: 'DELETE' });
             }
         }
@@ -157,7 +151,6 @@ export const thunkUpdateSpot = (spot) => async (dispatch) => {
                 previewFlag = true;
             }
             const reqImageBody = { url: imageInputs[image], preview: previewFlag };
-            // console.log('thunkUpdate, before imagePost, reqImageBody', reqImageBody);
             const imageRes = await csrfFetch(`/api/spots/${updatedSpot.id}/images`, {
                 method: 'POST',
                 body: JSON.stringify(reqImageBody)
@@ -193,7 +186,6 @@ export const thunkUpdateSpot = (spot) => async (dispatch) => {
 export const thunkDeleteSpot = (spotId) => async (dispatch) => {
     const res = await csrfFetch(`/api/spots/${spotId}`, { method: 'DELETE' });
     if (res.ok) {
-        // console.log('resOkay')
         const data = await res.json();
         dispatch(deleteSpot(spotId));
         return data;

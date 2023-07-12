@@ -13,10 +13,10 @@ The different technologies utilized in this project include:
 
 
 # Project Images Showcase
-![Alt text](project-showcase.png)
+![Alt text](./images/project-showcase-1.png)
 
 
-![Alt text](project-showcase-2.png)
+![Alt text](./images/project-showcase-2.png)
 
 
 

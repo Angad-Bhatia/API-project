@@ -1,30 +1,28 @@
 import { csrfFetch } from "./csrf";
+// import { thunkShowSpot } from "./spots";
 
 const LOAD_REVIEWS = "reviews/loadReviews";
 const RECEIVE_SPOTREVIEW = "reviews/receiveSpotReview";
 const DELETE_SPOTREVIEW = "reviews/deleteSpotReview"
 
-const loadReviews = (reviews, spotId) => {
+const loadReviews = (reviews) => {
     return {
         type: LOAD_REVIEWS,
-        reviews,
-        spotId
+        reviews
     };
 };
 
-const receiveSpotReview = (review, spotId) => {
+const receiveSpotReview = (review) => {
     return {
         type: RECEIVE_SPOTREVIEW,
-        review,
-        spotId
+        review
     };
 }
 
-const deleteSpotReview = (reviewId, spotId) => {
+const deleteSpotReview = (reviewId) => {
     return {
         type: DELETE_SPOTREVIEW,
-        reviewId,
-        spotId
+        reviewId
     }
 }
 
@@ -46,7 +44,8 @@ export const thunkCreateSpotReview = (spotId, review, stars) => async (dispatch)
 
     if (res.status < 400) {
         const newReview = await res.json();
-        dispatch(receiveSpotReview(newReview, spotId));
+        dispatch(receiveSpotReview(newReview));
+        // dispatch(thunkShowSpot(spotId));
         return newReview;
     } else {
         const errs = await res.json();
@@ -58,7 +57,8 @@ export const thunkDeleteSpotReview = (reviewId, spotId) => async (dispatch) => {
     const res = await csrfFetch(`/api/reviews/${reviewId}`, { method: 'DELETE' });
     if (res.ok) {
         const data = await res.json();
-        dispatch(deleteSpotReview(reviewId, spotId));
+        dispatch(deleteSpotReview(reviewId));
+        // dispatch(thunkShowSpot(spotId));
         return data;
     }
 }
@@ -69,45 +69,20 @@ const reviewsReducer = (state = initialState, action) => {
     let newState;
     switch (action.type) {
         case LOAD_REVIEWS:
-            newState = Object.assign({}, state);
-            newState.allReviews = {};
-            (action.reviews).forEach(review => {
+            newState = { allReviews: {} };
+            action.reviews.forEach(review => {
                 newState.allReviews[review.id] = review;
-            })
+            });
+
             return newState;
-            // const loadSpotReviewsState = { allReviews: { ...state.allReviews } }
-            // const spotId = action.spotId;
-            // const loadReviewsArr = action.reviews;
-            // if (!loadSpotReviewsState.allReviews) {
-            //     loadSpotReviewsState.allReviews = {};
-            // }
-            // loadSpotReviewsState.allReviews[`spot${spotId}`] = {};
-            // loadReviewsArr.forEach(review => {
-            //     const reviewId = review.id;
-            //     loadSpotReviewsState.allReviews[`spot${spotId}`][reviewId] = review;
-            // })
-            // return loadSpotReviewsState;
         case RECEIVE_SPOTREVIEW:
-            const receiveSpotReviewState = { allReviews: { ...state.allReviews } };
-            const newReview = action.review;
-
-            if (receiveSpotReviewState.allReviews === null) {
-                receiveSpotReviewState.allReviews = {};
-            }
-
-            if (!receiveSpotReviewState.allReviews[`spot${action.spotId}`]) {
-                receiveSpotReviewState.allReviews[`spot${action.spotId}`] = {};
-            };
-            const currSpotReviews = receiveSpotReviewState.allReviews[`spot${action.spotId}`];
-            currSpotReviews[newReview.id] = newReview;
-            return receiveSpotReviewState;
+            newState = { ...state, allReviews: { ...state.allReviews } };
+            newState.allReviews[action.review.id] = action.review;
+            return newState;
         case DELETE_SPOTREVIEW:
-            const deleteSpotReviewState = { allReviews: {[`spot${action.spotId}`]: { ...state.allReviews[`spot${action.spotId}`] }} };
-            const delId = action.reviewId;
-            if (deleteSpotReviewState.allReviews && deleteSpotReviewState.allReviews[`spot${action.spotId}`] && deleteSpotReviewState.allReviews[`spot${action.spotId}`][delId]) {
-                delete deleteSpotReviewState.allReviews[`spot${action.spotId}`][delId];
-            }
-            return deleteSpotReviewState;
+            newState = { ...state, allReviews: { ...state.allReviews } };
+            delete newState.allReviews[action.reviewId];
+            return newState;
         default:
             return state;
     }

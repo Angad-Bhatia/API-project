@@ -20,7 +20,7 @@ function SpotReviewsIndex({ spotId, numReviews }) {
 
     useEffect(() => {
         dispatch(thunkLoadSpotReviews(spotId));
-    }, [dispatch, spotId]);
+    }, [dispatch]);
 
     useEffect(() => {
         if (reviewsObj) {
@@ -30,7 +30,7 @@ function SpotReviewsIndex({ spotId, numReviews }) {
                 reviewsArr.sort((a, b) => b.id - a.id)
             }
 
-            setReviews(reviewsArr);
+            setReviews([...reviewsArr]);
         }
     }, [reviewsObj]);
 
@@ -74,11 +74,11 @@ function SpotReviewsIndex({ spotId, numReviews }) {
                 />
             </button>}
             {flag && !numReviews && <p>Be the first to post a review!</p>}
-            {numReviews ? <ul id="reviews-list">
+            {reviews.length ? <ul id="reviews-list">
                 {reviews.map(review => (
                     <SpotReviewsIndexItem
                         reviewObj={review}
-                        userId={user ? user.id : null}
+                        user={user}
                         spotId={spot.id}
                         key={review.id}
                     />

@@ -19,7 +19,6 @@ function CreateReviewModal({ spotId }) {
         e.preventDefault();
         setErrors({});
         await dispatch(thunkCreateSpotReview(spotId, reviewText, stars))
-            // .then(closeModal)
             .catch(async (res) => {
                 const data = await res.json();
                 if (data && data.errors) {
@@ -28,7 +27,6 @@ function CreateReviewModal({ spotId }) {
             });
         if (!errors.flag) {
             closeModal();
-            history.push(`/spots/${spotId}`);
         }
     }
 

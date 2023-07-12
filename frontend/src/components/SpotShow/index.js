@@ -11,8 +11,10 @@ function SpotShow() {
     const { spotId } = useParams();
 
     const spot = useSelector((state) => state.spots.allSpots ? state.spots.allSpots[spotId] : {});
-    const { Owner, SpotImages, avgStarRating, city, country, description, name, numReviews, price, state } = spot;
+    const reviewsObj = useSelector((state) => state.reviews.allReviews ? state.reviews.allReviews : null);
+    const { Owner, SpotImages, city, country, description, name, price, state } = spot;
 
+    const [numReviews, setNumReviews] = useState(0);
     const [numReviewsText, setNumReviewsText] = useState('');
     const [stars, setStars] = useState('');
 
@@ -21,17 +23,22 @@ function SpotShow() {
     }, [dispatch, spotId]);
 
     useEffect(() => {
-        if (numReviews > 1) {
-            setStars(parseFloat(avgStarRating).toFixed(1));
-            setNumReviewsText(`· ${numReviews} reviews`);
-        } else if (numReviews === 0) {
+        const reviews = reviewsObj ? Object.values(reviewsObj) : [];
+        if (reviews.length > 1) {
+            const avgRating = reviews.reduce((acc, review) => acc + Number(review.stars), 0);
+            setStars(parseFloat(avgRating / reviews.length).toFixed(1));
+            setNumReviews(reviews.length);
+            setNumReviewsText(`· ${reviews.length} reviews`);
+        } else if (!reviews.length) {
+            setNumReviews(0);
             setNumReviewsText('');
             setStars('New');
-        } else if (numReviews === 1) {
-            setStars(parseFloat(avgStarRating).toFixed(1));
+        } else if (reviews.length === 1) {
+            setStars(parseFloat(reviews[0].stars).toFixed(1));
+            setNumReviews(1);
             setNumReviewsText('· 1 review');
         }
-    }, [numReviews, avgStarRating])
+    }, [numReviews, reviewsObj]);
 
     const onClickReserve = (e) => {
         e.preventDefault();
@@ -41,8 +48,6 @@ function SpotShow() {
     if (!spot || !spot.Owner) {
         return null;
     }
-    // let numReviewsText;
-    // let stars;
 
     const previewImg = SpotImages.find(img => img.preview).url;
     const otherArr = SpotImages.slice(1);
