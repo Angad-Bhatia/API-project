@@ -59,7 +59,7 @@ const SpotForm = ({ spot, images, formType }) => {
         setErrors(spotErrs);
         setImgErrors(imgErr);
 
-        if (formType === 'Create a new Spot' && imgErrors.flag == false && errors.flag == false) {
+        if (formType === 'Create a new Spot' && imgErrors.flag === false && errors.flag === false) {
             const newSpot = await dispatch(thunkCreateSpot(spot))
             .catch(async (res) => {
                 const data = await res.json();
@@ -68,8 +68,8 @@ const SpotForm = ({ spot, images, formType }) => {
                 }
             });
             spot = newSpot;
-        } else if (formType === 'Update your Spot' && spot.id && imgErrors.flag == false && errors.flag == false) {
-            const updatedSpot = await dispatch(thunkUpdateSpot(spot))
+        } else if (formType === 'Update your Spot' && spot.id && imgErrors.flag === false && errors.flag === false) {
+            await dispatch(thunkUpdateSpot(spot))
             .catch(async (res) => {
                 const data = await res.json();
                 if (data && data.errors) {
@@ -77,7 +77,7 @@ const SpotForm = ({ spot, images, formType }) => {
                 }
             });
         }
-        if (spot && spot.id && imgErrors.flag == false && errors.flag == false) {
+        if (spot && spot.id && imgErrors.flag === false && errors.flag === false) {
             history.push(`/spots/${spot.id}`);
         }
     }
@@ -139,7 +139,7 @@ const SpotForm = ({ spot, images, formType }) => {
                                     State&nbsp;&nbsp;
                                     <div className="errors">{errors.state}</div>
                                 </div>
-                                {country == 'United States of America' &&
+                                {country === 'United States of America' &&
                                 <select
                                     id="state"
                                     name="state"

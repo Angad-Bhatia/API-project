@@ -125,7 +125,7 @@ export const thunkUpdateSpot = (spot) => async (dispatch) => {
     const reqBody = { address, city, state, country, lat: 90, lng: 90, name, description, price };
     const imageInputs = { image1, image2, image3, image4, image5 }
     const imageArr = [];
-    let spotImagesArr;
+    let spotImagesArr = [];
 
     const res = await csrfFetch(`/api/spots/${spot.id}`, {
         method: 'PUT',
@@ -195,43 +195,26 @@ export const thunkDeleteSpot = (spotId) => async (dispatch) => {
 const initialState = { allSpots: null };
 
 const spotsReducer = (state = initialState, action) => {
-    // let newState;
+    let newState;
     switch (action.type) {
         case LOAD_SPOTS:
-            const loadSpotsState = { allSpots: { ...state.allSpots } };
-            // if (!loadSpotsState.allSpots) {
-                loadSpotsState.allSpots = {};
-            // }
-            const spotsArr = action.spots;
-            spotsArr.forEach(spot => {
-                const spotId = spot.id;
-                loadSpotsState.allSpots[spotId] = spot;
+            newState = { ...state, allSpots: {} };
+            action.spots.forEach(spot => {
+                newState.allSpots[spot.id] = spot;
             });
-            return loadSpotsState;
+            return newState;
         case RECEIVE_SPOT:
-            const receiveSpotState = { allSpots: { ...state.allSpots } };
-            const id = action.spot.id;
-            if (!receiveSpotState.allSpots) {
-                receiveSpotState.allSpots = {};
-            }
-
-            receiveSpotState.allSpots[id] = action.spot;
-            return receiveSpotState;
+            newState = { ...state, allSpots: { ...state.allSpots } };
+            newState.allSpots[action.spot.id] = action.spot;
+            return newState;
         case DELETE_SPOT:
-            const deleteSpotState = { allSpots: { ...state.allSpots } };
-            const deleteId = action.spotId;
-            if (deleteSpotState.allSpots && deleteSpotState.allSpots[deleteId]) {
-                delete deleteSpotState.allSpots[deleteId];
-            }
-            return deleteSpotState;
+            newState = { ...state, allSpots: { ...state.allSpots } };
+            delete newState.allSpots[action.spotId];
+            return newState;
         case RECEIVE_SPOT_IMAGES:
-            const receiveSpotImageState = { allSpots: { ...state.allSpots } };
-            const spotIdForImage = action.spotId;
-            if (receiveSpotImageState.allSpots[spotIdForImage]) {
-                receiveSpotImageState.allSpots[spotIdForImage].SpotImages = action.images;
-            }
-
-            return receiveSpotImageState;
+            newState = { ...state, allSpots: { ...state.allSpots } };
+            newState.allSpots[action.spotId].SpotImages = action.images;
+            return newState;
         default:
             return state;
     }

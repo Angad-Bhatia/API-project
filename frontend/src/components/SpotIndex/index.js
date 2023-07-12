@@ -3,13 +3,11 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import SpotIndexItem from "../SpotIndexItem"
-
 import { thunkLoadSpots } from '../../store/spots';
 import './SpotIndex.css';
 
 function SpotIndex () {
-    const spotsObj = useSelector((state) => state.spots.allSpots ? state.spots.allSpots : []);
-    const spots = Object.values(spotsObj);
+    const spots = useSelector((state) => state.spots.allSpots ? Object.values(state.spots.allSpots) : []);
     const dispatch = useDispatch();
 
     useEffect(() => {

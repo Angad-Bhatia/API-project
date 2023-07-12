@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
 import { useModal } from '../../context/Modal';
@@ -7,7 +6,6 @@ import { thunkCreateSpotReview } from '../../store/reviews';
 import './CreateReview.css';
 
 function CreateReviewModal({ spotId }) {
-    const history = useHistory();
     const dispatch = useDispatch();
     const { closeModal } = useModal();
 

@@ -29,14 +29,14 @@ function SpotShow() {
             setStars(parseFloat(avgRating / reviews.length).toFixed(1));
             setNumReviews(reviews.length);
             setNumReviewsText(`· ${reviews.length} reviews`);
-        } else if (!reviews.length) {
-            setNumReviews(0);
-            setNumReviewsText('');
-            setStars('New');
         } else if (reviews.length === 1) {
             setStars(parseFloat(reviews[0].stars).toFixed(1));
             setNumReviews(1);
             setNumReviewsText('· 1 review');
+        } else {
+            setNumReviews(0);
+            setNumReviewsText('');
+            setStars('New');
         }
     }, [numReviews, reviewsObj]);
 
