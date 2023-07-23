@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import OpenModalMenuItem from "../Navigation/OpenModalMenuItem";
 import SpotReviewsIndexItem from "../SpotReviewsIndexItem";
-import CreateReviewModal from "../CreateReviewModal";
+import ReviewFormModal from "../ReviewFormModal";
 import { thunkLoadSpotReviews } from "../../store/reviews";
 import "./SpotReviewsIndex.css";
 
@@ -17,6 +17,7 @@ function SpotReviewsIndex({ spotId, numReviews }) {
     const [flag, setFlag] = useState(true);
     const [reviews, setReviews] = useState([]);
     const [userReview, setUserReview] = useState({});
+    const [name, setName] = useState(spot ? spot.name : '');
 
     useEffect(() => {
         dispatch(thunkLoadSpotReviews(spotId));
@@ -44,6 +45,7 @@ function SpotReviewsIndex({ spotId, numReviews }) {
     useEffect(() => {
         setFlag(true);
 
+        setName(spot.name)
         if (!user) {
             setFlag(false);
             return;
@@ -68,7 +70,7 @@ function SpotReviewsIndex({ spotId, numReviews }) {
             {flag && <button id="review-btn">
                 <OpenModalMenuItem
                     itemText="Post Your Review"
-                    modalComponent={<CreateReviewModal
+                    modalComponent={<ReviewFormModal
                         spotId={spotId}
                     />}
                 />
@@ -81,6 +83,7 @@ function SpotReviewsIndex({ spotId, numReviews }) {
                         user={user}
                         spotId={spot.id}
                         key={review.id}
+                        name={name}
                     />
                 ))}
             </ul> : null}

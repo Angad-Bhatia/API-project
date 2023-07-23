@@ -2,10 +2,12 @@ h4 {
     color: gray;
 }
 
-#delete-review-btn {
-    box-shadow: 2px 2px 2px gray;
+.manage-review-btns {
+    width: fit-content;
+    background-color: rgb(91, 91, 91);
     color: white;
-    background-color: rgb(75, 75, 75);
+    box-shadow: 10px 10px 10px gray;
+    border-radius: 2px;
 }
 
 .review-li {

@@ -7,7 +7,7 @@ import "./DeleteReview.css"
 
 function DeleteReviewModal({ id, spotId }) {
     const dispatch = useDispatch();
-    const { closeModal } = useModal()
+    const { closeModal } = useModal();
     const yes = 'Yes (Delete Review)'
     const no = 'No (Keep Review)'
     const onClickNo = (e) => {

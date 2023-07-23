@@ -63,6 +63,23 @@ export const thunkDeleteSpotReview = (reviewId, spotId) => async (dispatch) => {
     }
 }
 
+export const thunkUpdateSpotReview = (reviewId, review, stars, spotId) => async (dispatch) => {
+    const reqBody = { review, stars }
+    const res = await csrfFetch(`/api/reviews/${reviewId}`, {
+        method: 'PUT',
+        body: JSON.stringify(reqBody)
+    })
+    if (res.status < 400) {
+        const updatedReview = res.json();
+        dispatch(receiveSpotReview(updatedReview));
+        dispatch(thunkLoadSpotReviews(spotId))
+        return updatedReview;
+    } else {
+        const errs = res.json();
+        return errs;
+    }
+}
+
 const initialState = { allReviews: null };
 
 const reviewsReducer = (state = initialState, action) => {
