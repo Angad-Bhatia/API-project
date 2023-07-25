@@ -137,7 +137,6 @@ export const thunkUpdateSpot = (spot) => async (dispatch) => {
 
     if (res.status < 400) {
         const updatedSpot = await res.json();
-        let previewFlag = false;
         if (spot && spot.SpotImages && spot.SpotImages.length) {
             spotImagesArr = spot.SpotImages;
             for (let i = 0; i < spotImagesArr.length; i++) {
@@ -147,25 +146,29 @@ export const thunkUpdateSpot = (spot) => async (dispatch) => {
         }
 
         for (let image in imageInputs) {
+            let previewFlag = false;
             if (image === 'image1') {
                 previewFlag = true;
             }
-            const reqImageBody = { url: imageInputs[image], preview: previewFlag };
-            const imageRes = await csrfFetch(`/api/spots/${updatedSpot.id}/images`, {
-                method: 'POST',
-                body: JSON.stringify(reqImageBody)
-            });
 
-            if (imageRes.ok) {
-                const updatedImage = await imageRes.json();
-                if (updatedImage.preview) {
-                    imageArr.unshift(updatedImage);
+            if(imageInputs[image]) {
+                const reqImageBody = { url: imageInputs[image], preview: previewFlag };
+                const imageRes = await csrfFetch(`/api/spots/${updatedSpot.id}/images`, {
+                    method: 'POST',
+                    body: JSON.stringify(reqImageBody)
+                });
+
+                if (imageRes.ok) {
+                    const updatedImage = await imageRes.json();
+                    if (updatedImage.preview) {
+                        imageArr.unshift(updatedImage);
+                    } else {
+                        imageArr.push(updatedImage);
+                    }
                 } else {
-                    imageArr.push(updatedImage);
+                    errs.imageErrs[image] = await imageRes.json();
+                    errFlag = true;
                 }
-            } else {
-                errs.imageErrs[image] = await imageRes.json();
-                errFlag = true;
             }
         }
 

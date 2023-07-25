@@ -42,13 +42,13 @@ const SpotIndexUser = () => {
             <section>
                 <ul id="spots-list">
                     {spots.map(spot => (
-                        <div className='user-spot-conts'>
+                        <div className='user-spot-conts' key={spot.name}>
                             <SpotIndexItem
                                 spot={spot}
                                 key={spot.id}
                             />
                             <div className='user-crud-btn-conts'>
-                                <button onClick={async (e) => {
+                                <button key={spot.id} onClick={async (e) => {
                                     e.preventDefault();
                                     history.push(`/spots/${spot.id}/edit`);
                                 }} className='update-btns'>Update</button>

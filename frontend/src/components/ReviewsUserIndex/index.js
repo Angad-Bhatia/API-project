@@ -1,22 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
 
 import ReviewsIndex from "../ReviewsIndex";
 import "./ReviewsUserIndex.css";
 
 function ReviewsUserIndex() {
-    // const dispatch = useDispatch();
-
-    // const reviewsObj = useSelector((state) => state.reviews.allReviews ? state.reviews.allReviews : null);
-
-    // const [reviews, setReviews] = useState(reviewsObj ? Object.values(reviewsObj) : []);
-    // useEffect(() => {
-    //     dispatch();
-    // }, [dispatch]);
-
-    // useEffect(() => {
-    //     setReviews(reviewsObj ? Object.values(reviewsObj) : []);
-    // }, [reviewsObj])
     return (
         <div id="user-reviews-cont">
             <h2>Manage Reviews</h2>

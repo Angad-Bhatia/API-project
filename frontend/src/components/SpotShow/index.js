@@ -49,7 +49,8 @@ function SpotShow() {
         return null;
     }
 
-    const previewImg = SpotImages.find(img => img.preview).url;
+    const previewImgObj = SpotImages.find(img => img.preview)
+    const previewImg = previewImgObj ? previewImgObj.url : "";
     const otherArr = SpotImages.slice(1);
 
     return (

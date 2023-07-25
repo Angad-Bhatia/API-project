@@ -10,16 +10,18 @@ function DeleteReviewModal({ id, spotId }) {
     const { closeModal } = useModal();
     const yes = 'Yes (Delete Review)'
     const no = 'No (Keep Review)'
+
+    const onClickYes = (e) => {
+        e.preventDefault();
+        return dispatch(thunkDeleteSpotReview(id, spotId))
+        .then(closeModal)
+    }
+
     const onClickNo = (e) => {
         e.preventDefault(e);
         closeModal();
     }
 
-    const onClickYes = (e) => {
-        e.preventDefault();
-        return dispatch(thunkDeleteSpotReview(id, spotId))
-            .then(closeModal)
-    }
     return (
         <div id="delete-review-modal-cont">
             <h1>Confirm Delete</h1>

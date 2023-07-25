@@ -22,13 +22,13 @@ function ReviewsIndex({ spotId, numReviews }) {
 
     useEffect(() => {
         setFlag(true);
-        if (spotId === 0 && numReviews === 1) {
+        if (spotId === 0) {
             setFlag(false);
             setManage(true)
             dispatch(thunkLoadUserReviews());
         } else {
             dispatch(thunkLoadSpotReviews(spotId));
-        }
+        } // eslint-disable-next-line
     }, [dispatch]);
 
     useEffect(() => {
@@ -47,7 +47,7 @@ function ReviewsIndex({ spotId, numReviews }) {
         if (user && spotId !== 0) {
             const foundReview = reviews.find(review => review.userId === user.id)
             setUserReview(foundReview ? foundReview : null);
-        }
+        } // eslint-disable-next-line
     }, [user, reviews]);
 
     useEffect(() => {
@@ -70,7 +70,7 @@ function ReviewsIndex({ spotId, numReviews }) {
         } else if ((spot && user && spot.ownerId === user.id)) {
             setFlag(false);
             return;
-        }
+        } // eslint-disable-next-line
     }, [spot, user, userReview]);
 
     return (
@@ -91,7 +91,7 @@ function ReviewsIndex({ spotId, numReviews }) {
                         user={user}
                         spotId={review.spotId ? review.spotId : spot.id}
                         key={review.id}
-                        name={name ? name : review.Spot ? review.Spot.name : ""}
+                        name={review.Spot ? review.Spot.name : name}
                         manage={manage}
                     />
                 ))}

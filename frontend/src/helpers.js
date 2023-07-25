@@ -52,7 +52,7 @@ export const imageValidation = (imagesObj) => {
         }
     }
     const imgErr = { flag: false }
-    const { image1, image2, image3, image4, image5 } = imagesObj;
+    const { image1 } = imagesObj;
     if (!image1) {
         imgErr.image1 = 'Preview image is required.'
         imgErr.flag = true;
@@ -63,14 +63,20 @@ export const imageValidation = (imagesObj) => {
             !imagesObj[key].endsWith('.jpg') &&
             !imagesObj[key].endsWith('.jpeg'))
             )
-        {
-            imgErr[key] = 'Image URL must end in .png, .jpg, or .jpeg';
-            imgErr.flag = true;
-        } else if (imagesObj[key] && !isValidUrl(imagesObj[key])) {
-            imgErr[key] = 'Image URL must be a valid URL and start with "https://"';
-            imgErr.flag = true;
+            {
+                imgErr[key] = 'Image URL must end in .png, .jpg, or .jpeg';
+                imgErr.flag = true;
+            } else if (imagesObj[key] && !isValidUrl(imagesObj[key])) {
+                imgErr[key] = 'Image URL must be a valid URL and start with "https://"';
+                imgErr.flag = true;
+            }
         }
-    }
 
     return imgErr;
+}
+
+export const getMonthName = monthNumber => {
+    const date = new Date();
+    date.setMonth(monthNumber - 1);
+    return date.toLocaleString('en-US', { month: 'long' });
 }

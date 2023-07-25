@@ -3,6 +3,7 @@ import React from 'react';
 import OpenModalMenuItem from '../Navigation/OpenModalMenuItem';
 import ReviewFormModal from '../ReviewFormModal';
 import DeleteReviewModal from '../DeleteReviewModal';
+import { getMonthName } from '../../helpers';
 import "./ReviewsIndexItem.css";
 
 function ReviewsIndexItem ({ reviewObj, user, spotId, name, manage }) {
@@ -14,21 +15,14 @@ function ReviewsIndexItem ({ reviewObj, user, spotId, name, manage }) {
     const year = createdAt.slice(0, 4);
     const day = createdAt.slice(8, 10);
     const monthNum = Number(createdAt.slice(5, 7));
-    console.log('stars', stars);
-    function getMonthName(monthNumber) {
-        const date = new Date();
-        date.setMonth(monthNumber - 1);
-        return date.toLocaleString('en-US', { month: 'long' });
-    }
-
     const month = getMonthName(monthNum);
 
     return (
         <li key={reviewObj ? reviewObj.id: null} className="review-li">
-            {!manage && <h3>{user && user.id === userId ? user.firstName : User ? User.firstName : ''} &nbsp; &nbsp; &nbsp; {stars}&nbsp;
+            {manage ? <h3>{name}</h3> :
+            <h3>{user && user.id === userId ? user.firstName : User ? User.firstName : ''} &nbsp; &nbsp; &nbsp; {stars}&nbsp;
                 <i className="fa-solid fa-star" style={{"color": "#00040a"}}></i>
             </h3>}
-            {manage && <h3>{name}</h3>}
             <h4>{month} {day}, {year}</h4>
             <p>{review}</p>
             {user && user.id === userId &&

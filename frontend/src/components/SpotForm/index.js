@@ -54,30 +54,31 @@ const SpotForm = ({ spot, images, formType }) => {
         setImgErrors({ flag: false })
 
         spot = { ...spot, country, address, city, state, description, name, price, image1, image2, image3, image4, image5 };
-        const spotErrs = spotValidation(spot);
-        const imgErr = imageValidation(imagesObj);
-        setErrors(spotErrs);
-        setImgErrors(imgErr);
-
-        if (formType === 'Create a new Spot' && imgErrors.flag === false && errors.flag === false) {
+        const spotFrontErrors = spotValidation(spot);
+        const imageFrontErrors = imageValidation(imagesObj);
+        setErrors({ ...spotFrontErrors });
+        setImgErrors({ ...imageFrontErrors });
+        if (formType === 'Create a new Spot' && imageFrontErrors.flag === false && spotFrontErrors.flag === false) {
             const newSpot = await dispatch(thunkCreateSpot(spot))
             .catch(async (res) => {
                 const data = await res.json();
                 if (data && data.errors) {
                     setErrors({ ...data.errors, flag: true });
+                    spotFrontErrors.flag = true;
                 }
             });
             spot = newSpot;
-        } else if (formType === 'Update your Spot' && spot.id && imgErrors.flag === false && errors.flag === false) {
+        } else if (formType === 'Update your Spot' && spot.id && imageFrontErrors.flag === false && spotFrontErrors.flag === false) {
             await dispatch(thunkUpdateSpot(spot))
             .catch(async (res) => {
                 const data = await res.json();
                 if (data && data.errors) {
                     setErrors({ ...data.errors, flag: true });
+                    spotFrontErrors.flag = true;
                 }
             });
         }
-        if (spot && spot.id && imgErrors.flag === false && errors.flag === false) {
+        if (spot && spot.id && imageFrontErrors.flag === false && spotFrontErrors.flag === false) {
             history.push(`/spots/${spot.id}`);
         }
     }
@@ -104,7 +105,7 @@ const SpotForm = ({ spot, images, formType }) => {
                                 >
                                     <option value={country} selected>{country}</option>
                                     {countries.map(countryEl => (
-                                        <option value={countryEl}>{countryEl}</option>
+                                        <option value={countryEl} key={countryEl}>{countryEl}</option>
                                     ))}
                                 </select>
                             </label>
@@ -148,7 +149,7 @@ const SpotForm = ({ spot, images, formType }) => {
                                 >
                                     <option value={state} selected>{state}</option>
                                     {states.map(state => (
-                                        <option value={state}>{state}</option>))}
+                                        <option value={state} key={state}>{state}</option>))}
                                 </select>}
                                 {country !== 'United States of America' && <input type="text"
                                     value={state}
