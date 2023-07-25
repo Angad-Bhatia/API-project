@@ -2,8 +2,9 @@ import { csrfFetch } from "./csrf";
 // import { thunkShowSpot } from "./spots";
 
 const LOAD_REVIEWS = "reviews/loadReviews";
+// const LOAD_USER_REVIEWS = "reviews/loadUserReviews";
 const RECEIVE_SPOTREVIEW = "reviews/receiveSpotReview";
-const DELETE_SPOTREVIEW = "reviews/deleteSpotReview"
+const DELETE_SPOTREVIEW = "reviews/deleteSpotReview";
 
 const loadReviews = (reviews) => {
     return {
@@ -11,6 +12,13 @@ const loadReviews = (reviews) => {
         reviews
     };
 };
+
+// const loadUserReviews = (reviews) => {
+//     return {
+//         type: LOAD_USER_REVIEWS,
+//         reviews
+//     }
+// }
 
 const receiveSpotReview = (review) => {
     return {
@@ -30,7 +38,16 @@ export const thunkLoadSpotReviews = (spotId) => async (dispatch) => {
     const res = await fetch(`/api/spots/${spotId}/reviews`);
     if (res.ok) {
         const data = await res.json();
-        dispatch(loadReviews(data.Reviews, spotId))
+        dispatch(loadReviews(data.Reviews));
+        return data.Reviews;
+    }
+}
+
+export const thunkLoadUserReviews = () => async (dispatch) => {
+    const res = await fetch("/api/reviews/current");
+    if (res.status < 400) {
+        const data = await res.json();
+        dispatch(loadReviews(data.Reviews));
         return data.Reviews;
     }
 }
@@ -91,6 +108,12 @@ const reviewsReducer = (state = initialState, action) => {
                 newState.allReviews[review.id] = review;
             });
             return newState;
+        // case LOAD_USER_REVIEWS:
+        //     newState = { ...state, allReviews: {} };
+        //     action.reviews.reverse().forEach(review => {
+        //         newState.allReviews[review.id] = review;
+        //     });
+        //     return newState;
         case RECEIVE_SPOTREVIEW:
             newState = { ...state, allReviews: { ...state.allReviews } };
             newState.allReviews[action.review.id] = action.review;

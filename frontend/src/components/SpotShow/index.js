@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from "react-router-dom";
 
-import SpotReviewsIndex from "../SpotReviewsIndex";
+import ReviewsIndex from "../ReviewsIndex";
 import { thunkShowSpot } from "../../store/spots";
 import "./SpotShow.css";
 
@@ -92,7 +92,7 @@ function SpotShow() {
                     <i className="fa-solid fa-star" style={{"color": "#00040a"}}></i>
                     {stars} {numReviewsText}
                 </h2>
-                <SpotReviewsIndex
+                <ReviewsIndex
                     spotId={spotId}
                     numReviews={numReviews}
                 />

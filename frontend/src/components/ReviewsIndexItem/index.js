@@ -3,9 +3,9 @@ import React from 'react';
 import OpenModalMenuItem from '../Navigation/OpenModalMenuItem';
 import ReviewFormModal from '../ReviewFormModal';
 import DeleteReviewModal from '../DeleteReviewModal';
-import "./SpotReviewsIndexItem.css";
+import "./ReviewsIndexItem.css";
 
-function SpotReviewsIndexItem ({ reviewObj, user, spotId, name }) {
+function ReviewsIndexItem ({ reviewObj, user, spotId, name, manage }) {
     const { id, User, userId, createdAt, review, stars } = reviewObj;
     if (!createdAt) {
         return null;
@@ -25,9 +25,10 @@ function SpotReviewsIndexItem ({ reviewObj, user, spotId, name }) {
 
     return (
         <li key={reviewObj ? reviewObj.id: null} className="review-li">
-            <h3>{user && user.id === userId ? user.firstName : User ? User.firstName : ''} &nbsp; &nbsp; &nbsp; {stars}&nbsp;
+            {!manage && <h3>{user && user.id === userId ? user.firstName : User ? User.firstName : ''} &nbsp; &nbsp; &nbsp; {stars}&nbsp;
                 <i className="fa-solid fa-star" style={{"color": "#00040a"}}></i>
-            </h3>
+            </h3>}
+            {manage && <h3>{name}</h3>}
             <h4>{month} {day}, {year}</h4>
             <p>{review}</p>
             {user && user.id === userId &&
@@ -58,4 +59,4 @@ function SpotReviewsIndexItem ({ reviewObj, user, spotId, name }) {
     )
 }
 
-export default SpotReviewsIndexItem;
+export default ReviewsIndexItem;

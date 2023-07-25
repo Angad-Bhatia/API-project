@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import OpenModalMenuItem from "../Navigation/OpenModalMenuItem";
-import SpotReviewsIndexItem from "../SpotReviewsIndexItem";
+import ReviewsIndexItem from "../ReviewsIndexItem";
 import ReviewFormModal from "../ReviewFormModal";
-import { thunkLoadSpotReviews } from "../../store/reviews";
-import "./SpotReviewsIndex.css";
+import { thunkLoadSpotReviews, thunkLoadUserReviews } from "../../store/reviews";
+import "./ReviewsIndex.css";
 
-function SpotReviewsIndex({ spotId, numReviews }) {
+function ReviewsIndex({ spotId, numReviews }) {
     const dispatch = useDispatch();
 
     const reviewsObj = useSelector((state) => state.reviews.allReviews ? state.reviews.allReviews : null);
@@ -18,9 +18,17 @@ function SpotReviewsIndex({ spotId, numReviews }) {
     const [reviews, setReviews] = useState([]);
     const [userReview, setUserReview] = useState({});
     const [name, setName] = useState(spot ? spot.name : '');
+    const [manage, setManage] = useState(false);
 
     useEffect(() => {
-        dispatch(thunkLoadSpotReviews(spotId));
+        setFlag(true);
+        if (spotId === 0 && numReviews === 1) {
+            setFlag(false);
+            setManage(true)
+            dispatch(thunkLoadUserReviews());
+        } else {
+            dispatch(thunkLoadSpotReviews(spotId));
+        }
     }, [dispatch]);
 
     useEffect(() => {
@@ -36,7 +44,7 @@ function SpotReviewsIndex({ spotId, numReviews }) {
     }, [reviewsObj]);
 
     useEffect(() => {
-        if (user) {
+        if (user && spotId !== 0) {
             const foundReview = reviews.find(review => review.userId === user.id)
             setUserReview(foundReview ? foundReview : null);
         }
@@ -45,8 +53,8 @@ function SpotReviewsIndex({ spotId, numReviews }) {
     useEffect(() => {
         setFlag(true);
 
-        setName(spot.name)
-        if (!user) {
+        setName(spot ? spot.name : "")
+        if (!user || spotId === 0) {
             setFlag(false);
             return;
         }
@@ -78,12 +86,13 @@ function SpotReviewsIndex({ spotId, numReviews }) {
             {flag && !numReviews && <p>Be the first to post a review!</p>}
             {reviews.length ? <ul id="reviews-list">
                 {reviews.map(review => (
-                    <SpotReviewsIndexItem
+                    <ReviewsIndexItem
                         reviewObj={review}
                         user={user}
-                        spotId={spot.id}
+                        spotId={review.spotId ? review.spotId : spot.id}
                         key={review.id}
-                        name={name}
+                        name={name ? name : review.Spot ? review.Spot.name : ""}
+                        manage={manage}
                     />
                 ))}
             </ul> : null}
@@ -91,4 +100,4 @@ function SpotReviewsIndex({ spotId, numReviews }) {
     )
 }
 
-export default SpotReviewsIndex;
+export default ReviewsIndex;
