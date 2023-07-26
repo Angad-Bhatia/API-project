@@ -79,14 +79,12 @@ export const thunkCreateSpot = (spot) => async (dispatch) => {
 
     if (res.status < 400) {
         const newSpot = await res.json();
-        let previewFlag = false;
 
         for (let image in imageInputs) {
+            const preview = image === "image1";
+
             if (imageInputs[image]) {
-                if (image === 'image1') {
-                    previewFlag = true;
-                }
-                const reqImageBody = { url: imageInputs[image], preview: previewFlag }
+                const reqImageBody = { url: imageInputs[image], preview }
                 const imagesRes = await csrfFetch (`/api/spots/${newSpot.id}/images`, {
                     method: "POST",
                     body: JSON.stringify(reqImageBody)
@@ -146,13 +144,11 @@ export const thunkUpdateSpot = (spot) => async (dispatch) => {
         }
 
         for (let image in imageInputs) {
-            let previewFlag = false;
-            if (image === 'image1') {
-                previewFlag = true;
-            }
+            //if error check here. Used if and let for previewFlag before
+            const preview = image === "image1";
 
             if(imageInputs[image]) {
-                const reqImageBody = { url: imageInputs[image], preview: previewFlag };
+                const reqImageBody = { url: imageInputs[image], preview };
                 const imageRes = await csrfFetch(`/api/spots/${updatedSpot.id}/images`, {
                     method: 'POST',
                     body: JSON.stringify(reqImageBody)

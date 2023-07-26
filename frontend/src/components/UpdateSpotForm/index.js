@@ -12,22 +12,22 @@ const UpdateSpotForm = () => {
     const spot = useSelector((state) => state.spots.allSpots ? state.spots.allSpots[spotId] : null);
     useEffect(() => {
         dispatch((thunkShowSpot(spotId)));
-    }, [dispatch]);
+    }, [dispatch, spotId]);
 
     if (!spot || !spot.id || !spot.SpotImages) return null;
     const imagesArr = spot.SpotImages;
 
 
     const images = {};
-    let count = 1;
+    let imageNum = 2;
 
     for (let i = 0; i < imagesArr.length; i++) {
         const img = imagesArr[i];
         if (img.preview) {
             images['image1'] = img.url;
         } else {
-            count += 1;
-            images[`image${count}`] = img.url;
+            images[`image${imageNum}`] = img.url;
+            imageNum += 1;
         }
     };
 
