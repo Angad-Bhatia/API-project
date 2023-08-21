@@ -13,6 +13,8 @@ li {
     text-align: left;
     border: 2px solid black;
     padding: 1%;
+    /* position: fixed; */
+    z-index: 2;
 }
 
 #home-container {
@@ -43,6 +45,7 @@ li {
     align-items: center;
     padding: 0%;
     background-color: white;
+    height: 100%;
 }
 #home-img {
     background-color: black;
@@ -51,6 +54,9 @@ li {
     width: 30%;
     display: flex;
     justify-content: space-between;
+    height: 500%;
+    margin: 0;
+    padding: 0;
 }
 
 #new-spot {
@@ -59,15 +65,17 @@ li {
 
 #profile-btn {
     width: 100%;
-    border-radius: 5px;
+    border-radius: 30px;
     display: flex;
     justify-content: space-evenly;
+    height: 200%;
+    /* padding: 20%; */
 }
 
-#btn-container {
+#btn-container.navs {
     display: flex;
     flex-direction: column;
-    min-height: 100%;
+    height: 100%;
     width: 100%;
     align-items: center;
 }
