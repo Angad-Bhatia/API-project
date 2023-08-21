@@ -67,7 +67,7 @@ export const imageValidation = (imagesObj) => {
                 imgErr[key] = 'Image URL must end in .png, .jpg, or .jpeg';
                 imgErr.flag = true;
             } else if (imagesObj[key] && !isValidUrl(imagesObj[key])) {
-                imgErr[key] = 'Image URL must be a valid URL and start with "https://"';
+                imgErr[key] = 'Image URL must be a valid URL that starts with "https://"';
                 imgErr.flag = true;
             }
         }
